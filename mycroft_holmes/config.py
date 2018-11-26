@@ -3,6 +3,8 @@ Handles YAML config files
 """
 import logging
 
+from collections import OrderedDict
+
 import yaml
 from yaml.error import MarkedYAMLError
 
@@ -60,10 +62,24 @@ class Config:
         """
         return self.data
 
+    def get_name(self):
+        """
+        :rtype: str
+        """
+        return self.data['name']
+
     def get_sources(self):
         """
-        :rtype: list[dict]
+        Returns source name -> spec dictionary
+
+        :rtype: OrderedDict
         """
+        sources = OrderedDict()
+
+        for spec in self.data['sources']:
+            sources[spec['name']] = spec
+
+        return sources
 
     def get_features(self):
         """
