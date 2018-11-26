@@ -43,12 +43,23 @@ metrics:
     label: "%d P3 tickets"
 ```
 
-Sources are used via `metrics` that provide as specific value (e.g. number of tickets matching a given JQL query).
+Sources are used via `metrics` that provide a specific value (e.g. number of tickets matching a given JQL query).
 `source` specifies which source configured above to use.
 
 ```yaml
   - metrics:
-    -  name: jira/p2-tickets
+    -  name: jira/p3-tickets
 ```
 
 Finally, we specify the list of metrics for each feature.
+
+```yaml
+features:
+  - name: DynamicPageList
+    url: http://docs.company.net/pages/DynamicPageList
+    template:
+      - project: "DynamicPageList"  # this will be used in template string
+      - tag: "dpl"
+```
+
+Each feature can provide a list of template variables that will be used to replace `{varname}` placeholder defined in `query` parameters for metrics.
