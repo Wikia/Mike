@@ -11,12 +11,12 @@ sources:
     password: "${JIRA_PASSWORD}" # Jira API key
   - name: wikia/elastic
     kind: common/elastic
-    host: "{$ELASTIC_HOST}"
+    host: "${ELASTIC_HOST}"
   - name: wikia/tags-report
     kind: common/mysql
     host: db.prod
-    user: "{$DATABASE_USER}"
-    password: "{$DATABASE_PASSWORD}"
+    user: "${DATABASE_USER}"
+    password: "${DATABASE_PASSWORD}"
 
 # now define metrics that are taken from sources above
 metrics:
@@ -46,17 +46,17 @@ metrics:
 
 common:
   # these keys will be copied to each feature defined below
-  - metrics:
-      -  name: jira/p2-tickets
-      -  name: jira/p3-tickets
+  metrics:
+    -  name: jira/p2-tickets
+    -  name: jira/p3-tickets
 
 # now features "score" will be calculated using the metrics defined above with per-feature parameters set
 features:
   - name: DynamicPageList
     url: http://docs.company.net/pages/DynamicPageList
     template:
-      - project: "DynamicPageList"  # this will be used in template string
-      - tag: "dpl"
+      project: "DynamicPageList"  # this will be used in template string
+      tag: "dpl"
     metrics:
       # additional, per-feature metrics
       -  name: tags-report/usage
