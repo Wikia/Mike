@@ -1,5 +1,5 @@
 # Mike
-Mycroft Holmes (High-Optional, Logical, Multi-Evaluating Supervisor) aka Mike
+[Mycroft Holmes](https://en.wikipedia.org/wiki/The_Moon_Is_a_Harsh_Mistress#Characters) (High-Optional, Logical, Multi-Evaluating Supervisor) aka Mike
 
 ## Install
 
