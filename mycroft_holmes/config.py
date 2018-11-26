@@ -7,6 +7,7 @@ import yaml
 from yaml.error import MarkedYAMLError
 
 from .errors import MycroftHolmesError
+from. utils import yaml_variables_subst
 
 
 class MycroftHolmesConfigError(MycroftHolmesError):
@@ -33,19 +34,31 @@ class Config:
             self.logger.info('Got variables to substitute in config file: %s',
                              ', '.join(env.keys()))
 
+        # read from file
         try:
             with open(config_file, 'rt') as handler:
-                data = yaml.load(handler)
+                raw = handler.read()
         except OSError as ex:
             # File not found
             raise MycroftHolmesConfigError('Failed to load "%s" config file: %s' %
                                            (config_file, repr(ex)))
+
+        raw = yaml_variables_subst(raw, variables=env)
+
+        # parse it
+        try:
+            self.data = yaml.safe_load(raw)
+
         except MarkedYAMLError as ex:
             # YAML syntax is incorrect
             raise MycroftHolmesConfigError('Failed to parse "%s" config file: %s (%s)' %
                                            (config_file, str(ex).strip(), str(ex.problem_mark)))
 
-        print(data)
+    def get_raw(self):
+        """
+        :rtype: dict
+        """
+        return self.data
 
     def get_sources(self):
         """
