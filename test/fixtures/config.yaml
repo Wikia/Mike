@@ -47,8 +47,8 @@ metrics:
 common:
   # these keys will be copied to each feature defined below
   - metrics:
-      -  name: jira/p2-tickets
-      -  name: jira/p3-tickets
+    -  name: jira/p2-tickets
+    -  name: jira/p3-tickets
 
 # now features "score" will be calculated using the metrics defined above with per-feature parameters set
 features:
