@@ -62,3 +62,25 @@ def test_config_get_sources():
         'user': "${JIRA_USER}",
         'password': "${JIRA_PASSWORD}"
     }
+
+
+def test_config_get_features():
+    config = Config(config_file=get_fixtures_directory() + '/config.yaml')
+    features = config.get_features()
+
+    print(features)
+
+    assert 'DynamicPageList' in features
+    assert features['DynamicPageList'] == {
+        'name': 'DynamicPageList',
+        'url': 'http://docs.company.net/pages/DynamicPageList',
+        'metrics': [
+            {'name': 'jira/p2-tickets'},
+            {'name': 'jira/p3-tickets'},
+            {'name': 'tags-report/usage', 'weight': 0.1},
+        ],
+        'template': {
+            'project': 'DynamicPageList',
+            'tag': 'dpl'
+        }
+    }

@@ -83,5 +83,23 @@ class Config:
 
     def get_features(self):
         """
-        :rtype: list[dict]
+        Returns feature name -> spec dictionary
+
+        :rtype: OrderedDict
         """
+        features = OrderedDict()
+
+        # apply common part for each feature
+        common = self.get_raw().get('common')
+
+        for spec in self.data['features']:
+            if common and common.get('metrics'):
+                # merge metrics - common ones + spec-specific ones
+                metrics = common.get('metrics')
+                metrics += spec.get('metrics', [])
+
+                spec['metrics'] = metrics
+
+            features[spec['name']] = spec
+
+        return features
