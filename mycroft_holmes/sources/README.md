@@ -1,7 +1,7 @@
 Sources
 =======
 
-This directory contains implementation of various source that provide values for metrics.
+This directory contains implementation of various sources that provide values for metrics.
 
 ## Available sources
 
@@ -60,6 +60,16 @@ features:
     template:
       - project: "DynamicPageList"  # this will be used in template string
       - tag: "dpl"
+```
+
+We can also put common ones in `common` section (for instance Jira statistics should probably be gathered for all features):
+
+```yaml
+common:
+  # these keys will be copied to each feature defined below
+  - metrics:
+    -  name: jira/p2-tickets
+    -  name: jira/p3-tickets
 ```
 
 Each feature can provide a list of template variables that will be used to replace `{varname}` placeholder defined in `query` parameters for metrics.
