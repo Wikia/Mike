@@ -53,6 +53,8 @@ Sources are used via `metrics` that provide a specific value (e.g. number of tic
 
 Finally, we specify the list of metrics for each feature.
 
+Each feature can provide a list of template variables that will be used to replace `{varname}` placeholder defined in `query` parameters for metrics.
+
 ```yaml
 features:
   - name: DynamicPageList
@@ -71,5 +73,3 @@ common:
     -  name: jira/p2-tickets
     -  name: jira/p3-tickets
 ```
-
-Each feature can provide a list of template variables that will be used to replace `{varname}` placeholder defined in `query` parameters for metrics.
