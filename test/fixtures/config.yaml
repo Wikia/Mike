@@ -1,0 +1,63 @@
+# dashboard name
+name: "The A-Team components"
+
+# first, we specify settings for generic sources like Jira and MySQL
+# they need credentials and host name
+sources:
+  - name: wikia/jira
+    kind: common/jira
+    host: "the-company.attlasian-inc.com"
+    user: "${JIRA_USER}"  # variables substitution
+    password: "${JIRA_PASSWORD}" # Jira API key
+  - name: wikia/elastic
+    kind: common/elastic
+    host: "{$ELASTIC_HOST}"
+  - name: wikia/tags-report
+    kind: common/mysql
+    host: db.prod
+    user: "{$DATABASE_USER}"
+    password: "{$DATABASE_PASSWORD}"
+
+# now define metrics that are taken from sources above
+metrics:
+  # Jira
+  - name: jira/p3-tickets
+    source: wikia/jira  # see above
+    query: "project = '{project}' AND Priority = 'P3' AND status = 'Open'"  # you can use template strings
+    label: "%d P3 tickets"
+  - name: jira/p2-tickets
+    source: wikia/jira
+    query: "project = '{project}' AND Priority = 'P2' AND status = 'Open'"
+    label: "%d P2 tickets"
+  # Elasticsearch
+  - name: access-log/page-views
+    kind: wikia/elastic
+    index: logstash-apache-access-log
+    query: "request: 'GET' AND url: '{url}'"
+    label: "%d HTTP requests handled"
+  # MySQL
+  - name: tags-report/usage
+    kind: wikia/mysql
+    query: "SELECT count(*) FROM tags_report WHERE tag = '{tag}'"
+  - name: wikifactory/feature-enabled-on
+    kind: wikia/wikifactory  # we will use a generic source from the code if this one is not defined in "sources" section above
+    label: "enabled on %d wikis"
+    query: FeatureEnabledOn
+
+common:
+  # these keys will be copied to each feature defined below
+  - metrics:
+      -  name: jira/p2-tickets
+      -  name: jira/p3-tickets
+
+# now features "score" will be calculated using the metrics defined above with per-feature parameters set
+features:
+  - name: DynamicPageList
+    url: http://docs.company.net/pages/DynamicPageList
+    template:
+      - project: "DynamicPageList"  # this will be used in template string
+      - tag: "dpl"
+    metrics:
+      # additional, per-feature metrics
+      -  name: tags-report/usage
+         weight: 0.1  # defaults to 1
