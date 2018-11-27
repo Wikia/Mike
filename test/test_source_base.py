@@ -26,9 +26,9 @@ def test_get_description():
     print(source.get_description())
     assert source.get_name() == 'common/const'
     assert source.get_short_description() == \
-        'Source that returns a constant value. Can be used to tweak a score of a feature.'
+        'Returns a constant value (can be used to tweak a score of a feature).'
     assert source.get_description() == """
-Source that returns a constant value. Can be used to tweak a score of a feature.
+Returns a constant value (can be used to tweak a score of a feature).
 
 ### `metrics` config
 

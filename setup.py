@@ -27,6 +27,7 @@ setup(
     entry_points={
         'console_scripts': [
             'collect_metrics=mycroft_holmes.bin.collect_metrics:main',
+            'generate_source_docs=mycroft_holmes.bin.generate_source_docs:main',
         ],
     }
 )

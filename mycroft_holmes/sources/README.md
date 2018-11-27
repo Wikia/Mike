@@ -5,18 +5,70 @@ This directory contains implementation of various sources that provide values fo
 
 ## Available sources
 
+* `common/const` Returns a constant value (can be used to tweak a score of a feature).
+* `common/jira` Returns a number of Jira ticket matching given JQL query.
+
+### TODO
+
 * `common/analytics` (gets data from Google Analytics)
 * `common/elastic` (gets number of entries matching a given query against specified ElasticSearch index)
-* `common/jira` (counts of tickets)
 * `common/mysql` (performs a specified SQL query that returns a single value)
-
-And a special source:
-
-* `common/const` (returns a specified value, can be used to tweak a score of a feature)
 
 #### Wikia-specific sources
 
 * `wikia/wikifactory` (queries WikiFactory database that is used to configure every wiki Wikia hosts)
+
+## `common/const`
+
+Returns a constant value (can be used to tweak a score of a feature).
+
+### `metrics` config
+
+```yaml
+    metrics:
+      -  name: common/const
+         weight: 100
+```
+
+## `common/jira`
+
+Returns a number of Jira ticket matching given JQL query.
+
+### `sources` config
+
+```yaml
+sources:
+  - name: foo/jira
+    kind: common/jira
+    server: "https://foo-company.attlasian.net"
+    user: "${JIRA_USER}"  # variables substitution
+    password: "${JIRA_PASSWORD}" # Jira API key
+```
+
+Password is an API token that you can generate:
+https://confluence.atlassian.com/cloud/api-tokens-938839638.html.
+
+### `metrics` config
+
+```yaml
+    metrics:
+      # Jira
+      - name: jira/p3-tickets
+        source: foo/jira  # defined above
+        query: "project = '{project}' AND Priority = 'P3' AND status = 'Open'"
+        label: "%d P3 tickets"
+```
+
+### `features` config
+
+```yaml
+    features:
+      - name: FooBar
+        template:
+          - project: "Foo"  # this will be used in template string
+        metrics:
+          -  name: jira/p3-tickets
+```
 
 ## Sources setup
 
