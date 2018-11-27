@@ -4,6 +4,8 @@ JiraSource class
 from jira.client import JIRA
 
 from mycroft_holmes.errors import MycroftSourceError
+from mycroft_holmes.utils import format_query
+
 from .base import SourceBase
 
 
@@ -87,10 +89,11 @@ class JiraSource(SourceBase):
         query = kwargs.get('query')
         assert isinstance(query, str), '"query" parameter needs to be provided'
 
-        self.logger.info('JQL query: "%s"', query)
+        jql = format_query(query, kwargs.get('template'))
+        self.logger.info('JQL query: "%s"', jql)
 
         try:
-            tickets = self.client.search_issues(jql_str=query)
+            tickets = self.client.search_issues(jql_str=jql)
         except Exception as ex:
             raise MycroftSourceError('Failed to get metric value: %s' % repr(ex))
 
