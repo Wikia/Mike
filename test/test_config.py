@@ -58,7 +58,7 @@ def test_config_get_sources():
     assert sources['wikia/jira'] == {
         'name': 'wikia/jira',
         'kind': 'common/jira',
-        'host': "the-company.attlasian-inc.com",
+        'server': "${JIRA_URL}",
         'user': "${JIRA_USER}",
         'password': "${JIRA_PASSWORD}"
     }
