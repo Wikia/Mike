@@ -4,9 +4,11 @@ that are used to calculate scores for features.
 """
 import logging
 from collections import OrderedDict
+from os import environ
 from sys import argv
 
 from mycroft_holmes.config import Config
+from mycroft_holmes.errors import MycroftHolmesError
 from mycroft_holmes.sources.base import SourceBase
 
 
@@ -32,6 +34,8 @@ def get_metrics_for_feature(feature_name, config):
         source = config.get_source_from_metric_spec(metric_spec)
         logger.info('Source: %s', source)
 
+        result[metric_spec['name']] = source.get_value(**metric_spec)
+
     return result
 
 
@@ -46,7 +50,7 @@ def main():
     logger.info('Available sources: %s', SourceBase.get_sources_names())
 
     # read provided config file
-    config = Config(config_file=argv[1])
+    config = Config(config_file=argv[1], env=environ)
 
     # list features and metrics
     logger.info('Configured metrics: %s', list(config.get_metrics().keys()))
@@ -54,7 +58,13 @@ def main():
 
     # fetch metrics values for eac feature and calculate their score
     for _, feature in config.get_features().items():
-        feature_metrics = get_metrics_for_feature(feature['name'], config)
-        logger.info('Collected metrics: %s', feature_metrics)
+        try:
+            feature_metrics = get_metrics_for_feature(feature['name'], config)
+            logger.info('Collected metrics: %s', feature_metrics)
+        except MycroftHolmesError as ex:
+            logger.error('Failed to get metrics values', exc_info=True)
+
+            print('\nWe failed to generate metrics values:\n\t%s\n' % repr(ex))
+            exit(1)
 
     logger.info('Done')

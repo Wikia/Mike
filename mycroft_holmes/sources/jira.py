@@ -3,6 +3,7 @@ JiraSource class
 """
 from jira.client import JIRA
 
+from mycroft_holmes.errors import MycroftSourceError
 from .base import SourceBase
 
 
@@ -20,6 +21,9 @@ class JiraSource(SourceBase):
         user: "${JIRA_USER}"  # variables substitution
         password: "${JIRA_PASSWORD}" # Jira API key
     ```
+
+    Password is an API token that you can generate:
+    https://confluence.atlassian.com/cloud/api-tokens-938839638.html.
 
     ### `metrics` config
 
@@ -67,20 +71,27 @@ class JiraSource(SourceBase):
         :rtype: JIRA
         """
         if not self._client:
-            self.logger.info('Setting up Jira client for %s (%s:***)',
+            self.logger.info('Setting up Jira client for %s (auth: %s:***)',
                              self._server, self._basic_auth[0])
             self._client = JIRA(server=self._server, basic_auth=self._basic_auth)
+
+            self.logger.info('Connected with Jira server: %s', self._client.server_info())
 
         return self._client
 
     def get_value(self, **kwargs):
         """
+        :raise: MycroftSourceError
         :rtype: int
         """
         query = kwargs.get('query')
         assert isinstance(query, str), '"query" parameter needs to be provided'
 
-        self.logger.info('Searching tickets "%s"', query)
-        tickets = self.client.search_issues(jql_str=query)
+        self.logger.info('JQL query: "%s"', query)
+
+        try:
+            tickets = self.client.search_issues(jql_str=query)
+        except Exception as ex:
+            raise MycroftSourceError('Failed to get metric value: %s' % repr(ex))
 
         return len(tickets)
