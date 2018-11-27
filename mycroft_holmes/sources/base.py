@@ -2,6 +2,7 @@
 Common code
 """
 import logging
+import re
 
 
 class SourceBase:
@@ -49,3 +50,28 @@ class SourceBase:
         :rtype: int
         """
         raise NotImplementedError('get_value needs to be implemented')
+
+    def get_name(self):
+        """
+        :rtype: str
+        """
+        return self.NAME
+
+    def get_short_description(self):
+        """
+        :rtype: str
+        """
+        doc = str(self.__doc__).strip()
+
+        return doc.split('\n')[0]
+
+    def get_description(self):
+        """
+        :rtype: str
+        """
+        doc = str(self.__doc__).strip()
+
+        # remove indentation
+        doc = re.sub(r'^ {4}', '', doc, flags=re.MULTILINE)
+
+        return doc

@@ -17,3 +17,23 @@ def test_new_from_name():
 
     print(source)
     assert isinstance(source, ConstSource.__class__), 'ConstSource should be returned by SourceBase.new_from_name'
+
+
+def test_get_description():
+    source = ConstSource()
+
+    print(source.get_description())
+    assert source.get_name() == 'common/const'
+    assert source.get_short_description() == \
+        'Source that returns a constant value. Can be used to tweak a score of a feature.'
+    assert source.get_description() == """
+Source that returns a constant value. Can be used to tweak a score of a feature.
+
+### `metrics` config
+
+```yaml
+    metrics:
+      -  name: common/const
+         weight: 100
+```
+""".strip()
