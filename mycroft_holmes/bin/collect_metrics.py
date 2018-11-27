@@ -10,28 +10,22 @@ from mycroft_holmes.config import Config
 from mycroft_holmes.sources.base import SourceBase
 
 
-def get_metrics_for_feature(feature, config):
+def get_metrics_for_feature(feature_name, config):
     """
-    :type feature dict
+    :type feature_name str
     :type config Config
     :rtype: OrderedDict
     """
     logger = logging.getLogger('get_metrics_for_feature')
-    logger.info('Collecting metrics for "%s" feature', feature['name'])
+    logger.info('Collecting metrics for "%s" feature', feature_name)
 
     result = OrderedDict()
 
-    available_metrics = config.get_metrics()
-
-    for metric in feature.get('metrics', []):
-        # build metric spec
-        metric_spec = available_metrics.get(metric['name']).copy()
-        metric_spec['template'] = feature.get('template')
-
-        logger.debug('%s: %s', metric['name'], metric_spec)
+    for metric_spec in config.get_metrics_specs_for_feature(feature_name):
+        logger.debug('Metric: %s', metric_spec)
 
         if metric_spec.get('source') is None:
-            logger.warning('"%s" has no source specified, skipping!', metric['name'])
+            logger.warning('"%s" has no source specified, skipping!', metric_spec['name'])
             continue
 
         # build source spec and set it up
@@ -60,7 +54,7 @@ def main():
 
     # fetch metrics values for eac feature and calculate their score
     for _, feature in config.get_features().items():
-        feature_metrics = get_metrics_for_feature(feature, config)
+        feature_metrics = get_metrics_for_feature(feature['name'], config)
         logger.info('Collected metrics: %s', feature_metrics)
 
     logger.info('Done')
