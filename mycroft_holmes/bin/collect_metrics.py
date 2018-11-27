@@ -32,7 +32,7 @@ def get_metrics_for_feature(feature_name, config):
 
         # build source spec and set it up
         source = config.get_source_from_metric_spec(metric_spec)
-        logger.info('Source: %s', source)
+        logger.debug('Source: %s', source)
 
         result[metric_spec['name']] = source.get_value(**metric_spec)
 
