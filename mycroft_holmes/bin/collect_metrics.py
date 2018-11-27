@@ -10,41 +10,6 @@ from mycroft_holmes.config import Config
 from mycroft_holmes.sources.base import SourceBase
 
 
-SOURCES_CACHE = dict()
-
-
-def get_source_from_metric(metric_spec, config):
-    """
-    Cache by metric's spec "source" field
-
-    :type metric_spec dict
-    :type config Config
-    :rtype: SourceBase
-    """
-    source_name = metric_spec['source']
-
-    if source_name in SOURCES_CACHE:
-        return SOURCES_CACHE.get(source_name)
-
-    # get an entry from "source" config file section that matches given metric "source"
-    source_spec = config.get_sources().get(source_name).copy()
-    source_kind = source_spec['kind']
-
-    logger = logging.getLogger('get_source')
-
-    del source_spec['name']
-    del source_spec['kind']
-
-    logger.info('Setting up "%s" source of "%s" kind (args: %s)',
-                metric_spec['source'], source_kind, list(source_spec.keys()))
-
-    source = SourceBase.new_from_name(source_kind, args=source_spec)
-
-    # cache it
-    SOURCES_CACHE[source_name] = source
-    return source
-
-
 def get_metrics_for_feature(feature, config):
     """
     :type feature dict
@@ -70,7 +35,7 @@ def get_metrics_for_feature(feature, config):
             continue
 
         # build source spec and set it up
-        source = get_source_from_metric(metric_spec, config)
+        source = config.get_source_from_metric(metric_spec)
         logger.info('Source: %s', source)
 
     return result
