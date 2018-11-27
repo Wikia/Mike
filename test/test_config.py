@@ -5,6 +5,7 @@ Set of unit test for Config class
 import pytest
 
 from mycroft_holmes.config import Config, MycroftHolmesConfigError
+from mycroft_holmes.sources import JiraSource
 
 from . import get_fixtures_directory
 
@@ -100,3 +101,25 @@ def test_config_get_metrics():
         'query': "project = '{project}' AND Priority = 'P2' AND status = 'Open'",
         'label': '%d P2 tickets'
     }
+
+
+def test_config_get_source_from_metric():
+    config = Config(config_file=get_fixtures_directory() + '/config.yaml', env={
+        'JIRA_URL': 'https://foo.atlasian.net',
+        'JIRA_USER': 'MrFoo',
+        'JIRA_PASSWORD': '9bec73487c01653ad7830c25e4b1dc926d17e518',
+    })
+    source = config.get_source_from_metric({
+        'name': 'jira/p2-tickets',
+        'source': 'wikia/jira',
+        'template': {
+            'project': 'DynamicPageList',
+            'tag': 'dpl'
+        }
+    })
+
+    print(source)
+
+    assert isinstance(source, JiraSource), 'get_source_from_metric should return an instance of JiraSource'
+    assert source._server == 'https://foo.atlasian.net'
+    assert source._basic_auth == ('MrFoo', '9bec73487c01653ad7830c25e4b1dc926d17e518')
