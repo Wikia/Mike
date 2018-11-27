@@ -3,6 +3,24 @@ Utility functions
 """
 
 
+def format_query(query, params=None):
+    """
+    Replaces "{foo}" in query with values from params.
+    Works just like Python str.format
+
+    :type query str
+    :type params dict
+    :rtype: str
+    """
+    if params is None:
+        return query
+
+    for key, value in params.items():
+        query = query.replace('{%s}' % key, value)
+
+    return query
+
+
 def yaml_variables_subst(yaml_raw, variables=None):
     """
     Performs variables substitute on a provided raw YAML content

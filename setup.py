@@ -21,6 +21,12 @@ setup(
         ]
     },
     install_requires=[
-        'PyYAML==3.13'
-    ]
+        'jira==2.0.0',
+        'PyYAML==3.13',
+    ],
+    entry_points={
+        'console_scripts': [
+            'collect_metrics=mycroft_holmes.bin.collect_metrics:main',
+        ],
+    }
 )

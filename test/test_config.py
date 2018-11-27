@@ -5,6 +5,7 @@ Set of unit test for Config class
 import pytest
 
 from mycroft_holmes.config import Config, MycroftHolmesConfigError
+from mycroft_holmes.sources import JiraSource
 
 from . import get_fixtures_directory
 
@@ -58,7 +59,7 @@ def test_config_get_sources():
     assert sources['wikia/jira'] == {
         'name': 'wikia/jira',
         'kind': 'common/jira',
-        'host': "the-company.attlasian-inc.com",
+        'server': "${JIRA_URL}",
         'user': "${JIRA_USER}",
         'password': "${JIRA_PASSWORD}"
     }
@@ -80,7 +81,72 @@ def test_config_get_features():
             {'name': 'tags-report/usage', 'weight': 0.1},
         ],
         'template': {
+            'component': 'DynamicPageList',
+            'tag': 'dpl'
+        }
+    }
+
+
+def test_config_get_metrics():
+    config = Config(config_file=get_fixtures_directory() + '/config.yaml')
+    metrics = config.get_metrics()
+
+    print(metrics)
+
+    assert 'jira/p2-tickets' in metrics
+    assert 'jira/p3-tickets' in metrics
+    assert metrics['jira/p2-tickets'] == {
+        'name': 'jira/p2-tickets',
+        'source': 'wikia/jira',
+        'query': "component = '{component}' AND Priority = 'Severe - fix in 48h (P2)' AND status = 'Open'",
+        'label': '%d P2 tickets'
+    }
+
+
+def test_config_get_source_from_metric():
+    config = Config(config_file=get_fixtures_directory() + '/config.yaml', env={
+        'JIRA_URL': 'https://foo.atlasian.net',
+        'JIRA_USER': 'MrFoo',
+        'JIRA_PASSWORD': '9bec73487c01653ad7830c25e4b1dc926d17e518',
+    })
+    source = config.get_source_from_metric_spec({
+        'name': 'jira/p2-tickets',
+        'source': 'wikia/jira',
+        'template': {
             'project': 'DynamicPageList',
             'tag': 'dpl'
         }
+    })
+
+    print(source)
+
+    assert isinstance(source, JiraSource), 'get_source_from_metric should return an instance of JiraSource'
+    assert source._server == 'https://foo.atlasian.net'
+    assert source._basic_auth == ('MrFoo', '9bec73487c01653ad7830c25e4b1dc926d17e518')
+
+
+def test_config_get_metrics_specs_for_feature():
+    config = Config(config_file=get_fixtures_directory() + '/config.yaml')
+
+    assert config.get_metrics_specs_for_feature(feature_name='foobar') == []
+
+    metrics_specs = config.get_metrics_specs_for_feature(feature_name='DynamicPageList')
+    print(metrics_specs)
+
+    assert len(metrics_specs) == 3
+
+    assert metrics_specs[0] == {
+        'query': "component = '{component}' AND Priority = 'Severe - fix in 48h (P2)' AND status = 'Open'",
+        'source': 'wikia/jira',
+        'name': 'jira/p2-tickets',
+        'label': '%d P2 tickets',
+        'template': {'component': 'DynamicPageList', 'tag': 'dpl'}
+    }
+
+    assert metrics_specs[1] == {
+        'query': "component = '{component}' AND Priority = 'Major - fix in 28 days (P3)' AND status = 'Open'",
+        'source': 'wikia/jira',
+        'name': 'jira/p3-tickets',
+        'label': '%d P3 tickets',
+        'template': {'component': 'DynamicPageList', 'tag': 'dpl'}
     }

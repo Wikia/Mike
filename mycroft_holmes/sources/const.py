@@ -19,5 +19,5 @@ class ConstSource(SourceBase):
 
     NAME = 'common/const'
 
-    def get_value(self):
+    def get_value(self, **kwargs):
         return 1

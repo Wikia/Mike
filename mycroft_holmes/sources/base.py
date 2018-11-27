@@ -34,18 +34,20 @@ class SourceBase:
         return [source.NAME for source in SourceBase._sources()]
 
     @staticmethod
-    def new_from_name(name):
+    def new_from_name(name, args=None):
         """
         :type name str
+        :type args dict
         :rtype: SourceBase|None
         """
         for source in SourceBase._sources():
             if source.NAME == name:
-                return source()
+                args = args if args else {}
+                return source(**args)
 
         return None
 
-    def get_value(self):
+    def get_value(self, **kwargs):
         """
         :rtype: int
         """
