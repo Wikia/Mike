@@ -81,6 +81,19 @@ class Config:
 
         return sources
 
+    def get_metrics(self):
+        """
+        Returns metric name -> spec dictionary
+
+        :rtype: OrderedDict
+        """
+        metrics = OrderedDict()
+
+        for spec in self.data['metrics']:
+            metrics[spec['name']] = spec
+
+        return metrics
+
     def get_features(self):
         """
         Returns feature name -> spec dictionary

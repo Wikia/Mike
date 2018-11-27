@@ -84,3 +84,19 @@ def test_config_get_features():
             'tag': 'dpl'
         }
     }
+
+
+def test_config_get_metrics():
+    config = Config(config_file=get_fixtures_directory() + '/config.yaml')
+    metrics = config.get_metrics()
+
+    print(metrics)
+
+    assert 'jira/p2-tickets' in metrics
+    assert 'jira/p3-tickets' in metrics
+    assert metrics['jira/p2-tickets'] == {
+        'name': 'jira/p2-tickets',
+        'source': 'wikia/jira',
+        'query': "project = '{project}' AND Priority = 'P2' AND status = 'Open'",
+        'label': '%d P2 tickets'
+    }
