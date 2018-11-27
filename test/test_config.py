@@ -123,3 +123,30 @@ def test_config_get_source_from_metric():
     assert isinstance(source, JiraSource), 'get_source_from_metric should return an instance of JiraSource'
     assert source._server == 'https://foo.atlasian.net'
     assert source._basic_auth == ('MrFoo', '9bec73487c01653ad7830c25e4b1dc926d17e518')
+
+
+def test_config_get_metrics_specs_for_feature():
+    config = Config(config_file=get_fixtures_directory() + '/config.yaml')
+
+    assert config.get_metrics_specs_for_feature(feature_name='foobar') == []
+
+    metrics_specs = config.get_metrics_specs_for_feature(feature_name='DynamicPageList')
+    print(metrics_specs)
+
+    assert len(metrics_specs) == 3
+
+    assert metrics_specs[0] == {
+        'query': "project = '{project}' AND Priority = 'P2' AND status = 'Open'",
+        'source': 'wikia/jira',
+        'name': 'jira/p2-tickets',
+        'label': '%d P2 tickets',
+        'template': {'project': 'DynamicPageList', 'tag': 'dpl'}
+    }
+
+    assert metrics_specs[1] == {
+        'query': "project = '{project}' AND Priority = 'P3' AND status = 'Open'",
+        'source': 'wikia/jira',
+        'name': 'jira/p3-tickets',
+        'label': '%d P3 tickets',
+        'template': {'project': 'DynamicPageList', 'tag': 'dpl'}
+    }

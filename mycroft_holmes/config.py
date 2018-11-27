@@ -122,6 +122,33 @@ class Config:
 
         return features
 
+    def get_metrics_specs_for_feature(self, feature_name):
+        """
+        Get metrics spec for a given feature. Each of returned items can then be passed to
+        get_source_from_metric_spec method to get an instance of source object
+
+        :type feature_name str
+        :rtype: list[dict]
+        """
+        feature = self.get_features().get(feature_name)
+
+        if feature is None:
+            return []
+
+        available_metrics = self.get_metrics()
+        metrics_specs = []
+
+        for metric in feature.get('metrics', []):
+            # create a fresh copy of metric spec
+            spec = available_metrics.get(metric['name']).copy()
+
+            # extend it with feature-wide template variables
+            spec['template'] = feature.get('template')
+
+            metrics_specs.append(spec)
+
+        return metrics_specs
+
     def get_source_from_metric_spec(self, metric_spec):
         """
         Return an instance of BaseSource object that matches provided metric spec
