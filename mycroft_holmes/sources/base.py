@@ -59,19 +59,21 @@ class SourceBase:
         """
         return self.NAME
 
-    def get_short_description(self):
+    @classmethod
+    def get_short_description(cls):
         """
         :rtype: str
         """
-        doc = str(self.__doc__).strip()
+        doc = str(cls.__doc__).strip()
 
         return doc.split('\n')[0]
 
-    def get_description(self):
+    @classmethod
+    def get_description(cls):
         """
         :rtype: str
         """
-        doc = str(self.__doc__).strip()
+        doc = str(cls.__doc__).strip()
 
         # remove indentation
         doc = re.sub(r'^ {4}', '', doc, flags=re.MULTILINE)

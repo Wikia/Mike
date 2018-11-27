@@ -6,7 +6,7 @@ from .base import SourceBase
 
 class ConstSource(SourceBase):
     """
-    Source that returns a constant value. Can be used to tweak a score of a feature.
+    Returns a constant value (can be used to tweak a score of a feature).
 
     ### `metrics` config
 

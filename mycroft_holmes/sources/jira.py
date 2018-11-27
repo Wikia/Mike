@@ -11,7 +11,7 @@ from .base import SourceBase
 
 class JiraSource(SourceBase):
     """
-    Source that returns a number of ticket matching given JQL query.
+    Returns a number of Jira ticket matching given JQL query.
 
     ### `sources` config
 
