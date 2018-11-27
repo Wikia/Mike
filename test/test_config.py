@@ -109,7 +109,7 @@ def test_config_get_source_from_metric():
         'JIRA_USER': 'MrFoo',
         'JIRA_PASSWORD': '9bec73487c01653ad7830c25e4b1dc926d17e518',
     })
-    source = config.get_source_from_metric({
+    source = config.get_source_from_metric_spec({
         'name': 'jira/p2-tickets',
         'source': 'wikia/jira',
         'template': {

@@ -122,7 +122,7 @@ class Config:
 
         return features
 
-    def get_source_from_metric(self, metric_spec):
+    def get_source_from_metric_spec(self, metric_spec):
         """
         Return an instance of BaseSource object that matches provided metric spec
         from "features" YAML config section.
