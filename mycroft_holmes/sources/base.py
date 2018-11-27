@@ -45,7 +45,7 @@ class SourceBase:
 
         return None
 
-    def get_value(self):
+    def get_value(self, **kwargs):
         """
         :rtype: int
         """

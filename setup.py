@@ -21,6 +21,7 @@ setup(
         ]
     },
     install_requires=[
-        'PyYAML==3.13'
+        'jira==2.0.0',
+        'PyYAML==3.13',
     ]
 )

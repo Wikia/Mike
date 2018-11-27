@@ -6,7 +6,7 @@ name: "The A-Team components"
 sources:
   - name: wikia/jira
     kind: common/jira
-    host: "the-company.attlasian-inc.com"
+    server: "${JIRA_URL}"
     user: "${JIRA_USER}"  # variables substitution
     password: "${JIRA_PASSWORD}" # Jira API key
   - name: wikia/elastic
