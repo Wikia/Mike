@@ -81,7 +81,7 @@ def test_config_get_features():
             {'name': 'tags-report/usage', 'weight': 0.1},
         ],
         'template': {
-            'project': 'DynamicPageList',
+            'component': 'DynamicPageList',
             'tag': 'dpl'
         }
     }
@@ -98,7 +98,7 @@ def test_config_get_metrics():
     assert metrics['jira/p2-tickets'] == {
         'name': 'jira/p2-tickets',
         'source': 'wikia/jira',
-        'query': "project = '{project}' AND Priority = 'P2' AND status = 'Open'",
+        'query': "component = '{component}' AND Priority = 'Severe - fix in 48h (P2)' AND status = 'Open'",
         'label': '%d P2 tickets'
     }
 
@@ -136,17 +136,17 @@ def test_config_get_metrics_specs_for_feature():
     assert len(metrics_specs) == 3
 
     assert metrics_specs[0] == {
-        'query': "project = '{project}' AND Priority = 'P2' AND status = 'Open'",
+        'query': "component = '{component}' AND Priority = 'Severe - fix in 48h (P2)' AND status = 'Open'",
         'source': 'wikia/jira',
         'name': 'jira/p2-tickets',
         'label': '%d P2 tickets',
-        'template': {'project': 'DynamicPageList', 'tag': 'dpl'}
+        'template': {'component': 'DynamicPageList', 'tag': 'dpl'}
     }
 
     assert metrics_specs[1] == {
-        'query': "project = '{project}' AND Priority = 'P3' AND status = 'Open'",
+        'query': "component = '{component}' AND Priority = 'Major - fix in 28 days (P3)' AND status = 'Open'",
         'source': 'wikia/jira',
         'name': 'jira/p3-tickets',
         'label': '%d P3 tickets',
-        'template': {'project': 'DynamicPageList', 'tag': 'dpl'}
+        'template': {'component': 'DynamicPageList', 'tag': 'dpl'}
     }
