@@ -16,7 +16,8 @@ def test_new_from_name():
     source = SourceBase.new_from_name('common/const')
 
     print(source)
-    assert isinstance(source, ConstSource.__class__), 'ConstSource should be returned by SourceBase.new_from_name'
+    assert isinstance(source, ConstSource), 'ConstSource should be returned by SourceBase.new_from_name'
+    assert source.get_value() == 1
 
 
 def test_get_description():

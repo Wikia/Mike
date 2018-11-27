@@ -20,7 +20,7 @@ class SourceBase:
         """
         Returns all subclasses of SourceBase class imported in __init__.py file
 
-        :rtype: list[SourceBase]
+        :rtype: list[cls]
         """
         return SourceBase.__subclasses__()
 
@@ -41,7 +41,7 @@ class SourceBase:
         """
         for source in SourceBase._sources():
             if source.NAME == name:
-                return source
+                return source()
 
         return None
 
