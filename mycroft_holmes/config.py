@@ -103,12 +103,14 @@ class Config:
         features = OrderedDict()
 
         # apply common part for each feature
-        common = self.get_raw().get('common')
+        common_metrics = self.get_raw().get('common', {}).get('metrics')
 
         for spec in self.data['features']:
-            if common and common.get('metrics'):
+            spec = spec.copy()
+
+            if common_metrics:
                 # merge metrics - common ones + spec-specific ones
-                metrics = common.get('metrics')
+                metrics = common_metrics.copy()
                 metrics += spec.get('metrics', [])
 
                 spec['metrics'] = metrics
