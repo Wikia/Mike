@@ -22,3 +22,7 @@ To install development dependencies run `make` inside virtualenv.
 ## Config file
 
 > TODO
+
+## License
+
+[Dashboard sidebar's background image](https://commons.wikimedia.org/wiki/File:Gree-02.jpg) is used under public domain license.

@@ -10,6 +10,13 @@ body {
     box-shadow: 0 16px 38px -12px rgba(0,0,0,.25);
 }
 
+.sidebar-wrapper {
+    background-repeat: no-repeat;
+    background-image: linear-gradient(to bottom, rgba(255,255,255,.9) 0%,rgba(255,255,255,.5) 100%), url('../img/mike.jpg');
+    background-repeat: no-repeat;
+    background-position: right bottom;
+}
+
 .card-icon {
     padding: 5px !important;
 }
@@ -83,3 +90,4 @@ pre {
     padding: 1em 2em;
 }
 **/
+
