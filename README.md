@@ -25,4 +25,4 @@ To install development dependencies run `make` inside virtualenv.
 
 ## License
 
-[Dashboard sidebar's background image](https://commons.wikimedia.org/wiki/File:Gree-02.jpg) is used under public domain license.
+[Dashboard sidebar's background image](https://commons.wikimedia.org/wiki/File:Gree-02.jpg) is used under public domain license. Favicon made by [Freepik](https://www.flaticon.com/authors/freepik) is licensed by CC 3.0 BY.
