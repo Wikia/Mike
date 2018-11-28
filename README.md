@@ -1,6 +1,8 @@
 # Mike [![Build Status](https://travis-ci.org/Wikia/Mike.svg?branch=master)](https://travis-ci.org/Wikia/Mike)
 
-[Mycroft Holmes](https://en.wikipedia.org/wiki/The_Moon_Is_a_Harsh_Mistress#Characters) (High-Optional, Logical, Multi-Evaluating Supervisor) aka Mike
+[Mycroft Holmes](https://en.wikipedia.org/wiki/The_Moon_Is_a_Harsh_Mistress#Characters) (High-Optional, Logical, Multi-Evaluating Supervisor) aka Mike.
+
+[The tool that collects metrics for software components](https://medium.com/legacy-systems-diary/our-story-about-sustaining-engineering-team-7e83652b8873) based on: bug reports / tickets, features usage and the code quality.
 
 ## Install
 
