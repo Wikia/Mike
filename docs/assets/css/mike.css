@@ -22,18 +22,33 @@ h1,
     letter-spacing: -1px;
 }
 
+a.card-header {
+    padding: 0;
+}
+
 .metrics .card-footer {
     display: block;
 }
 
-.card-ok {
-    opacity: 0.6;
+.card {
     transition-property: opacity;
     transition-duration: .5s;
 }
 
-.card-ok:hover {
+.card:hover {
     opacity: 1;
+}
+
+.card-warning {
+    opacity: 0.8;
+}
+
+.card-ok {
+    opacity: 0.6;
+}
+
+.card h3 {
+    font-size: 2.2em;
 }
 
 .card h3 a,
