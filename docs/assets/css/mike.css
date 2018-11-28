@@ -1,0 +1,56 @@
+body {
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#eeeeee+0,aaaaaa+100,7db9e8+100 */
+    background: #eeeeee; /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover, #ffffff 0%, #eeeeee 100%, #7db9e8 100%); /* FF3.6-15 */
+    background: -webkit-radial-gradient(center, ellipse cover, #ffffff 0%,#eeeeee 100%,#7db9e8 100%); /* Chrome10-25,Safari5.1-6 */
+    background: radial-gradient(ellipse at center, #ffffff 0%,#eeeeee 100%,#7db9e8 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+
+.sidebar {
+    box-shadow: 0 16px 38px -12px rgba(0,0,0,.25);
+}
+
+.col-lg-3 {
+    flex: 0 0 475px;
+    max-width: 475px;
+}
+
+h1,
+.card-title,
+.metric-value {
+    font-family: "Roboto Slab";
+    letter-spacing: -1px;
+}
+
+.metrics .card-footer {
+    display: block;
+}
+
+.card-ok {
+    opacity: 0.6;
+    transition-property: opacity;
+    transition-duration: .5s;
+}
+
+.card-ok:hover {
+    opacity: 1;
+}
+
+.card a {
+    color: #333 !important;
+    border-bottom: solid 3px rgba(0, 0, 0, .25);
+}
+
+.row.metrics .col-lg-2 {
+    flex: 0 0 275px;
+    max-width: 275px;
+}
+
+/**
+pre {
+    background: rgba(0,0,0, .9);
+    border: solid 1px rgba(255,255,255, .75);
+    color: #eee;
+    padding: 1em 2em;
+}
+**/
