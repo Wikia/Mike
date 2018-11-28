@@ -36,9 +36,14 @@ h1,
     opacity: 1;
 }
 
-.card a {
+.card h3 a,
+.card .stats a {
     color: #333 !important;
     border-bottom: solid 3px rgba(0, 0, 0, .25);
+}
+
+.card a.material-icons {
+    color: #aaa !important;
 }
 
 .row.metrics .col-lg-2 {
