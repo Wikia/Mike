@@ -19,6 +19,40 @@ To install development dependencies run `make` inside virtualenv.
 
 > TODO
 
+## Scripts
+
+The following command line scripts are available in Mike's virtual environment:
+
+### `collect_metrics`
+
+This script should be run periodically to collect metrics for features defined in YAML config file.
+
+Simply run `collect_metrics <path to YAML config file>`
+
+Environment variables passed to the script will be used to replace variables in the YAML config file.
+
+For instance, running the following:
+
+```
+DATABASE_USER=foo DATABASE_PASSWORD=2505eb2474b2 collect_metrics test/fixtures/config.yaml
+```
+
+will replace `${...}` placeholders with appropriate values taken from environment variables provided above.
+
+```yaml
+sources:
+  - name: wikia/tags-report
+    kind: common/mysql
+    host: db.prod
+    user: "${DATABASE_USER}"
+    password: "${DATABASE_PASSWORD}"
+```
+
+### `generate_source_docs`
+
+Prints out Markdown with sources documentation taken from the code, to be pasted into `mycroft_holmes/sources/README>md`
+when a new source is added or an existing one is updated.
+
 ## Config file
 
 [An example YAML config file](https://github.com/Wikia/Mike/blob/master/test/fixtures/config.yaml) can be found in `test/fixtures` directory.
