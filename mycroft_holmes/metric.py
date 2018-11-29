@@ -18,11 +18,17 @@ class Metric:
         self.config = config
         self.spec = spec
 
+    def get_name(self):
+        """
+        :rtype: str
+        """
+        return self.spec['name']
+
     def get_source_name(self):
         """
         :rtype: str
         """
-        return self.spec['source']
+        return self.spec.get('source')
 
     def get_spec(self):
         """

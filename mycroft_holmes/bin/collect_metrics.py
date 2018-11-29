@@ -23,18 +23,19 @@ def get_metrics_for_feature(feature_name, config):
 
     result = OrderedDict()
 
-    for metric_spec in config.get_metrics_for_feature(feature_name):
-        logger.debug('Metric: %s', metric_spec)
+    for metric in config.get_metrics_for_feature(feature_name):
+        metric_name = metric.get_name()
+        logger.debug('Metric: %s', metric.get_spec())
 
-        if metric_spec.get('source') is None:
-            logger.warning('"%s" has no source specified, skipping!', metric_spec['name'])
+        if metric.get_source_name() is None:
+            logger.warning('"%s" has no source specified, skipping!', metric_name)
             continue
 
         # build source spec and set it up
-        source = config.get_source_from_metric(metric_spec)
+        source = metric.get_source()
         logger.debug('Source: %s', source)
 
-        result[metric_spec['name']] = source.get_value(**metric_spec)
+        result[metric_name] = source.get_value(**metric.get_spec())
 
     return result
 
