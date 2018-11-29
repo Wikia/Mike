@@ -18,15 +18,18 @@ def main():
     full_docs = ''
 
     for source in sources:
-        name = source.NAME
+        class_name = source.__name__  # e.g. ConstSource
+        source_name = source.NAME  # e.g. common/const
 
-        sources_list += "* `%s` %s\n" % (name, source.get_short_description())
+        sources_list += "* `%s`: %s\n" % (source_name, source.get_short_description())
 
         full_docs += """
-## `%s`
+### %s
 
-%s
-""".strip() % (name, source.get_description()) + '\n\n'
+Source name: `%s`
+
+> %s
+""".strip() % (class_name, source_name, source.get_description()) + '\n\n'
 
     # print the list of sources
     print('## Available sources\n')

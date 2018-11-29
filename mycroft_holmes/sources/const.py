@@ -8,7 +8,7 @@ class ConstSource(SourceBase):
     """
     Returns a constant value (can be used to tweak a score of a feature).
 
-    ### `metrics` config
+    #### `metrics` config
 
     ```yaml
         metrics:

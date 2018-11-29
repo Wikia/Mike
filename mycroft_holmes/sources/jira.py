@@ -13,7 +13,7 @@ class JiraSource(SourceBase):
     """
     Returns a number of Jira ticket matching given JQL query.
 
-    ### `sources` config
+    #### `sources` config
 
     ```yaml
     sources:
@@ -27,7 +27,7 @@ class JiraSource(SourceBase):
     Password is an API token that you can generate:
     https://confluence.atlassian.com/cloud/api-tokens-938839638.html.
 
-    ### `metrics` config
+    #### `metrics` config
 
     ```yaml
         metrics:
@@ -38,7 +38,7 @@ class JiraSource(SourceBase):
             label: "%d P3 tickets"
     ```
 
-    ### `features` config
+    #### `features` config
 
     ```yaml
         features:

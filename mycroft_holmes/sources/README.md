@@ -5,8 +5,8 @@ This directory contains implementation of various sources that provide values fo
 
 ## Available sources
 
-* `common/const` Returns a constant value (can be used to tweak a score of a feature).
-* `common/jira` Returns a number of Jira ticket matching given JQL query.
+* `common/const`: Returns a constant value (can be used to tweak a score of a feature).
+* `common/jira`: Returns a number of Jira ticket matching given JQL query.
 
 ### TODO
 
@@ -18,11 +18,13 @@ This directory contains implementation of various sources that provide values fo
 
 * `wikia/wikifactory` (queries WikiFactory database that is used to configure every wiki Wikia hosts)
 
-## `common/const`
+### ConstSource
 
-Returns a constant value (can be used to tweak a score of a feature).
+Source name: `common/const`
 
-### `metrics` config
+> Returns a constant value (can be used to tweak a score of a feature).
+
+#### `metrics` config
 
 ```yaml
     metrics:
@@ -30,11 +32,13 @@ Returns a constant value (can be used to tweak a score of a feature).
          weight: 100
 ```
 
-## `common/jira`
+### JiraSource
 
-Returns a number of Jira ticket matching given JQL query.
+Source name: `common/jira`
 
-### `sources` config
+> Returns a number of Jira ticket matching given JQL query.
+
+#### `sources` config
 
 ```yaml
 sources:
@@ -48,7 +52,7 @@ sources:
 Password is an API token that you can generate:
 https://confluence.atlassian.com/cloud/api-tokens-938839638.html.
 
-### `metrics` config
+#### `metrics` config
 
 ```yaml
     metrics:
@@ -59,7 +63,7 @@ https://confluence.atlassian.com/cloud/api-tokens-938839638.html.
         label: "%d P3 tickets"
 ```
 
-### `features` config
+#### `features` config
 
 ```yaml
     features:
