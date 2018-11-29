@@ -9,8 +9,8 @@ import yaml
 from yaml.error import MarkedYAMLError
 
 from .errors import MycroftHolmesError
-from .sources.base import SourceBase
-from. utils import yaml_variables_subst
+from .metric import Metric
+from .utils import yaml_variables_subst
 
 
 class MycroftHolmesConfigError(MycroftHolmesError):
@@ -30,8 +30,6 @@ class Config:
         :type config_file str
         :type env dict
         """
-        self.sources_cache = dict()
-
         self.logger = logging.getLogger(self.__class__.__name__)
         self.logger.info('Reading config file "%s"', config_file)
 
@@ -122,13 +120,13 @@ class Config:
 
         return features
 
-    def get_metrics_specs_for_feature(self, feature_name):
+    def get_metrics_for_feature(self, feature_name):
         """
-        Get metrics spec for a given feature. Each of returned items can then be passed to
-        get_source_from_metric_spec method to get an instance of source object
+        Get metrics for a given feature. Each of returned items can then be passed to
+        get_source_from_metric method to get an instance of source object
 
         :type feature_name str
-        :rtype: list[dict]
+        :rtype: list[Metric]
         """
         feature = self.get_features().get(feature_name)
 
@@ -136,7 +134,7 @@ class Config:
             return []
 
         available_metrics = self.get_metrics()
-        metrics_specs = []
+        metrics = []
 
         for metric in feature.get('metrics', []):
             # create a fresh copy of metric spec
@@ -145,38 +143,8 @@ class Config:
             # extend it with feature-wide template variables
             spec['template'] = feature.get('template')
 
-            metrics_specs.append(spec)
+            metrics.append(
+                Metric(spec=spec, feature_name=feature_name, config=self)
+            )
 
-        return metrics_specs
-
-    def get_source_from_metric_spec(self, metric_spec):
-        """
-        Return an instance of BaseSource object that matches provided metric spec
-        from "features" YAML config section.
-
-        Cache by metric's spec "source" field
-
-        :type metric_spec dict
-        :rtype: SourceBase
-        """
-        source_name = metric_spec['source']
-
-        if source_name in self.sources_cache:
-            return self.sources_cache.get(source_name)
-
-        # get an entry from "source" config file section that matches given metric "source"
-        source_spec = self.get_sources().get(source_name).copy()
-        source_kind = source_spec['kind']
-
-        del source_spec['name']
-        del source_spec['kind']
-
-        self.logger.info('Setting up "%s" source of "%s" kind (args: %s)',
-                         metric_spec['source'], source_kind, list(source_spec.keys()))
-
-        source = SourceBase.new_from_name(source_kind, args=source_spec)
-
-        # cache it
-        self.sources_cache[source_name] = source
-
-        return source
+        return metrics

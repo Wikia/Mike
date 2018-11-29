@@ -23,7 +23,7 @@ def get_metrics_for_feature(feature_name, config):
 
     result = OrderedDict()
 
-    for metric_spec in config.get_metrics_specs_for_feature(feature_name):
+    for metric_spec in config.get_metrics_for_feature(feature_name):
         logger.debug('Metric: %s', metric_spec)
 
         if metric_spec.get('source') is None:
@@ -31,7 +31,7 @@ def get_metrics_for_feature(feature_name, config):
             continue
 
         # build source spec and set it up
-        source = config.get_source_from_metric_spec(metric_spec)
+        source = config.get_source_from_metric(metric_spec)
         logger.debug('Source: %s', source)
 
         result[metric_spec['name']] = source.get_value(**metric_spec)

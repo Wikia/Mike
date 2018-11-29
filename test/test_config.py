@@ -103,39 +103,17 @@ def test_config_get_metrics():
     }
 
 
-def test_config_get_source_from_metric():
-    config = Config(config_file=get_fixtures_directory() + '/config.yaml', env={
-        'JIRA_URL': 'https://foo.atlasian.net',
-        'JIRA_USER': 'MrFoo',
-        'JIRA_PASSWORD': '9bec73487c01653ad7830c25e4b1dc926d17e518',
-    })
-    source = config.get_source_from_metric_spec({
-        'name': 'jira/p2-tickets',
-        'source': 'wikia/jira',
-        'template': {
-            'project': 'DynamicPageList',
-            'tag': 'dpl'
-        }
-    })
-
-    print(source)
-
-    assert isinstance(source, JiraSource), 'get_source_from_metric should return an instance of JiraSource'
-    assert source._server == 'https://foo.atlasian.net'
-    assert source._basic_auth == ('MrFoo', '9bec73487c01653ad7830c25e4b1dc926d17e518')
-
-
 def test_config_get_metrics_specs_for_feature():
     config = Config(config_file=get_fixtures_directory() + '/config.yaml')
 
-    assert config.get_metrics_specs_for_feature(feature_name='foobar') == []
+    assert config.get_metrics_for_feature(feature_name='foobar') == []
 
-    metrics_specs = config.get_metrics_specs_for_feature(feature_name='DynamicPageList')
+    metrics_specs = config.get_metrics_for_feature(feature_name='DynamicPageList')
     print(metrics_specs)
 
     assert len(metrics_specs) == 3
 
-    assert metrics_specs[0] == {
+    assert metrics_specs[0].get_spec() == {
         'query': "component = '{component}' AND Priority = 'Severe - fix in 48h (P2)' AND status = 'Open'",
         'source': 'wikia/jira',
         'name': 'jira/p2-tickets',
@@ -143,7 +121,7 @@ def test_config_get_metrics_specs_for_feature():
         'template': {'component': 'DynamicPageList', 'tag': 'dpl'}
     }
 
-    assert metrics_specs[1] == {
+    assert metrics_specs[1].get_spec() == {
         'query': "component = '{component}' AND Priority = 'Major - fix in 28 days (P3)' AND status = 'Open'",
         'source': 'wikia/jira',
         'name': 'jira/p3-tickets',

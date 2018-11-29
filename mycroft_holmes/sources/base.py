@@ -4,6 +4,8 @@ Common code
 import logging
 import re
 
+SOURCES_CACHE = dict()
+
 
 class SourceBase:
     """
@@ -46,6 +48,36 @@ class SourceBase:
                 return source(**args)
 
         return None
+
+    @classmethod
+    def new_for_metric(cls, metric, config):
+        """
+        :type metric mycroft_holmes.metric.Metric
+        :type config mycroft_holmes.config.Config
+        :rtype: SourceBase
+        """
+        source_name = metric.get_source_name()
+
+        if source_name in SOURCES_CACHE:
+            return SOURCES_CACHE.get(source_name)
+
+        # get an entry from "source" config file section that matches given metric "source"
+        source_spec = config.get_sources().get(source_name).copy()
+        source_kind = source_spec['kind']
+
+        del source_spec['name']
+        del source_spec['kind']
+
+        logger = logging.getLogger(cls.__class__.__name__)
+        logger.info('Setting up "%s" source of "%s" kind (args: %s)',
+                    source_name, source_kind, list(source_spec.keys()))
+
+        source = SourceBase.new_from_name(source_kind, args=source_spec)
+
+        # cache it
+        SOURCES_CACHE[source_name] = source
+
+        return source
 
     def get_value(self, **kwargs):
         """
