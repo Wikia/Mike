@@ -30,7 +30,7 @@ def test_get_description():
     assert source.get_description() == """
 Returns a constant value (can be used to tweak a score of a feature).
 
-### `metrics` config
+#### `metrics` config
 
 ```yaml
     metrics:
