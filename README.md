@@ -21,7 +21,9 @@ To install development dependencies run `make` inside virtualenv.
 
 ## Config file
 
-> TODO
+[An example YAML config file](https://github.com/Wikia/Mike/blob/master/test/fixtures/config.yaml) can be found in `test/fixtures` directory.
+
+[Mike's architecture, sources structure and configuration](https://github.com/Wikia/Mike/tree/master/mycroft_holmes/sources#sources) are described in `mycroft_holmes/sources` directory.
 
 ## License
 
