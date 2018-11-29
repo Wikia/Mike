@@ -52,18 +52,19 @@ class JiraSource(SourceBase):
 
     NAME = 'common/jira'
 
-    def __init__(self, server, user, password):
+    def __init__(self, server, user, password, client=None):
         """
         :type server str
         :type user str
         :type password str
+        :type client obj
         """
         super(JiraSource, self).__init__()
 
         self._server = server
         self._basic_auth = (user, password)
 
-        self._client = None
+        self._client = client or None
 
     @property
     def client(self):
