@@ -25,17 +25,11 @@ def get_metrics_for_feature(feature_name, config):
 
     for metric in config.get_metrics_for_feature(feature_name):
         metric_name = metric.get_name()
-        logger.debug('Metric: %s', metric.get_spec())
 
-        if metric.get_source_name() is None:
-            logger.warning('"%s" has no source specified, skipping!', metric_name)
-            continue
-
-        # build source spec and set it up
-        source = metric.get_source()
-        logger.debug('Source: %s', source)
-
-        result[metric_name] = source.get_value(**metric.get_spec())
+        try:
+            result[metric_name] = metric.fetch_value()
+        except MycroftHolmesError:
+            logger.warning('Failed to fetch value for "%s"', metric_name, exc_info=True)
 
     return result
 

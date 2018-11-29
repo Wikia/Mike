@@ -1,6 +1,9 @@
 """
 Handles a single metric of a feature
 """
+import logging
+
+from .errors import MycroftMetricError
 from .sources.base import SourceBase
 
 
@@ -14,6 +17,8 @@ class Metric:
         :type config mycroft_holmes.config.Config
         :type spec dict
         """
+        self.logger = logging.getLogger(self.__class__.__name__)
+
         self.feature_name = feature_name
         self.config = config
         self.spec = spec
@@ -36,8 +41,24 @@ class Metric:
         """
         return self.spec
 
-    def get_source(self):
+    def _get_source(self):
         """
         :rtype: SourceBase
         """
         return SourceBase.new_for_metric(metric=self, config=self.config)
+
+    def fetch_value(self):
+        """
+        Fetches the metric value from the appropriate source
+
+        :raise: MycroftMetricError
+        :rtype: int
+        """
+        self.logger.debug('Fetching value for: %s', self.get_spec())
+
+        if self.get_source_name() is None:
+            raise MycroftMetricError('"%s" has no source specified, skipping!' % self.get_name())
+
+        source = self._get_source()
+
+        return source.get_value(**self.get_spec())
