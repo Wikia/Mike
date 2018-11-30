@@ -13,3 +13,9 @@ class MycroftSourceError(MycroftHolmesError):
     """
     Thrown when we fail to get a value from a source
     """
+
+
+class MycroftMetricError(MycroftHolmesError):
+    """
+    Thrown when we fail to get a value for a metric
+    """

@@ -23,18 +23,13 @@ def get_metrics_for_feature(feature_name, config):
 
     result = OrderedDict()
 
-    for metric_spec in config.get_metrics_specs_for_feature(feature_name):
-        logger.debug('Metric: %s', metric_spec)
+    for metric in config.get_metrics_for_feature(feature_name):
+        metric_name = metric.get_name()
 
-        if metric_spec.get('source') is None:
-            logger.warning('"%s" has no source specified, skipping!', metric_spec['name'])
-            continue
-
-        # build source spec and set it up
-        source = config.get_source_from_metric_spec(metric_spec)
-        logger.debug('Source: %s', source)
-
-        result[metric_spec['name']] = source.get_value(**metric_spec)
+        try:
+            result[metric_name] = metric.fetch_value()
+        except MycroftHolmesError:
+            logger.warning('Failed to fetch value for "%s"', metric_name, exc_info=True)
 
     return result
 
