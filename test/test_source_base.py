@@ -1,6 +1,9 @@
 """
 Set of unit test for SourceBase class
 """
+import pytest
+
+from mycroft_holmes.errors import MycroftSourceError
 from mycroft_holmes.sources.base import SourceBase
 from mycroft_holmes.sources import ConstSource
 
@@ -18,6 +21,11 @@ def test_new_from_name():
     print(source)
     assert isinstance(source, ConstSource), 'ConstSource should be returned by SourceBase.new_from_name'
     assert source.get_value() == 1
+
+
+def test_new_from_name_missing():
+    with pytest.raises(MycroftSourceError):
+        SourceBase.new_from_name('foo/missing-source')
 
 
 def test_get_description():
