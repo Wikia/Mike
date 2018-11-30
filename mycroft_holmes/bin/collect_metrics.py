@@ -21,15 +21,23 @@ def get_metrics_for_feature(feature_name, config):
     logger = logging.getLogger('get_metrics_for_feature')
     logger.info('Collecting metrics for "%s" feature', feature_name)
 
-    result = OrderedDict()
+    result = OrderedDict(score=0)
+
+    feature_score = 0
 
     for metric in config.get_metrics_for_feature(feature_name):
         metric_name = metric.get_name()
 
         try:
-            result[metric_name] = metric.fetch_value()
+            metric_value = metric.fetch_value()
+
+            result[metric_name] = metric_value
+            feature_score += metric_value * metric.get_weight()
         except MycroftHolmesError:
             logger.warning('Failed to fetch value for "%s"', metric_name, exc_info=True)
+
+    result['score'] = feature_score
+    logger.info('Score for "%s" feature: %d', feature_name, feature_score)
 
     return result
 
