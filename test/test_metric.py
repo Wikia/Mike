@@ -1,7 +1,10 @@
 """
 Set of unit test for Metric class
 """
+import pytest
+
 from mycroft_holmes.config import Config
+from mycroft_holmes.errors import MycroftSourceError
 from mycroft_holmes.metric import Metric
 from mycroft_holmes.sources import JiraSource
 from mycroft_holmes.sources.base import SourceBase
@@ -41,6 +44,18 @@ def test_metric():
     assert isinstance(source, JiraSource), 'get_source_from_metric should return an instance of JiraSource'
     assert source._server == 'https://foo.atlasian.net'
     assert source._basic_auth == ('MrFoo', '9bec73487c01653ad7830c25e4b1dc926d17e518')
+
+
+def test_metric_missing_source_handling():
+    config = Config(config_file=get_fixtures_directory() + '/config.yaml')
+
+    metric = Metric(spec={
+        'name': 'foo/var',
+        'source': 'foo/missing-source'
+    }, feature_name='foo', config=config)
+
+    with pytest.raises(MycroftSourceError):
+        metric.fetch_value()
 
 
 def test_metric_get_weight():

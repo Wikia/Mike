@@ -4,6 +4,8 @@ Common code
 import logging
 import re
 
+from mycroft_holmes.errors import MycroftSourceError
+
 SOURCES_CACHE = dict()
 
 
@@ -62,7 +64,22 @@ class SourceBase:
             return SOURCES_CACHE.get(source_name)
 
         # get an entry from "source" config file section that matches given metric "source"
-        source_spec = config.get_sources().get(source_name).copy()
+        spec = config.get_sources().get(source_name)
+
+        # fallback to names of base sources (those defined in the code, not in the config file)
+        if spec is None:
+            if source_name in cls.get_sources_names():
+                spec = metric.get_spec().copy()
+                del spec['source']
+
+                spec['kind'] = source_name
+                spec['name'] = None
+
+        # raise an error if an entry has not been found
+        if spec is None:
+            raise MycroftSourceError('"%s" source is not known' % source_name)
+
+        source_spec = spec.copy()
         source_kind = source_spec['kind']
 
         del source_spec['name']
