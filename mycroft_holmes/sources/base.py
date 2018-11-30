@@ -38,18 +38,18 @@ class SourceBase:
         return [source.NAME for source in SourceBase._sources()]
 
     @staticmethod
-    def new_from_name(name, args=None):
+    def new_from_name(source_name, args=None):
         """
-        :type name str
+        :type source_name str
         :type args dict
-        :rtype: SourceBase|None
+        :rtype: SourceBase
         """
         for source in SourceBase._sources():
-            if source.NAME == name:
+            if source.NAME == source_name:
                 args = args if args else {}
                 return source(**args)
 
-        return None
+        raise MycroftSourceError('"%s" source is not known' % source_name)
 
     @classmethod
     def new_for_metric(cls, metric, config):

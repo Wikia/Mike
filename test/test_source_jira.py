@@ -32,7 +32,7 @@ def test_is_source_present():
 
 def test_source_get_value():
     source = SourceBase.new_from_name(
-        name=JiraSource.NAME,
+        source_name=JiraSource.NAME,
         args={
             'server': 'https://foo-company.attlasian.net',
             'user': 'MrFoo',
