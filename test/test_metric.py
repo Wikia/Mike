@@ -4,7 +4,7 @@ Set of unit test for Metric class
 import pytest
 
 from mycroft_holmes.config import Config
-from mycroft_holmes.errors import MycroftSourceError
+from mycroft_holmes.errors import MycroftSourceError, MycroftMetricError
 from mycroft_holmes.metric import Metric
 from mycroft_holmes.sources import JiraSource
 from mycroft_holmes.sources.base import SourceBase
@@ -55,6 +55,17 @@ def test_metric_missing_source_handling():
     }, feature_name='foo', config=config)
 
     with pytest.raises(MycroftSourceError):
+        metric.fetch_value()
+
+
+def test_metric_empty_source_handling():
+    config = Config(config_file=get_fixtures_directory() + '/config.yaml')
+
+    metric = Metric(spec={
+        'name': 'foo/var',
+    }, feature_name='foo', config=config)
+
+    with pytest.raises(MycroftMetricError):
         metric.fetch_value()
 
 
