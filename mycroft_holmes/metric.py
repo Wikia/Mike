@@ -41,6 +41,12 @@ class Metric:
         """
         return self.spec
 
+    def get_weight(self):
+        """
+        :rtype: float
+        """
+        return self.spec.get('weight', 1)
+
     def _get_source(self):
         """
         :rtype: SourceBase

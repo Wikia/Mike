@@ -9,7 +9,7 @@ from mycroft_holmes.sources.base import SourceBase
 from . import get_fixtures_directory
 
 
-def test_config_get_source_from_metric():
+def test_metric():
     config = Config(config_file=get_fixtures_directory() + '/config.yaml', env={
         'JIRA_URL': 'https://foo.atlasian.net',
         'JIRA_USER': 'MrFoo',
@@ -26,6 +26,7 @@ def test_config_get_source_from_metric():
 
     print(metric)
 
+    assert metric.get_name() == 'jira/p2-tickets'
     assert metric.get_source_name() == 'wikia/jira'
     assert metric.get_spec() == {
         'name': 'jira/p2-tickets',
@@ -40,3 +41,22 @@ def test_config_get_source_from_metric():
     assert isinstance(source, JiraSource), 'get_source_from_metric should return an instance of JiraSource'
     assert source._server == 'https://foo.atlasian.net'
     assert source._basic_auth == ('MrFoo', '9bec73487c01653ad7830c25e4b1dc926d17e518')
+
+
+def test_metric_get_weight():
+    config = Config(config_file=get_fixtures_directory() + '/config.yaml')
+
+    metric = Metric(spec={
+        'name': 'foo/var',
+        'weight': 2.5
+    }, feature_name='foo', config=config)
+
+    print(metric)
+    assert metric.get_weight() == 2.5
+
+    metric = Metric(spec={
+        'name': 'foo/var'
+    }, feature_name='foo', config=config)
+
+    print(metric)
+    assert metric.get_weight() == 1  # a default value
