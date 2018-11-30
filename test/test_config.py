@@ -5,7 +5,6 @@ Set of unit test for Config class
 import pytest
 
 from mycroft_holmes.config import Config, MycroftHolmesConfigError
-from mycroft_holmes.sources import JiraSource
 
 from . import get_fixtures_directory
 
@@ -128,3 +127,18 @@ def test_config_get_metrics_specs_for_feature():
         'label': '%d P3 tickets',
         'template': {'component': 'DynamicPageList', 'tag': 'dpl'}
     }
+
+
+def test_config_get_metrics_for_feature_const():
+    config = Config(config_file=get_fixtures_directory() + '/const.yaml')
+
+    metrics = config.get_metrics_for_feature('Foo Bar')
+
+    print(metrics)
+    assert len(metrics) == 2
+
+    assert metrics[0].get_source_name() == 'common/const'
+    assert metrics[0].get_weight() == 42
+
+    assert metrics[1].get_source_name() == 'common/const'
+    assert metrics[1].get_weight() == 66

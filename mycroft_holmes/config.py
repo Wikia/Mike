@@ -77,7 +77,7 @@ class Config:
         """
         sources = OrderedDict()
 
-        for spec in self.data['sources']:
+        for spec in self.data.get('sources', []):
             sources[spec['name']] = spec
 
         return sources
@@ -90,7 +90,7 @@ class Config:
         """
         metrics = OrderedDict()
 
-        for spec in self.data['metrics']:
+        for spec in self.data.get('metrics', []):
             metrics[spec['name']] = spec
 
         return metrics
@@ -141,7 +141,12 @@ class Config:
             spec = available_metrics.get(metric['name']).copy()
 
             # extend it with feature-wide template variables
-            spec['template'] = feature.get('template')
+            if feature.get('template'):
+                spec['template'] = feature.get('template')
+
+            # pass per-metric weight
+            if metric.get('weight'):
+                spec['weight'] = metric.get('weight')
 
             metrics.append(
                 Metric(spec=spec, feature_name=feature_name, config=self)

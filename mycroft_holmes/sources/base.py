@@ -82,8 +82,11 @@ class SourceBase:
         source_spec = spec.copy()
         source_kind = source_spec['kind']
 
+        # remove common spec entries before we pass them as source parameters
         del source_spec['name']
         del source_spec['kind']
+        if 'weight' in source_spec:
+            del source_spec['weight']
 
         logger = logging.getLogger(cls.__class__.__name__)
         logger.info('Setting up "%s" source of "%s" kind (args: %s)',
