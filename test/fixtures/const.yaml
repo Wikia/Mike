@@ -1,0 +1,14 @@
+# config file for test_collect_metrics.py
+metrics:
+  - name: usage/foo
+    source: common/const
+  - name: usage/bar
+    source: common/const
+
+features:
+  - name: Foo Bar
+    metrics:
+      -  name: usage/foo
+         weight: 42
+      -  name: usage/bar
+         weight: 66
