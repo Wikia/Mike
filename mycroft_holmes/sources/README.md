@@ -11,7 +11,7 @@ This directory contains implementation of various sources that provide values fo
 ### TODO
 
 * `common/analytics` (gets data from Google Analytics)
-* `common/elastic` (gets number of entries matching a given query against specified ElasticSearch index)
+* `common/logstash` (gets number of entries matching a given query against specified logstash ElasticSearch-powered index)
 * `common/mysql` (performs a specified SQL query that returns a single value)
 
 #### Wikia-specific sources
@@ -90,6 +90,8 @@ sources:
 `kind` key defines the name of Mike's source that will be set up using specified settings (e.g. JIRA credentials).
 `name` is the name under which it will be available for feature's metrics.
 
+Values defined in `sources` section are passed to the constructor of a source class that extends `SourceBase`.
+
 ```yaml
 metrics:
   # Jira
@@ -129,3 +131,5 @@ common:
     -  name: jira/p2-tickets
     -  name: jira/p3-tickets
 ```
+
+Values defined in `metrics` section are passed to the `get_value` method of source class that extends `SourceBase`.
