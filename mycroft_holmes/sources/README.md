@@ -41,7 +41,6 @@ sources:
     # JSON-encoded string with service account credentials
     credentials: "${ANALYTICS_SERVICE_ACCOUNT_JSON}"
     view_id: 1234  # your Google Analytics view ID
-    multiply: 20  # e.g. all metrics are sampled at 5%, multiply them by x20 (optional)
 ```
 
 Service account credentials JSON file can obtained from

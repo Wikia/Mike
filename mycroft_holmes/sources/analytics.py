@@ -27,7 +27,6 @@ class GoogleAnalyticsSource(SourceBase):
         # JSON-encoded string with service account credentials
         credentials: "${ANALYTICS_SERVICE_ACCOUNT_JSON}"
         view_id: 1234  # your Google Analytics view ID
-        multiply: 20  # e.g. all metrics are sampled at 5%, multiply them by x20 (optional)
     ```
 
     Service account credentials JSON file can obtained from
@@ -64,18 +63,16 @@ class GoogleAnalyticsSource(SourceBase):
 
     NAME = 'common/analytics'
 
-    def __init__(self, credentials, view_id, multiply=1, client=None):
+    def __init__(self, credentials, view_id, client=None):
         """
         :type credentials str
         :type view_id int
-        :type multiply int
         :type client obj
         """
         super(GoogleAnalyticsSource, self).__init__()
 
         self.credentials = credentials
         self.view_id = view_id
-        self.multiply = multiply
 
         self._client = client or None
 
