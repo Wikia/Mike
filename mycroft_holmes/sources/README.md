@@ -7,11 +7,11 @@ This directory contains implementation of various sources that provide values fo
 
 * `common/const`: Returns a constant value (can be used to tweak a score of a feature).
 * `common/jira`: Returns a number of Jira ticket matching given JQL query.
+* `common/logstash`: Returns a number of entries matching a given elasticsearch query.
 
 ### TODO
 
 * `common/analytics` (gets data from Google Analytics)
-* `common/logstash` (gets number of entries matching a given query against specified logstash ElasticSearch-powered index)
 * `common/mysql` (performs a specified SQL query that returns a single value)
 
 #### Wikia-specific sources
@@ -72,6 +72,47 @@ https://confluence.atlassian.com/cloud/api-tokens-938839638.html.
           - project: "Foo"  # this will be used in template string
         metrics:
           -  name: jira/p3-tickets
+```
+
+### LogstashSource
+
+Source name: `common/logstash`
+
+> Returns a number of entries matching a given elasticsearch query.
+
+We assume that elasticsearch indices follow logstash naming convention
+and are sharded by date, e.g. `logstash-access-log-2017.05.09`
+
+#### `sources` config
+
+```yaml
+sources:
+  - name: foo/logstash
+    kind: common/logstash
+    host: ${ELASTIC_HOST}
+    index: logstash-access-log  # will query this index (e.g. logstash-access-log)
+    period: 3600  # in seconds, query entries from the last hour (defaults to 86400 s)
+```
+
+#### `metrics` config
+
+```yaml
+    metrics:
+      - name: logstash/get-requests-access-log
+        source: foo/logstash  # defined above
+        query: "request: 'GET' AND url: '{url}'"
+        label: "%d GET request"
+```
+
+#### `features` config
+
+```yaml
+    features:
+      - name: FooBar
+        template:
+          - url: "/foo"  # this will be used in template string
+        metrics:
+          -  name: logstash/get-requests-access-log
 ```
 
 ## Sources setup
