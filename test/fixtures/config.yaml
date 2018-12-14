@@ -78,12 +78,19 @@ features:
     template:
       component: "Message Wall"  # this will be used in template string
 
-  - name: Lightbox
-    url: http://docs.company.net/pages/Lightbox
+  # Editors
+  - name: CKEditor
+    url: http://docs.company.net/pages/CKEditor
     template:
-        component: "Lightbox"
-        # metric='ga:totalEvents', filters='ga:eventCategory==lightbox'
-        ga_filter: "ga:eventCategory==lightbox"
+        component: "CK Editor (RTE)"
+        ga_filter: "ga:eventCategory==editor-ck;ga:eventAction==submit;ga:eventLabel==publish"
     metrics:
         - name: analytics/events
-          weight: 0.05
+
+  - name: VisualEditor
+    url: http://docs.company.net/pages/VisualEditor
+    template:
+        component: "Visual Editor"
+        ga_filter: "ga:eventCategory==editor-ve;ga:eventAction==success;ga:eventLabel==publish"
+    metrics:
+        - name: analytics/events

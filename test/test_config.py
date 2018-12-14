@@ -71,6 +71,8 @@ def test_config_get_features():
 
     print(features)
 
+    assert len(features) == 4
+
     assert 'DynamicPageList' in features
     assert features['DynamicPageList'] == {
         'name': 'DynamicPageList',
@@ -86,18 +88,18 @@ def test_config_get_features():
         }
     }
 
-    assert 'Lightbox' in features
-    assert features['Lightbox'] == {
-        'name': 'Lightbox',
-        'url': 'http://docs.company.net/pages/Lightbox',
+    assert 'CKEditor' in features
+    assert features['CKEditor'] == {
+        'name': 'CKEditor',
+        'url': 'http://docs.company.net/pages/CKEditor',
         'metrics': [
             {'name': 'jira/p2-tickets'},
             {'name': 'jira/p3-tickets'},
-            {'name': 'analytics/events', 'weight': 0.05},
+            {'name': 'analytics/events'},
         ],
         'template': {
-            'component': 'Lightbox',
-            'ga_filter': 'ga:eventCategory==lightbox'
+            'component': 'CK Editor (RTE)',
+            'ga_filter': 'ga:eventCategory==editor-ck;ga:eventAction==submit;ga:eventLabel==publish'
         }
     }
 
