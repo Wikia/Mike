@@ -96,6 +96,7 @@ def test_config_get_features():
             {'name': 'analytics/events'},
         ],
         'template': {
+            'component': 'Notifications',
             'ga_filter': 'ga:eventCategory==notifications'
         }
     }

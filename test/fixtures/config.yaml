@@ -20,9 +20,8 @@ sources:
   - name: wikia/analytics
     kind: common/analytics
     # https://developers.google.com/analytics/devguides/reporting/core/v4/quickstart/service-py
-    credentials: "${ANALYTICS_SERVICE_ACCOUNT_JSON}"
-    view_id: 89268958  # All Wikis Sampled @ 10%
-    multiply: 10  # all metrics are sampled at 10%, multiply them by x10
+    credentials: '${ANALYTICS_SERVICE_ACCOUNT_JSON}'
+    view_id: 89268958  # All Wikis Sampled @ 100%
 
 # now define metrics that are taken from sources above
 metrics:
@@ -82,6 +81,7 @@ features:
   - name: Notifications
     url: http://docs.company.net/pages/Notifications
     template:
+        component: "Notifications"
         # metric='ga:totalEvents', filters='ga:eventCategory==notifications'
         ga_filter: "ga:eventCategory==notifications"
     metrics:
