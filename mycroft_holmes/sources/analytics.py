@@ -92,8 +92,7 @@ class GoogleAnalyticsSource(SourceBase):
             try:
                 service_account_info = json.loads(self.credentials)
             except json.JSONDecodeError:
-                raise MycroftSourceError(
-                    'Failed to load Google\'s service account JSON file', exc_info=True)
+                raise MycroftSourceError('Failed to load Google\'s service account JSON file')
 
             # simple validation of provided JSON credentials
             assert 'client_email' in service_account_info,\
@@ -161,20 +160,25 @@ class GoogleAnalyticsSource(SourceBase):
 
         self.logger.info('Metric: %s with filters: %s', metric, filters)
 
-        res = self._query(
-            # fetch events for the last 24h
-            start_date='1daysAgo', end_date='1daysAgo',
-            # 20161016, group by day
-            dimension='ga:date',
-            # now provide a query
-            metric=metric,
-            filters=filters,
-        )
+        try:
+            res = self._query(
+                # fetch events for the last 24h
+                start_date='1daysAgo', end_date='1daysAgo',
+                # 20161016, group by day
+                dimension='ga:date',
+                # now provide a query
+                metric=metric,
+                filters=filters,
+            )
 
-        self.logger.debug('API response: %s', res)
+            self.logger.debug('API response: %s', res)
 
-        report = res['reports'][0]
+            report = res['reports'][0]
 
-        # [{'metrics': [{'values': ['270634']}], 'dimensions': ['20181213']}]
-        rows = report['data']['rows']
-        return int(rows[0]['metrics'][0]['values'][0])
+            # [{'metrics': [{'values': ['270634']}], 'dimensions': ['20181213']}]
+            rows = report['data']['rows']
+            return int(rows[0]['metrics'][0]['values'][0])
+
+        except Exception as ex:
+            self.logger.error('get_value() failed', exc_info=True)
+            raise MycroftSourceError('Failed to get metric value: %s' % repr(ex))
