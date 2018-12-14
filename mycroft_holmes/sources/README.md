@@ -3,6 +3,14 @@ Sources
 
 This directory contains implementation of various sources that provide values for metrics.
 
+## Vocabulary
+
+* **`source`** is a data provider. It can be a MySQL database, Google Analytics API, elasticsearch or your JIRA instance. Each source needs to be set up with an instance specific configuration (e.g. MySQL credentials, elasticsearch host address).
+* **`metric`** defines a query on a specific `source`. It can perform a defined SQL query on MySQL database, get events count from Google Analytics or count JIRA tickets matching a given JQL.
+* **`feature`** is a set of `metrics`. They are used to calculate feature's score. Each feature can provide a set of "template" variables thar are passed to `metrics` to customize their queries run against `sources`.
+
+> Please refer to sources documentation below and to `test/fixtures/config.yaml` for more examples.
+
 ## Available sources
 
 * `common/const`: Returns a constant value (can be used to tweak a score of a feature).
