@@ -78,11 +78,12 @@ features:
     template:
       component: "Message Wall"  # this will be used in template string
 
-  - name: Notifications
-    url: http://docs.company.net/pages/Notifications
+  - name: Lightbox
+    url: http://docs.company.net/pages/Lightbox
     template:
-        component: "Notifications"
-        # metric='ga:totalEvents', filters='ga:eventCategory==notifications'
-        ga_filter: "ga:eventCategory==notifications"
+        component: "Lightbox"
+        # metric='ga:totalEvents', filters='ga:eventCategory==lightbox'
+        ga_filter: "ga:eventCategory==lightbox"
     metrics:
         - name: analytics/events
+          weight: 0.05

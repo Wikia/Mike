@@ -86,18 +86,18 @@ def test_config_get_features():
         }
     }
 
-    assert 'Notifications' in features
-    assert features['Notifications'] == {
-        'name': 'Notifications',
-        'url': 'http://docs.company.net/pages/Notifications',
+    assert 'Lightbox' in features
+    assert features['Lightbox'] == {
+        'name': 'Lightbox',
+        'url': 'http://docs.company.net/pages/Lightbox',
         'metrics': [
             {'name': 'jira/p2-tickets'},
             {'name': 'jira/p3-tickets'},
-            {'name': 'analytics/events'},
+            {'name': 'analytics/events', 'weight': 0.05},
         ],
         'template': {
-            'component': 'Notifications',
-            'ga_filter': 'ga:eventCategory==notifications'
+            'component': 'Lightbox',
+            'ga_filter': 'ga:eventCategory==lightbox'
         }
     }
 
