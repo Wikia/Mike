@@ -22,6 +22,7 @@ setup(
     },
     install_requires=[
         'elasticsearch-query==2.4.0',
+        'google-api-python-client==1.7.6',
         'jira==2.0.0',
         'PyYAML==3.13',
     ],
