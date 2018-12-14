@@ -54,6 +54,7 @@ def test_config_get_sources():
     assert 'wikia/jira' in sources
     assert 'wikia/elastic' in sources
     assert 'wikia/tags-report' in sources
+    assert 'wikia/analytics' in sources
 
     assert sources['wikia/jira'] == {
         'name': 'wikia/jira',
@@ -85,6 +86,20 @@ def test_config_get_features():
         }
     }
 
+    assert 'Notifications' in features
+    assert features['Notifications'] == {
+        'name': 'Notifications',
+        'url': 'http://docs.company.net/pages/Notifications',
+        'metrics': [
+            {'name': 'jira/p2-tickets'},
+            {'name': 'jira/p3-tickets'},
+            {'name': 'analytics/events'},
+        ],
+        'template': {
+            'ga_filter': 'ga:eventCategory==notifications'
+        }
+    }
+
 
 def test_config_get_metrics():
     config = Config(config_file=get_fixtures_directory() + '/config.yaml')
@@ -99,6 +114,15 @@ def test_config_get_metrics():
         'source': 'wikia/jira',
         'query': "component = '{component}' AND Priority = 'Severe - fix in 48h (P2)' AND status = 'Open'",
         'label': '%d P2 tickets'
+    }
+
+    assert 'analytics/events' in metrics
+    assert metrics['analytics/events'] == {
+        'name': 'analytics/events',
+        'source': 'wikia/analytics',
+        'metric': 'ga:totalEvents',
+        'label': '%d GA events',
+        'filters': '{ga_filter}'
     }
 
 
