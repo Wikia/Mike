@@ -33,7 +33,7 @@ class GoogleAnalyticsSource(SourceBase):
     https://developers.google.com/analytics/devguides/reporting/core/v4/authorization.
 
     * "Google Analytics Reporting API" needs to be enabled for service account.
-    * You need to an email specified in service account JSON to your Google Analytics users.
+    * You need to add an email (specified in service account JSON file) to your GA users.
 
     > See https://github.com/Wikia/Mike/issues/12 for more details and troubleshooting guides.
 

@@ -7,7 +7,7 @@ This directory contains implementation of various sources that provide values fo
 
 * **`source`** is a data provider. It can be a MySQL database, Google Analytics API, elasticsearch or your JIRA instance. Each source needs to be set up with an instance specific configuration (e.g. MySQL credentials, elasticsearch host address).
 * **`metric`** defines a query on a specific `source`. It can perform a defined SQL query on MySQL database, get events count from Google Analytics or count JIRA tickets matching a given JQL.
-* **`feature`** is a set of `metrics`. They are used to calculate feature's score. Each feature can provide a set of "template" variables thar are passed to `metrics` to customize their queries run against `sources`.
+* **`feature`** is a set of `metrics`. They are used to calculate feature's score. Each feature can provide a set of "template" variables that are passed to `metrics` to customize their queries run against `sources`.
 
 > Please refer to sources documentation below and to `test/fixtures/config.yaml` for more examples.
 
@@ -47,7 +47,7 @@ Service account credentials JSON file can obtained from
 https://developers.google.com/analytics/devguides/reporting/core/v4/authorization.
 
 * "Google Analytics Reporting API" needs to be enabled for service account.
-* You need to an email specified in service account JSON to your Google Analytics users.
+* You need to add an email (specified in service account JSON file) to your GA users.
 
 > See https://github.com/Wikia/Mike/issues/12 for more details and troubleshooting guides.
 
@@ -201,6 +201,8 @@ metrics:
 Sources are used via `metrics` that provide a specific value (e.g. number of tickets matching a given JQL query).
 `source` specifies which source configured above to use.
 
+Values defined in `metrics` section are passed to the `get_value` method of source class that extends `SourceBase`.
+
 ```yaml
   - metrics:
     -  name: jira/p3-tickets
@@ -228,5 +230,3 @@ common:
     -  name: jira/p2-tickets
     -  name: jira/p3-tickets
 ```
-
-Values defined in `metrics` section are passed to the `get_value` method of source class that extends `SourceBase`.
