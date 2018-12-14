@@ -1,3 +1,4 @@
+# pylint: disable=too-many-arguments
 """
 GoogleAnalyticsSource class
 """
@@ -23,19 +24,19 @@ class GoogleAnalyticsSource(SourceBase):
     sources:
       - name: foo/analytics
         kind: common/analytics
-        # https://developers.google.com/analytics/devguides/reporting/core/v4/quickstart/service-py
+        # JSON-encoded string with service account credentials
         credentials: "${ANALYTICS_SERVICE_ACCOUNT_JSON}"
         view_id: 1234  # your Google Analytics view ID
         multiply: 20  # e.g. all metrics are sampled at 5%, multiply them by x20 (optional)
     ```
 
     Service account credentials JSON file can obtained from
-    https://developers.google.com/analytics/devguides/reporting/core/v4/authorization#service_accounts.
+    https://developers.google.com/analytics/devguides/reporting/core/v4/authorization.
 
     * "Google Analytics Reporting API" needs to be enabled for service account.
     * You need to an email specified in service account JSON to your Google Analytics users.
 
-    > See https://github.com/Wikia/Mike/issues/12 and https://stackoverflow.com/a/13167988 for more details.
+    > See https://github.com/Wikia/Mike/issues/12 for more details and troubleshooting guides.
 
     #### `metrics` config
 
@@ -91,11 +92,15 @@ class GoogleAnalyticsSource(SourceBase):
             try:
                 service_account_info = json.loads(self.credentials)
             except json.JSONDecodeError:
-                raise MycroftSourceError('Failed to load Google\'s service account JSON file', exc_info=True)
+                raise MycroftSourceError(
+                    'Failed to load Google\'s service account JSON file', exc_info=True)
 
             # simple validation of provided JSON credentials
-            assert 'client_email' in service_account_info, "'client_email' entry not found in service account JSON"
-            self.logger.info('Using service account for %s', service_account_info.get('client_email'))
+            assert 'client_email' in service_account_info,\
+                "'client_email' entry not found in service account JSON"
+
+            self.logger.info('Using service account for %s',
+                             service_account_info.get('client_email'))
 
             self._client = build(
                 'analyticsreporting', 'v4',
@@ -125,7 +130,8 @@ class GoogleAnalyticsSource(SourceBase):
         }
 
         if filters is not None:
-            report_request['filtersExpression'] = filters if isinstance(filters, str) else ';'.join(filters)
+            report_request['filtersExpression'] = \
+                filters if isinstance(filters, str) else ';'.join(filters)
 
         if dimension is not None:
             report_request['dimensions'] = [{'name': dimension}]
@@ -134,7 +140,7 @@ class GoogleAnalyticsSource(SourceBase):
             'reportRequests': [report_request]
         }
 
-        self.logger.debug('Query: {}'.format(body))
+        self.logger.debug('Query: %s', body)
         return self.client.reports().batchGet(body=body).execute()
 
     def get_value(self, **kwargs):
@@ -168,6 +174,7 @@ class GoogleAnalyticsSource(SourceBase):
         self.logger.debug('API response: %s', res)
 
         report = res['reports'][0]
-        rows = report['data']['rows']  # [{'metrics': [{'values': ['270634']}], 'dimensions': ['20181213']}]
 
+        # [{'metrics': [{'values': ['270634']}], 'dimensions': ['20181213']}]
+        rows = report['data']['rows']
         return int(rows[0]['metrics'][0]['values'][0])
