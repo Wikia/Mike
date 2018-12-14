@@ -48,6 +48,8 @@ sources:
     password: "${DATABASE_PASSWORD}"
 ```
 
+[List of all available sources with full documentation](https://github.com/Wikia/Mike/tree/master/mycroft_holmes/sources#sources).
+
 ### `generate_source_docs`
 
 Prints out Markdown with sources documentation taken from the code, to be pasted into `mycroft_holmes/sources/README>md`
