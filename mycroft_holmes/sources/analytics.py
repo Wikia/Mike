@@ -16,7 +16,7 @@ from .base import SourceBase
 
 class GoogleAnalyticsSource(SourceBase):
     """
-    Returns a number of Jira ticket matching given JQL query.
+    Returns a metric value from Google Analytics.
 
     #### `sources` config
 

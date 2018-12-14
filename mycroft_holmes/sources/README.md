@@ -13,18 +13,67 @@ This directory contains implementation of various sources that provide values fo
 
 ## Available sources
 
+* `common/analytics`: Returns a metric value from Google Analytics.
 * `common/const`: Returns a constant value (can be used to tweak a score of a feature).
 * `common/jira`: Returns a number of Jira ticket matching given JQL query.
 * `common/logstash`: Returns a number of entries matching a given elasticsearch query.
 
 ### TODO
 
-* `common/analytics` (gets data from Google Analytics)
 * `common/mysql` (performs a specified SQL query that returns a single value)
 
 #### Wikia-specific sources
 
 * `wikia/wikifactory` (queries WikiFactory database that is used to configure every wiki Wikia hosts)
+
+### GoogleAnalyticsSource
+
+Source name: `common/analytics`
+
+> Returns a metric value from Google Analytics.
+
+#### `sources` config
+
+```yaml
+sources:
+  - name: foo/analytics
+    kind: common/analytics
+    # JSON-encoded string with service account credentials
+    credentials: "${ANALYTICS_SERVICE_ACCOUNT_JSON}"
+    view_id: 1234  # your Google Analytics view ID
+    multiply: 20  # e.g. all metrics are sampled at 5%, multiply them by x20 (optional)
+```
+
+Service account credentials JSON file can obtained from
+https://developers.google.com/analytics/devguides/reporting/core/v4/authorization.
+
+* "Google Analytics Reporting API" needs to be enabled for service account.
+* You need to an email specified in service account JSON to your Google Analytics users.
+
+> See https://github.com/Wikia/Mike/issues/12 for more details and troubleshooting guides.
+
+#### `metrics` config
+
+```yaml
+    metrics:
+      # Google Analytics
+      - name: analytics/events
+        source: foo/analytics
+        label: "%d GA events"
+        metric: "ga:totalEvents"
+        filters: "{ga_filter}"
+```
+
+#### `features` config
+
+```yaml
+    features:
+      - name: FooBar
+        template:
+          - ga_filter: "ga:eventCategory==foo_bar"
+        metrics:
+          -  name: analytics/events
+```
 
 ### ConstSource
 
