@@ -21,7 +21,7 @@ setup(
         ]
     },
     install_requires=[
-        'wikia-common-kibana==2.2.7',
+        'elasticsearch-query==2.4.0',
         'jira==2.0.0',
         'PyYAML==3.13',
     ],

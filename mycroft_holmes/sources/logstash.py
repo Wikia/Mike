@@ -1,7 +1,7 @@
 """
 LogstashSource class
 """
-from wikia_common_kibana import Kibana
+from elasticsearch_query import ElasticsearchQuery
 
 from mycroft_holmes.errors import MycroftSourceError
 from mycroft_holmes.utils import format_query
@@ -14,7 +14,7 @@ class LogstashSource(SourceBase):
     Returns a number of entries matching a given elasticsearch query.
 
     We assume that elasticsearch indices follow logstash naming convention
-    and are sharded by date, e.g. logstash-access-log-2017.05.09
+    and are sharded by date, e.g. `logstash-access-log-2017.05.09`
 
     #### `sources` config
 
@@ -31,7 +31,6 @@ class LogstashSource(SourceBase):
 
     ```yaml
         metrics:
-          # Jira
           - name: logstash/get-requests-access-log
             source: foo/logstash  # defined above
             query: "request: 'GET' AND url: '{url}'"
@@ -69,14 +68,14 @@ class LogstashSource(SourceBase):
     @property
     def client(self):
         """
-        Connect to Jira lazily
+        Connect to elasticsearch lazily
 
-        :rtype: Kibana
+        :rtype: ElasticsearchQuery
         """
         if not self._client:
             self.logger.info('Setting up elasticsearch client for %s host ("%s" index)',
                              self._server, self._index)
-            self._client = Kibana(
+            self._client = ElasticsearchQuery(
                 es_host=self._server, period=self._period, index_prefix=self._index)
 
         return self._client
@@ -93,8 +92,8 @@ class LogstashSource(SourceBase):
         self.logger.info('Query: "%s"', query)
 
         try:
-            tickets = self.client.get_aggregations(query=query)
+            cnt = self.client.count(query=query)
         except Exception as ex:
             raise MycroftSourceError('Failed to get metric value: %s' % repr(ex))
 
-        return len(tickets)
+        return cnt
