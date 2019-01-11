@@ -10,6 +10,7 @@ from sys import argv
 from mycroft_holmes.config import Config
 from mycroft_holmes.errors import MycroftHolmesError
 from mycroft_holmes.sources.base import SourceBase
+from mycroft_holmes.storage import MetricsStorage
 
 
 def get_metrics_for_feature(feature_name, config):
@@ -59,17 +60,22 @@ def main():
     logger.info('Configured metrics: %s', list(config.get_metrics().keys()))
     logger.info('Features: %s', list(config.get_features().keys()))
 
+    # set up the metrics storage
+    storage = MetricsStorage(config=config)
+
     # fetch metrics values for eac feature and calculate their score
     for _, feature in config.get_features().items():
         try:
             feature_id = Config.get_feature_id(feature['name'])
             feature_metrics = get_metrics_for_feature(feature['name'], config)
 
-            logger.info('Collected metrics for %s: %s', feature_id, feature_metrics)
+            storage.push(feature_id, feature_metrics)
+
         except MycroftHolmesError as ex:
             logger.error('Failed to get metrics values', exc_info=True)
 
             print('\nWe failed to generate metrics values:\n\t%s\n' % repr(ex))
             exit(1)
 
+    storage.commit()
     logger.info('Done')
