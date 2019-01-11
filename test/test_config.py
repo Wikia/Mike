@@ -78,7 +78,7 @@ def test_config_get_features():
         'name': 'DynamicPageList',
         'url': 'http://docs.company.net/pages/DynamicPageList',
         'metrics': [
-            {'name': 'jira/p2-tickets'},
+            {'name': 'jira/p2-tickets', 'weight': 2},
             {'name': 'jira/p3-tickets'},
             {'name': 'tags-report/usage', 'weight': 0.1},
         ],
@@ -93,7 +93,7 @@ def test_config_get_features():
         'name': 'CKEditor',
         'url': 'http://docs.company.net/pages/CKEditor',
         'metrics': [
-            {'name': 'jira/p2-tickets'},
+            {'name': 'jira/p2-tickets', 'weight': 2},
             {'name': 'jira/p3-tickets'},
             {'name': 'analytics/events'},
         ],
@@ -144,7 +144,8 @@ def test_config_get_metrics_specs_for_feature():
         'source': 'wikia/jira',
         'name': 'jira/p2-tickets',
         'label': '%d P2 tickets',
-        'template': {'component': 'DynamicPageList', 'tag': 'dpl'}
+        'template': {'component': 'DynamicPageList', 'tag': 'dpl'},
+        'weight': 2
     }
 
     assert metrics_specs[1].get_spec() == {
