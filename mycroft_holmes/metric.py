@@ -99,6 +99,32 @@ class Metric:
         """
         return self._value
 
+    @staticmethod
+    def format_value(value):
+        """
+        :type value int
+        :rtype: str
+        """
+        if value >= 100000:
+            # 100k
+            return '{:.0f}k'.format(value / 1000)
+
+        if value >= 10000:
+            # 21.2k
+            return '{:.1f}k'.format(value / 1000)
+
+        if value >= 1000:
+            # 1.23k
+            return '{:.2f}k'.format(value / 1000)
+
+        return str(value)
+
+    def get_formatted_value(self):
+        """
+        :rtypeL str
+        """
+        return self.format_value(self.value)
+
     def get_label(self):
         """
         Render a label for a metric when rendering it in UI (without a value)
@@ -117,4 +143,4 @@ class Metric:
 
         :rtype: str
         """
-        return self._label.replace('%d', str(self.value))
+        return self._label.replace('%d', self.get_formatted_value())

@@ -102,4 +102,13 @@ def test_metric_get_label():
     # analytics
     metrics[2].set_value(34511)
     assert metrics[2].get_label() == 'GA events'
-    assert metrics[2].get_label_with_value() == 'GA events: 34511'
+    assert metrics[2].get_label_with_value() == 'GA events: 34.5k'
+
+
+def test_format_value():
+    assert Metric.format_value(1) == '1'
+    assert Metric.format_value(12) == '12'
+    assert Metric.format_value(123) == '123'
+    assert Metric.format_value(1213) == '1.21k'
+    assert Metric.format_value(22213) == '22.2k'
+    assert Metric.format_value(222130) == '222k'
