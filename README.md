@@ -64,3 +64,25 @@ when a new source is added or an existing one is updated.
 ## License
 
 [Dashboard sidebar's background image](https://commons.wikimedia.org/wiki/File:Gree-02.jpg) is used under public domain license. Favicon made by [Freepik](https://www.flaticon.com/authors/freepik) is licensed by CC 3.0 BY.
+
+## Tests
+
+After setting up virtual env, please install all dependencies (including dev ones) via `make init`. Then run:
+
+```
+make test
+```
+
+### MySQL storage integration tests
+
+> `TEST_DATABASE` env variable needs to be set to run these tests. `schema.sql` file needs to be applied as well. Please refer to `.travis.yml` when in doubt.
+
+You may want to include storage integration tests. They do require running MySQL server. Connection details are provided via env variables:
+
+```
+export TEST_DATABASE='mycroft_holmes'
+export TEST_DATABASE_USER='foo'
+export TEST_DATABASE_PASSWORD='bar'
+
+make test
+```

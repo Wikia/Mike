@@ -23,6 +23,14 @@ sources:
     credentials: '${ANALYTICS_SERVICE_ACCOUNT_JSON}'
     view_id: 89268958  # All Wikis Sampled @ 100%
 
+# where will metrics be stored
+storage:
+  engine: mysql
+  host: "${DATABASE_HOST}"
+  database: "mike_holmes"
+  user: "${DATABASE_USER}"
+  password: "${DATABASE_PASSWORD}"
+
 # now define metrics that are taken from sources above
 metrics:
   # Jira
