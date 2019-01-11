@@ -2,6 +2,7 @@
 Handles YAML config files
 """
 import logging
+import re
 
 from collections import OrderedDict
 
@@ -94,6 +95,18 @@ class Config:
             metrics[spec['name']] = spec
 
         return metrics
+
+    @staticmethod
+    def get_feature_id(feature_name):
+        """
+        Given feature name returns a string that is suitable for metrics storage
+
+        E.g. "Message Wall" -> message_wall
+
+        :type feature_name str
+        :rtype: str
+        """
+        return re.sub(r'[^a-z0-9]+', '_', feature_name.lower()).strip('_')
 
     def get_features(self):
         """

@@ -62,8 +62,10 @@ def main():
     # fetch metrics values for eac feature and calculate their score
     for _, feature in config.get_features().items():
         try:
+            feature_id = Config.get_feature_id(feature['name'])
             feature_metrics = get_metrics_for_feature(feature['name'], config)
-            logger.info('Collected metrics: %s', feature_metrics)
+
+            logger.info('Collected metrics for %s: %s', feature_id, feature_metrics)
         except MycroftHolmesError as ex:
             logger.error('Failed to get metrics values', exc_info=True)
 
