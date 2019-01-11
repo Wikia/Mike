@@ -75,7 +75,7 @@ make test
 
 ### MySQL storage integration tests
 
-> `TEST_DATABASE` env variable needs to be set to run these tests.
+> `TEST_DATABASE` env variable needs to be set to run these tests. `schema.sql` file needs to be applied as well. Please refer to `.travis.yml` when in doubt.
 
 You may want to include storage integration tests. They do require running MySQL server. Connection details are provided via env variables:
 
