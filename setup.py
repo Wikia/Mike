@@ -16,13 +16,13 @@ setup(
     extras_require={
         'dev': [
             'coverage==4.5.2',
-            'pylint==2.2.0',
-            'pytest==4.0.1',
+            'pylint>=1.9.2, <=2.3.0',  # 2.x branch is for Python 3
+            'pytest==4.1.0',
         ]
     },
     install_requires=[
         'elasticsearch-query==2.4.0',
-        'google-api-python-client==1.7.6',
+        'google-api-python-client==1.7.7',
         'jira==2.0.0',
         'PyYAML==3.13',
     ],
