@@ -86,3 +86,20 @@ def test_metric_get_weight():
 
     print(metric)
     assert metric.get_weight() == 1  # a default value
+
+
+def test_metric_get_label():
+    config = Config(config_file=get_fixtures_directory() + '/config.yaml')
+    metrics = config.get_metrics_for_feature(feature_name='VisualEditor')
+
+    print(metrics)
+
+    # jira
+    metrics[0].set_value(12)
+    assert metrics[0].get_label() == 'P2 tickets'
+    assert metrics[0].get_label_with_value() == '12 P2 tickets'
+
+    # analytics
+    metrics[2].set_value(34511)
+    assert metrics[2].get_label() == 'GA events'
+    assert metrics[2].get_label_with_value() == 'GA events: 34511'

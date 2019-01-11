@@ -23,6 +23,14 @@ class Metric:
         self.config = config
         self.spec = spec
 
+        self._value = None
+
+    def __repr__(self):
+        """
+        :rtype: str
+        """
+        return '<Metric feature:{} "{}">'.format(self.feature_name, self._label)
+
     def get_name(self):
         """
         :rtype: str
@@ -68,3 +76,45 @@ class Metric:
         source = self._get_source()
 
         return source.get_value(**self.get_spec())
+
+    @property
+    def _label(self):
+        """
+        :rtype: str`
+        """
+        return self.get_spec().get('label')
+
+    def set_value(self, value):
+        """
+        This one is used in unit tests
+
+        :type value int
+        """
+        self._value = value
+
+    @property
+    def value(self):
+        """
+        :rtype: int
+        """
+        return self._value
+
+    def get_label(self):
+        """
+        Render a label for a metric when rendering it in UI (without a value)
+
+        E.g. "P2 tickets", "Daily page views"
+
+        :rtype: str
+        """
+        return self._label.replace('%d', '').strip(' :')
+
+    def get_label_with_value(self):
+        """
+        Render a label with a value for a metric. This is used when rendering a component widget.
+
+        E.g. "45 P2 tickets", "Daily page views: 134"
+
+        :rtype: str
+        """
+        return self._label.replace('%d', str(self.value))

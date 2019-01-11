@@ -19,6 +19,12 @@ class SourceBase:
     def __init__(self):
         self.logger = logging.getLogger(self.__class__.__name__)
 
+    def __repr__(self):
+        """
+        :rtype: str
+        """
+        return '<{} name:{}>'.format(self.__class__.__name__, self.NAME)
+
     @staticmethod
     def _sources():
         """

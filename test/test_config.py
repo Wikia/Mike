@@ -124,7 +124,7 @@ def test_config_get_metrics():
         'name': 'analytics/events',
         'source': 'wikia/analytics',
         'metric': 'ga:totalEvents',
-        'label': '%d GA events',
+        'label': 'GA events: %d',
         'filters': '{ga_filter}'
     }
 
