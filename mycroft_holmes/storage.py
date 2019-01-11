@@ -44,6 +44,26 @@ class MetricsStorage:
 
         return self._storage
 
+    def get(self, feature_id, feature_metric):
+        """
+        :type feature_id str
+        :type feature_metric str
+        :rtype: int
+        """
+        # SELECT value FROM features_metrics
+        # WHERE feature = 'ckeditor' and metric = 'score'
+        # ORDER BY timestamp desc limit 1;
+        cursor = self.storage.cursor()
+
+        cursor.execute(
+            'SELECT /* mycroft_holmes */ value FROM features_metrics '
+            'WHERE feature = %s and metric = %s '
+            'ORDER BY timestamp DESC LIMIT 1',
+            (feature_id, feature_metric)
+        )
+
+        return cursor.fetchone()[0]
+
     def push(self, feature_id, feature_metrics):
         """
         :type feature_id str

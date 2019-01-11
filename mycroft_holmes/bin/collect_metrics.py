@@ -63,6 +63,8 @@ def main():
     # set up the metrics storage
     storage = MetricsStorage(config=config)
 
+    # print(storage.get('ckeditor', 'score')); exit(1)
+
     # fetch metrics values for eac feature and calculate their score
     for _, feature in config.get_features().items():
         try:
