@@ -34,9 +34,13 @@ def test_storage():
     storage.push('bar', {'score': 1, 'bar/metric': -3})
     storage.commit()
 
+    storage.push('bar', {'score': 5, 'bar/metric': -4})
+    storage.commit()
+
     assert storage.get(feature_id='foo', feature_metric='score') == 123
     assert storage.get(feature_id='foo', feature_metric='bar/metric') == 42, 'Storage keeps integers'
-    assert storage.get(feature_id='bar', feature_metric='score') == 1
-    assert storage.get(feature_id='bar', feature_metric='bar/metric') == -3, 'Negative values are accepted'
+
+    assert storage.get(feature_id='bar', feature_metric='score') == 5, 'The most recent value should be taken'
+    assert storage.get(feature_id='bar', feature_metric='bar/metric') == -4, 'Negative values are accepted'
 
     assert storage.get(feature_id='not_existing', feature_metric='bar/metric') is None, 'Not existing metric'
