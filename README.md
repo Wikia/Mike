@@ -17,7 +17,20 @@ To install development dependencies run `make` inside virtualenv.
 
 ## Running
 
+### Using Docker
+
 > TODO
+
+### Via crontab
+
+Let's assume that this repository has been cloned into ` /home/macbre/github/Mike` and virtual env has been set up.
+Now add the following to your `crontab`:
+
+```
+SHELL=/bin/bash
+# m h  dom mon dow   command
+2 2,14 *   *   *     ( cd /home/macbre/github/Mike && source env/bin/activate && source .env && collect_metrics test/fixtures/config.yaml ) >> /home/macbre/Mike.log 2>&1
+```
 
 ## Scripts
 
