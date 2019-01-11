@@ -20,7 +20,6 @@ class MetricsStorage:
 
         # read the config
         self.config = config.get_raw()['storage']
-        self.logger.info('Config: %s', self.config)
 
         assert self.config['engine'] == 'mysql', 'Only "mysql" storage is currently supported'
 
@@ -48,7 +47,7 @@ class MetricsStorage:
         """
         :type feature_id str
         :type feature_metric str
-        :rtype: int
+        :rtype: int|None
         """
         # SELECT value FROM features_metrics
         # WHERE feature = 'ckeditor' and metric = 'score'
@@ -62,7 +61,8 @@ class MetricsStorage:
             (feature_id, feature_metric)
         )
 
-        return cursor.fetchone()[0]
+        row = cursor.fetchone()
+        return row[0] if row else None
 
     def push(self, feature_id, feature_metrics):
         """
@@ -100,5 +100,5 @@ class MetricsStorage:
             self.logger.info('Data has been stored')
 
         except connector.errors.Error as ex:
-            self.logger.error('Storage error occured', exc_info=True)
+            self.logger.error('Storage error occured: %s', ex)
             raise ex

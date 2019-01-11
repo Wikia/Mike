@@ -1,8 +1,17 @@
 # https://docs.travis-ci.com/user/reference/xenial/#using-xenial
 dist: xenial
 
+# set up MySQL database
+# https://docs.travis-ci.com/user/database-setup/#mysql
 services:
   - mysql
+
+env:
+  - TEST_DATABASE=mycroft_holmes TEST_DATABASE_USER=travis TEST_DATABASE_PASSWORD=''
+
+before_script:
+  - mysql -e 'CREATE DATABASE mycroft_holmes;'
+  - cat schema.sql | mysql mycroft_holmes
 
 language: python
 python:
