@@ -27,6 +27,9 @@ setup(
         'oauthlib[signedtoken]>=2.1.0, <3.0.0',
         'jira==2.0.0',
         'pyyaml>=4.2b1',
+        # UI
+        'flask==1.0.2',
+        'gunicorn==19.9.0',
     ],
     entry_points={
         'console_scripts': [

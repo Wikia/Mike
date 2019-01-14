@@ -77,6 +77,7 @@ def test_config_get_features():
     assert features['DynamicPageList'] == {
         'name': 'DynamicPageList',
         'url': 'http://docs.company.net/pages/DynamicPageList',
+        'repo': 'https://github.com/Wikia/app/tree/dev/extensions/DynamicPageList',
         'metrics': [
             {'name': 'jira/p2-tickets', 'weight': 2},
             {'name': 'jira/p3-tickets'},
@@ -92,6 +93,7 @@ def test_config_get_features():
     assert features['CKEditor'] == {
         'name': 'CKEditor',
         'url': 'http://docs.company.net/pages/CKEditor',
+        'repo': 'https://github.com/Wikia/app/tree/dev/extensions/wikia/RTE',
         'metrics': [
             {'name': 'jira/p2-tickets', 'weight': 2},
             {'name': 'jira/p3-tickets'},

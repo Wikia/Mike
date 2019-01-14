@@ -18,4 +18,8 @@ coverage:
 	coverage xml -i
 	coverage report $(coverage_options)
 
+# UI
+server_dev:
+	FLASK_APP=mycroft_holmes/app/app.py FLASK_ENV=development flask run
+
 .PHONY: test
