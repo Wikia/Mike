@@ -41,3 +41,18 @@ def get_config():
         config_file=config_file,
         env=environ
     )
+
+
+def get_feature_spec_by_id(config, feature_id):
+    """
+    :type config Config
+    :type feature_id str
+    :rtype: dict|None
+    """
+    for feature_name, spec in config.get_features().items():
+        _id = config.get_feature_id(feature_name)
+
+        if _id == feature_id:
+            return spec
+
+    return None

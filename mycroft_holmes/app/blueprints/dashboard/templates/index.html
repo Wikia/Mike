@@ -1,8 +1,8 @@
-{% extends "main.html" %}
+{% extends "_main.html" %}
 {% block title %}{{ dashboard_name | safe }}{% endblock %}
 
 {% block navbar %}
-<a class="navbar-brand" href="">{{ dashboard_name | safe }}</a>
+<a class="navbar-brand" href="/">{{ dashboard_name | safe }}</a>
 
 <div class="float-right">
     <a href="{{ _json | safe }}" class="badge badge-secondary">JSON</a>
@@ -22,14 +22,14 @@
                     <i class="material-icons">check_circle_outline</i>
                   </div>
                   <p class="card-category">Score: <b>{{ component.score }}</b></p>
-                    <h3 class="card-title"><a href="#">{{ component.name | safe }}</a></h3>
+                    <h3 class="card-title"><a href="{{ component.url | safe }}">{{ component.name | safe }}</a></h3>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
                     {% for metric in component.metrics %}<span>{{ metric | safe }}</span>{% endfor %}
                   </div>
                   <div class="float-right">
-                    <a class="material-icons" href="{{ component.url | safe }}" title="Documentation">assignment</a>
+                    <a class="material-icons" href="{{ component.docs | safe }}" title="Documentation">assignment</a>
                     <a class="material-icons" href="{{ component.repo | safe }}" title="Code on GitHub">code</a>
                   </div>
                 </div>

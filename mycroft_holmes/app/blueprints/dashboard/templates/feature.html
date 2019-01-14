@@ -1,0 +1,72 @@
+{% extends "_main.html" %}
+{% block title %}{{ component.name | safe }}{% endblock %}
+
+{% block navbar %}
+<a class="navbar-brand" href="/">{{ dashboard_name | safe }}</a>
+{% endblock %}
+
+
+{% block content %}
+       <div class="container-fluid">
+
+            <div class="float-right">
+                <a href="{{ _csv | safe }}" class="badge badge-secondary">CSV</a>
+                &nbsp;
+                <a href="{{ _json | safe }}" class="badge badge-secondary">JSON</a>
+            </div>
+
+            <h1>{{ component.name | safe }}</h1>
+            <h6>
+                <a href="{{ component.docs | safe }}" target="_blank">Component's documentation</a> |
+                <a href="{{ component.repo | safe }}" target="_blank">View the code on GitHub</a>
+            </h6>
+
+            <div class="spacer"></div>
+
+            <h2>Component's metrics</h2>
+
+            <div class="row metrics">
+            <!-- metrics -->
+                <div class="col-lg-2 col-md-6 col-sm-6">
+                  <div class="card card-stats">
+                    <div class="card-header card-header-icon card-header-warning">
+                      <div class="card-icon">
+                        <i class="material-icons"><i class="material-icons">content_copy</i></i>
+                      </div>
+                      <h5 class="card-title">Total score</h5>
+                      <h3 class="metric-value">{{ score }}</h3>
+                    </div>
+                    <div class="card-footer">
+                      &nbsp;
+                    </div>
+                  </div>
+                </div>
+
+{% for metric in metrics %}
+
+                <div class="col-lg-2 col-md-6 col-sm-6">
+                  <div class="card card-stats">
+                    <div class="card-header card-header-icon">
+                      <div class="card-icon">
+                        <i class="material-icons">extension</i>
+                      </div>
+                      <h5 class="card-title">{{ metric.label | safe }}</h5>
+                      <h3 class="metric-value" title="{{ metric.raw_value }}">{{ metric.value }}</h3>
+                      <!-- <p class="card-category">No change in the last 7 days</p> -->
+                    </div>
+                    <div class="card-footer">
+                      <div class="float-right" title="Metric multiplier">{% if metric.weight != 1 %}x{{ metric.weight }}{% endif %}</div>
+                      <div class="stats">
+                        {% if metric.more_link %}
+                          <a href="{{ metric.more_link[1] | safe }}" target="_blank">{{ metric.more_link[0] | safe }}</a>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+{% endfor %}
+
+          <!-- end of metrics -->
+          </div>
+        </div>
+{% endblock %}

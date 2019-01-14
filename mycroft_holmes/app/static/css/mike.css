@@ -26,6 +26,10 @@ body {
     max-width: 475px;
 }
 
+.spacer {
+    margin-top: 50px;
+}
+
 h1,
 h3.card-title,
 .metric-value {

@@ -26,9 +26,12 @@ app.register_blueprint(version_info)
 
 # inject variables into templates
 @app.context_processor
-def inject_version():
+def inject():
     """
-    Inject Mike's version
+    Inject Mike's version and dashboard name
     :rtype: dict
     """
-    return dict(version=VERSION)
+    return dict(
+        dashboard_name=get_config().get_name(),
+        version=VERSION
+    )
