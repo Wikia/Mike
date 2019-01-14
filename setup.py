@@ -24,9 +24,9 @@ setup(
         'elasticsearch-query==2.4.0',
         'google-api-python-client==1.7.7',
         'mysql-connector-python==8.0.13',
-        'oauthlib>=2.1.0, <3.0.0',
+        'oauthlib[signedtoken]>=2.1.0, <3.0.0',
         'jira==2.0.0',
-        'PyYAML==3.13',
+        'pyyaml>=4.2b1',
     ],
     entry_points={
         'console_scripts': [
