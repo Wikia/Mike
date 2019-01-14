@@ -15,7 +15,19 @@ pip install -e .
 
 To install development dependencies run `make` inside virtualenv.
 
-## Running
+## Running UI
+
+`Mycroft Holmes` comes with Flask-powered web-application that provides a dashboard with an overview of components and their metrics.
+
+Run the following to try it out in development mode:
+
+```
+make server_dev
+```
+
+Now visit [`/version.json`]()http://127.0.0.1:5000/version.json). 
+
+## Collecting metrics
 
 ### Using Docker
 
