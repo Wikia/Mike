@@ -144,3 +144,12 @@ class Metric:
         :rtype: str
         """
         return self._label.replace('%d', self.get_formatted_value())
+
+    def get_more_link(self):
+        """
+        Returns a tuple with link name and URL that can give you more details
+        for this metric, e.g. link to a JIRA dashboard
+
+        :rtype: tuple[str, str]|None
+        """
+        return self._get_source().get_more_link(**self.get_spec())

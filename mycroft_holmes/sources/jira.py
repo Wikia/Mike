@@ -1,6 +1,7 @@
 """
 JiraSource class
 """
+from urllib.parse import quote
 from jira.client import JIRA
 
 from mycroft_holmes.errors import MycroftSourceError
@@ -82,15 +83,23 @@ class JiraSource(SourceBase):
 
         return self._client
 
-    def get_value(self, **kwargs):
+    @staticmethod
+    def _get_jql(**kwargs):
         """
-        :raise: MycroftSourceError
-        :rtype: int
+        :rtype: str
         """
         query = kwargs.get('query')
         assert isinstance(query, str), '"query" parameter needs to be provided'
 
         jql = format_query(query, kwargs.get('template'))
+        return jql
+
+    def get_value(self, **kwargs):
+        """
+        :raise: MycroftSourceError
+        :rtype: int
+        """
+        jql = self._get_jql(**kwargs)
         self.logger.info('JQL query: "%s"', jql)
 
         try:
@@ -99,3 +108,21 @@ class JiraSource(SourceBase):
             raise MycroftSourceError('Failed to get metric value: %s' % repr(ex))
 
         return len(tickets)
+
+    def get_more_link(self, **kwargs):
+        """
+        Returns a tuple with link name and URL that can give you more details
+        for this metric, e.g. link to a JIRA dashboard
+
+        :rtype: tuple[str, str]|None
+        """
+        jql = self._get_jql(**kwargs)
+
+        return (
+            'View tickets',
+            # https://foo.atlassian.net/issues/?jql=...
+            '{server}/issues/?jql={jql}'.format(
+                server=self._server,
+                jql=quote(jql)
+            )
+        )
