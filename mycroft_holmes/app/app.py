@@ -8,8 +8,9 @@ from mycroft_holmes import VERSION
 from .utils import get_config
 
 # import blueprints
-from .blueprints import version_info
-
+from .blueprints import \
+    dashboard,\
+    version_info
 
 # read the config
 get_config()
@@ -19,4 +20,5 @@ app = Flask(__name__)
 app.logger.info('Starting Mycroft Holmes UI v%s', VERSION)
 
 # add blueprints
+app.register_blueprint(dashboard)
 app.register_blueprint(version_info)
