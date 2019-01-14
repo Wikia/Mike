@@ -74,6 +74,7 @@ common:
 features:
   - name: DynamicPageList
     url: http://docs.company.net/pages/DynamicPageList
+    repo: https://github.com/Wikia/app/tree/dev/extensions/DynamicPageList
     template:
       component: "DynamicPageList"  # this will be used in template string
       tag: "dpl"
@@ -84,12 +85,14 @@ features:
 
   - name: Message Wall
     url: http://docs.company.net/pages/Wall
+    repo: https://github.com/Wikia/app/tree/dev/extensions/wikia/Wall
     template:
       component: "Message Wall"  # this will be used in template string
 
   # Editors
   - name: CKEditor
     url: http://docs.company.net/pages/CKEditor
+    repo: https://github.com/Wikia/app/tree/dev/extensions/wikia/RTE
     template:
         component: "CK Editor (RTE)"
         ga_filter: "ga:eventCategory==editor-ck;ga:eventAction==submit;ga:eventLabel==publish"
@@ -98,6 +101,7 @@ features:
 
   - name: VisualEditor
     url: http://docs.company.net/pages/VisualEditor
+    repo: https://github.com/Wikia/app/tree/dev/extensions/VisualEditor
     template:
         component: "Visual Editor"
         ga_filter: "ga:eventCategory==editor-ve;ga:eventAction==success;ga:eventLabel==publish"
