@@ -59,7 +59,7 @@ metrics:
   # Google Analytics
   - name: analytics/events
     source: wikia/analytics
-    label: "%d GA events"
+    label: "GA events: %d"
     metric: "ga:totalEvents"
     filters: "{ga_filter}"
 

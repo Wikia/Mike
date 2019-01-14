@@ -6,6 +6,7 @@ from unittest import SkipTest
 from os import environ
 
 from mycroft_holmes.config import Config
+from mycroft_holmes.metric import Metric
 from mycroft_holmes.storage import MetricsStorage
 
 
@@ -44,3 +45,10 @@ def test_storage():
     assert storage.get(feature_id='bar', feature_metric='bar/metric') == -4, 'Negative values are accepted'
 
     assert storage.get(feature_id='not_existing', feature_metric='bar/metric') is None, 'Not existing metric'
+
+    # now check if we can get the metric value
+    metric = Metric(feature_name='Bar', config=ConfigForMetricsStorage(), spec={'name': 'bar/metric'})
+    assert metric.value == -4, 'Get the most recent value from the storage'
+
+    metric = Metric(feature_name='Foo', config=ConfigForMetricsStorage(), spec={'name': 'bar/metric'})
+    assert metric.value == 42, 'Get the most recent value from the storage'

@@ -9,6 +9,8 @@ class MetricsStorage:
     """
     MySQL storage
     """
+    CONNECTIONS_CACHE = dict()
+
     def __init__(self, config):
         """
         :type config mycroft_holmes.config.Config
@@ -30,8 +32,14 @@ class MetricsStorage:
 
         :rtype: mysql.connector.connection.MySQLConnection
         """
+        storage_host = self.config['host']
+
+        # use cached connection
+        if storage_host in self.CONNECTIONS_CACHE:
+            return self.CONNECTIONS_CACHE[storage_host]
+
         if not self._storage:
-            self.logger.info('Connecting to MySQL running at "%s"', self.config['host'])
+            self.logger.info('Connecting to MySQL running at "%s"', storage_host)
 
             # https://dev.mysql.com/doc/connector-python
             self._storage = connector.connect(
@@ -40,6 +48,8 @@ class MetricsStorage:
                 user=self.config['user'],
                 password=self.config['password'],
             )
+
+            self.CONNECTIONS_CACHE[storage_host] = self._storage
 
         return self._storage
 
@@ -52,6 +62,8 @@ class MetricsStorage:
         # SELECT value FROM features_metrics
         # WHERE feature = 'ckeditor' and metric = 'score'
         # ORDER BY timestamp desc limit 1;
+        self.logger.info('Reading metric for "%s": %s', feature_id, feature_metric)
+
         cursor = self.storage.cursor()
 
         cursor.execute(

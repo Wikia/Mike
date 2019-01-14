@@ -19,6 +19,12 @@ class SourceBase:
     def __init__(self):
         self.logger = logging.getLogger(self.__class__.__name__)
 
+    def __repr__(self):
+        """
+        :rtype: str
+        """
+        return '<{} name:{}>'.format(self.__class__.__name__, self.NAME)
+
     @staticmethod
     def _sources():
         """
@@ -110,6 +116,16 @@ class SourceBase:
         :rtype: str
         """
         return self.NAME
+
+    def get_more_link(self, **kwargs):
+        """
+        Returns a tuple with link name and URL that can give you more details
+        for this metric, e.g. link to a JIRA dashboard
+
+        :rtype: tuple[str, str]|None
+        """
+        # pylint: disable=no-self-use,unused-argument
+        return None
 
     @classmethod
     def get_short_description(cls):
