@@ -44,14 +44,14 @@
 
 {% for metric in metrics %}
 
-                <div class="col-lg-2 col-md-6 col-sm-6">
-                  <div class="card card-stats">
+                <div class="col-lg-2 col-md-6 col-sm-6x">
+                  <div class="card card-stats{% if metric.value is none %} card-broken{%endif%}">
                     <div class="card-header card-header-icon">
                       <div class="card-icon">
                         <i class="material-icons">{{ metric.icon }}</i>
                       </div>
                       <h5 class="card-title">{{ metric.label | safe }}</h5>
-                      <h3 class="metric-value" title="{{ metric.raw_value }}">{{ metric.value }}</h3>
+                      <h3 class="metric-value" title="{{ metric.raw_value }}">{{ metric.value or '-' }}</h3>
                       <!-- <p class="card-category">No change in the last 7 days</p> -->
                     </div>
                     <div class="card-footer">
@@ -59,6 +59,9 @@
                       <div class="stats">
                         {% if metric.more_link %}
                           <a href="{{ metric.more_link[1] | safe }}" target="_blank">{{ metric.more_link[0] | safe }}</a>
+                        {% endif %}
+                        {% if metric.value is none %}
+                          <span>Metric <tt>{{ metric.name | safe }}</tt> failed</span>
                         {% endif %}
                       </div>
                     </div>
