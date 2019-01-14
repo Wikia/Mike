@@ -1,32 +1,43 @@
 """
 App utilities
 """
+import functools
+
 from os import environ, path
 
 from mycroft_holmes.config import Config
 
 
-# pylint: disable=too-few-public-methods
-class Cache:
+def memoize(func):
     """
-    This object is used as a static variables wrapper
+    Memoization pattern implemented
+    :type func
+    :rtype func
     """
-    CONFIG = None
+    # @see https://medium.com/@nkhaja/memoization-and-decorators-with-python-32f607439f84
+    cache = func.cache = {}
 
-    def __init__(self):
-        pass
+    @functools.wraps(func)
+    def memoized_func(*args, **kwargs):
+        """
+        :type args
+        :type kwargs
+        """
+        key = str(args) + str(kwargs)
+        if key not in cache:
+            cache[key] = func(*args, **kwargs)
+        return cache[key]
+    return memoized_func
 
 
+@memoize
 def get_config():
     """
     :rtype: mycroft_holmes.config.Config
     """
-    if Cache.CONFIG is None:
-        config_file = path.join(path.dirname(__file__), '../../test/fixtures', 'config.yaml')
+    config_file = path.join(path.dirname(__file__), '../../test/fixtures', 'config.yaml')
 
-        Cache.CONFIG = Config(
-            config_file=config_file,
-            env=environ
-        )
-
-    return Cache.CONFIG
+    return Config(
+        config_file=config_file,
+        env=environ
+    )
