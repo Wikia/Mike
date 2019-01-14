@@ -48,7 +48,7 @@
                   <div class="card card-stats">
                     <div class="card-header card-header-icon">
                       <div class="card-icon">
-                        <i class="material-icons">extension</i>
+                        <i class="material-icons">{{ metric.icon }}</i>
                       </div>
                       <h5 class="card-title">{{ metric.label | safe }}</h5>
                       <h3 class="metric-value" title="{{ metric.raw_value }}">{{ metric.value }}</h3>

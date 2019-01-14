@@ -104,6 +104,7 @@ def feature(feature_id):
     metrics = [
         {
             'name': metric.get_name(),
+            'icon': get_icon_for_source(metric.get_source_name()),
             'source': metric.get_source_name(),
             'raw_value': metric.value,
             'value': metric.get_formatted_value(),
@@ -122,3 +123,19 @@ def feature(feature_id):
         _csv='#',
         _json='#',
     )
+
+
+def get_icon_for_source(source_name, default='extension'):
+    """
+    :type source_name str
+    :type default str
+    :rtype: str
+    """
+    # https://material.io/tools/icons/?style=baseline
+    if source_name == 'wikia/jira':
+        return 'bug_report'
+
+    if source_name == 'wikia/analytics':
+        return 'trending_up'
+
+    return default
