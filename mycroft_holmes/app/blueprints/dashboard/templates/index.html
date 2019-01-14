@@ -1,0 +1,43 @@
+{% extends "main.html" %}
+{% block title %}{{ dashboard_name | safe }}{% endblock %}
+
+{% block navbar %}
+<a class="navbar-brand" href="">{{ dashboard_name | safe }}</a>
+
+<div class="float-right">
+    <a href="{{ _json | safe }}" class="badge badge-secondary">JSON</a>
+</div>
+{% endblock %}
+
+{% block content %}
+       <div class="container-fluid">
+          <div class="row">
+            <!-- components -->
+{% for component in components %}
+
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats card-ok">
+                <div class="card-header card-header-success card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">check_circle_outline</i>
+                  </div>
+                  <p class="card-category">Score: <b>{{ component.score }}</b></p>
+                    <h3 class="card-title"><a href="#">{{ component.name | safe }}</a></h3>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    {% for metric in component.metrics %}<span>{{ metric | safe }}</span>{% endfor %}
+                  </div>
+                  <div class="float-right">
+                    <a class="material-icons" href="{{ component.url | safe }}" title="Documentation">assignment</a>
+                    <a class="material-icons" href="{{ component.repo | safe }}" title="Code on GitHub">code</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+{% endfor %}
+
+          <!-- end of components -->
+          </div>
+        </div>
+{% endblock %}

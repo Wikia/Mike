@@ -22,3 +22,13 @@ app.logger.info('Starting Mycroft Holmes UI v%s', VERSION)
 # add blueprints
 app.register_blueprint(dashboard)
 app.register_blueprint(version_info)
+
+
+# inject variables into templates
+@app.context_processor
+def inject_version():
+    """
+    Inject Mike's version
+    :rtype: dict
+    """
+    return dict(version=VERSION)
