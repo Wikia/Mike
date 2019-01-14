@@ -20,6 +20,6 @@ coverage:
 
 # UI
 server_dev:
-	FLASK_APP=mycroft_holmes/app/app.py FLASK_ENV=development flask run
+	FLASK_APP=mycroft_holmes/app/app.py FLASK_ENV=development flask run --host=0.0.0.0
 
 .PHONY: test
