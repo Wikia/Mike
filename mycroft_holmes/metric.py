@@ -3,7 +3,7 @@ Handles a single metric of a feature
 """
 import logging
 
-from .errors import MycroftMetricError
+from .errors import MycroftMetricError, MycroftSourceError
 from .sources.base import SourceBase
 from .storage import MetricsStorage
 
@@ -24,7 +24,7 @@ class Metric:
         self.config = config
         self.spec = spec
 
-        self._value = None
+        self._value = False
 
     def __repr__(self):
         """
@@ -89,7 +89,7 @@ class Metric:
         """
         This one is used in unit tests
 
-        :type value int
+        :type value int|None
         """
         self._value = value
 
@@ -99,7 +99,7 @@ class Metric:
         :rtype: int
         """
         # lazy-load value from the storage
-        if self._value is None:
+        if self._value is False:
             storage = MetricsStorage(config=self.config)
             self._value = storage.get(
                 feature_id=self.config.get_feature_id(self.feature_name),
@@ -130,9 +130,9 @@ class Metric:
 
     def get_formatted_value(self):
         """
-        :rtypeL str
+        :rtype: str|None
         """
-        return self.format_value(self.value)
+        return self.format_value(self.value) if self.value is not None else None
 
     def get_label(self):
         """
@@ -140,9 +140,9 @@ class Metric:
 
         E.g. "P2 tickets", "Daily page views"
 
-        :rtype: str
+        :rtype: str|None
         """
-        return self._label.replace('%d', '').strip(' :')
+        return self._label.replace('%d', '').strip(' :') if self._label is not None else None
 
     def get_label_with_value(self):
         """
@@ -150,9 +150,10 @@ class Metric:
 
         E.g. "45 P2 tickets", "Daily page views: 134"
 
-        :rtype: str
+        :rtype: str|None
         """
-        return self._label.replace('%d', self.get_formatted_value())
+        return self._label.replace('%d', self.get_formatted_value()) \
+            if self.value is not None else None
 
     def get_more_link(self):
         """
@@ -161,4 +162,7 @@ class Metric:
 
         :rtype: tuple[str, str]|None
         """
-        return self._get_source().get_more_link(**self.get_spec())
+        try:
+            return self._get_source().get_more_link(**self.get_spec())
+        except MycroftSourceError:
+            return None

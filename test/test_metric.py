@@ -119,3 +119,23 @@ def test_format_value():
     assert Metric.format_value(1213) == '1.21k'
     assert Metric.format_value(22213) == '22.2k'
     assert Metric.format_value(222130) == '222k'
+    assert Metric.format_value(222930) == '223k'
+
+
+def test_empty_metric():
+    config = Config(config_file=get_fixtures_directory() + '/config.yaml')
+
+    metric = Metric(spec={
+        'name': 'foo/var',
+    }, feature_name='foo', config=config)
+
+    # the value is empty, storage read seems to fail for it
+    metric.set_value(None)
+
+    print(metric)
+
+    assert metric.get_label() is None
+    assert metric.value is None
+    assert metric.get_formatted_value() is None
+    assert metric.get_label_with_value() is None
+    assert metric.get_more_link() is None
