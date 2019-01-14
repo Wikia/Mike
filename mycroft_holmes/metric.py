@@ -5,6 +5,7 @@ import logging
 
 from .errors import MycroftMetricError
 from .sources.base import SourceBase
+from .storage import MetricsStorage
 
 
 class Metric:
@@ -97,6 +98,14 @@ class Metric:
         """
         :rtype: int
         """
+        # lazy-load value from the storage
+        if self._value is None:
+            storage = MetricsStorage(config=self.config)
+            self._value = storage.get(
+                feature_id=self.config.get_feature_id(self.feature_name),
+                feature_metric=self.get_name()
+            )
+
         return self._value
 
     @staticmethod
