@@ -69,6 +69,8 @@ a.card-header {
 
 .card-broken {
     opacity: 0.5;
+    border: solid 2px red;
+    background-color: rgba(255,0,0,0.1);
 }
 
 .card h3 {
