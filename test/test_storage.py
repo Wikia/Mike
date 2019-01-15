@@ -28,7 +28,7 @@ def test_storage():
     if environ.get('TEST_DATABASE') is None:
         raise SkipTest('TEST_DATABASE env variable needs to be set to run this test.')
 
-    storage = MetricsStorage(config=ConfigForMetricsStorage())
+    storage = MetricsStorage(config=ConfigForMetricsStorage(), use_slave=False)
 
     # push some metrics and later on try to get them
     storage.push('foo', {'score': 123, 'bar/metric': 42.4})
