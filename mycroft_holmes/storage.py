@@ -36,10 +36,13 @@ class MetricsStorage:
 
         # use cached connection
         if storage_host in self.CONNECTIONS_CACHE:
+            # https://dev.mysql.com/doc/connector-python/en/connector-python-api-mysqlconnection-ping.html
+            self.CONNECTIONS_CACHE[storage_host].ping(reconnect=True, attempts=1, delay=0)
+
             return self.CONNECTIONS_CACHE[storage_host]
 
         if not self._storage:
-            self.logger.info('Connecting to MySQL running at "%s"', storage_host)
+            self.logger.info('Connecting to MySQL running at "%s"...', storage_host)
 
             # https://dev.mysql.com/doc/connector-python
             self._storage = connector.connect(
