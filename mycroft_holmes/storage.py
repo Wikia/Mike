@@ -11,9 +11,13 @@ class MetricsStorage:
     """
     CONNECTIONS_CACHE = dict()
 
-    def __init__(self, config):
+    def __init__(self, config, use_slave=True):
         """
+        Connect to storage database.
+        Use slave by default (use "host_slave" config entry if provided)
+
         :type config mycroft_holmes.config.Config
+        :type use_slave bool
         """
         self.logger = logging.getLogger(self.__class__.__name__)
 
@@ -24,6 +28,10 @@ class MetricsStorage:
         self.config = config.get_raw()['storage']
 
         assert self.config['engine'] == 'mysql', 'Only "mysql" storage is currently supported'
+
+        # pick a host
+        if use_slave and 'host_slave' in self.config:
+            self.config['host'] = self.config['host_slave']
 
     @property
     def storage(self):

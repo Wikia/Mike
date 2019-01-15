@@ -60,8 +60,8 @@ def main():
     logger.info('Configured metrics: %s', list(config.get_metrics().keys()))
     logger.info('Features: %s', list(config.get_features().keys()))
 
-    # set up the metrics storage
-    storage = MetricsStorage(config=config)
+    # set up the metrics storage (and connect to master database)
+    storage = MetricsStorage(config=config, use_slave=False)
 
     # print(storage.get('ckeditor', 'score')); exit(1)
 

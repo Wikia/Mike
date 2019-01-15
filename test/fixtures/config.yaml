@@ -27,6 +27,7 @@ sources:
 storage:
   engine: mysql
   host: "${DATABASE_HOST}"
+  host_slave: "${DATABASE_HOST_SLAVE}"  # this is optional and will be used when use_slave=True
   database: "mike_holmes"
   user: "${DATABASE_USER}"
   password: "${DATABASE_PASSWORD}"
