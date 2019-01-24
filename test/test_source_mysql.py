@@ -40,14 +40,22 @@ def test_source_get_value():
     print(source)
     assert isinstance(source, MysqlSource)
 
-    # AssertionError: "query" parameter needs to be provided
-    with raises(AssertionError):
-        source.get_value()
+    query = 'SELECT count(*) FROM mike_test WHERE user_group = %(group)s'
 
     assert source.get_value(
-        query='SELECT count(*) FROM mike_test WHERE user_group = %(group)s',
+        query=query,
         template={'project': 'Foo', 'group': 'admin'}
     ) == 2
+
+    assert source.get_value(
+        query=query,
+        template={'project': 'Foo', 'group': 'user'}
+    ) == 1
+
+    assert source.get_value(
+        query=query,
+        template={'project': 'Foo', 'group': '"test"'}
+    ) == 0
 
 
 def test_client_exception_handling():
