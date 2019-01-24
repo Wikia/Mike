@@ -22,4 +22,8 @@ coverage:
 server_dev:
 	FLASK_APP=mycroft_holmes/app/app.py FLASK_ENV=development flask run --host=0.0.0.0
 
+# test database
+mysql_cli:
+	mysql -h127.0.0.1 -u${TEST_DATABASE_USER} -p${TEST_DATABASE_PASSWORD} ${TEST_DATABASE}
+
 .PHONY: test
