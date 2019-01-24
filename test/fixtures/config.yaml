@@ -54,7 +54,7 @@ metrics:
   - name: tags-report/usage
     source: wikia/tags-report
     query: "SELECT count(*) FROM city_used_tags WHERE ct_kind = %(tag)s"
-    label: "<{tag}> usage: %d"
+    label: "<{tag}> tag usage: %d"
   - name: wikifactory/feature-enabled-on
     source: wikia/wikifactory  # we will use a generic source from the code if this one is not defined in "sources" section above
     label: "enabled on %d wikis"
