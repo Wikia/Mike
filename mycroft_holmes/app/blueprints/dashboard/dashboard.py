@@ -68,29 +68,22 @@ def index_json():
     """
     :rtype: flask.Response
     """
-    config = get_config()
-    storage = MetricsStorage(config=config)
+    components = get_components_with_metrics(config=get_config())
 
-    return jsonify({
-        'dashboard_name': config.get_name(),
-        'features': [
-            {
-                'name': feature_name,
-                'url': feature_spec.get('url'),
-                'repo': feature_spec.get('repo'),
-                'metrics': [metric['name'] for metric in feature_spec['metrics']],
-                'score': storage.get(
-                    feature_id=config.get_feature_id(feature_name),
-                    feature_metric='score'
-                ),
-                'links': {
-                    'self': url_for('dashboard.feature',
-                                    feature_id=config.get_feature_id(feature_name))
-                }
-            }
-            for feature_name, feature_spec in config.get_features().items()
-        ]
-    })
+    features = []
+
+    for component in components:
+        component['metrics'] = {
+            metric.get_name(): metric.value for metric in component['metrics']
+        }
+
+        component['links'] = {
+            'self': url_for('dashboard.feature', feature_id=component['id'])
+        }
+
+        features.append(component)
+
+    return jsonify(features)
 
 
 @dashboard.route('/index.csv')
