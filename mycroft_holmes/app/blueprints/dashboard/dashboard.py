@@ -1,10 +1,16 @@
 """
 Provides a blueprint that renders JSON with software version and environment details
 """
-from flask import Blueprint, jsonify, render_template, url_for, abort
+from csv import DictWriter
+from io import StringIO
+
+from flask import Blueprint, jsonify, render_template, url_for, abort, make_response
 
 from mycroft_holmes.app.utils import get_config, get_feature_spec_by_id
 from mycroft_holmes.storage import MetricsStorage
+
+from .models import get_components_with_metrics
+
 
 dashboard = Blueprint('dashboard', __name__, template_folder='templates')
 
@@ -53,6 +59,7 @@ def index():
         'index.html',
         components=components,
         _json=url_for('dashboard.index_json'),
+        _csv=url_for('dashboard.index_csv'),
     )
 
 
@@ -77,12 +84,60 @@ def index_json():
                     feature_metric='score'
                 ),
                 'links': {
-                    'self': url_for('dashboard.index')
+                    'self': url_for('dashboard.feature',
+                                    feature_id=config.get_feature_id(feature_name))
                 }
             }
             for feature_name, feature_spec in config.get_features().items()
         ]
     })
+
+
+@dashboard.route('/index.csv')
+def index_csv():
+    """
+    :rtype: flask.Response
+    """
+    components = get_components_with_metrics(config=get_config())
+
+    # get the unique list of all metric name
+    metrics = set()
+
+    for component in components:
+        for metric in component['metrics']:
+            metrics.add(metric.get_name())
+
+    metrics = sorted(list(metrics))
+
+    # https://docs.python.org/3.6/library/csv.html#writer-objects
+    output = StringIO()
+
+    csv = DictWriter(
+        f=output,
+        fieldnames=['Component', 'Documentation', 'Repository', 'Dashboard', 'Score'] + metrics
+    )
+
+    csv.writeheader()
+
+    # write CSV rows
+    for component in components:
+        row = {
+            'Component': component['name'],
+            'Documentation': component['docs'],
+            'Repository': component['repo'],
+            'Dashboard': component['url'],
+            'Score': component['score'],
+        }
+
+        for metric in component['metrics']:
+            row[metric.get_name()] = metric.value
+
+        csv.writerow(row)
+
+    resp = make_response(output.getvalue())
+    resp.headers['Content-Type'] = 'text/plain'
+
+    return resp
 
 
 @dashboard.route('/component/<string:feature_id>')
