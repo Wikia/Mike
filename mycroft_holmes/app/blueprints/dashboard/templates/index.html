@@ -1,11 +1,11 @@
 {% extends "_main.html" %}
-{% block title %}{{ dashboard_name | safe }}{% endblock %}
+{% block title %}{{ dashboard_name | e }}{% endblock %}
 
 {% block navbar %}
-<a class="navbar-brand" href="/">{{ dashboard_name | safe }}</a>
+<a class="navbar-brand" href="/">{{ dashboard_name | e }}</a>
 
 <div class="float-right">
-    <a href="{{ _json | safe }}" class="badge badge-secondary">JSON</a>
+    <a href="{{ _json | e }}" class="badge badge-secondary">JSON</a>
 </div>
 {% endblock %}
 
@@ -22,15 +22,15 @@
                     <i class="material-icons">check_circle_outline</i>
                   </div>
                   <p class="card-category">Score: <b>{{ component.score }}</b></p>
-                    <h3 class="card-title"><a href="{{ component.url | safe }}">{{ component.name | safe }}</a></h3>
+                    <h3 class="card-title"><a href="{{ component.url | e }}">{{ component.name | e }}</a></h3>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    {% for metric in component.metrics %}<span>{{ metric | safe }}</span>{% endfor %}
+                    {% for metric in component.metrics %}<span>{{ metric | e }}</span>{% endfor %}
                   </div>
                   <div class="float-right">
-                    <a class="material-icons" href="{{ component.docs | safe }}" title="Documentation">assignment</a>
-                    <a class="material-icons" href="{{ component.repo | safe }}" title="Code on GitHub">code</a>
+                    <a class="material-icons" href="{{ component.docs | e }}" title="Documentation">assignment</a>
+                    <a class="material-icons" href="{{ component.repo | e }}" title="Code on GitHub">code</a>
                   </div>
                 </div>
               </div>
