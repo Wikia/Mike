@@ -20,40 +20,17 @@ def index():
     """
     :rtype: flask.Response
     """
-    config = get_config()
-    storage = MetricsStorage(config=config)
+    components = get_components_with_metrics(config=get_config())
+    features = []
 
-    components = []
+    for component in components:
+        component['metrics'] = [
+            metric.get_label_with_value() for metric in component['metrics']
+        ]
 
-    for feature_name, feature_spec in config.get_features().items():
-        feature_id = config.get_feature_id(feature_name)
-        metrics = config.get_metrics_for_feature(feature_name)
-        # print(feature_name, metrics)
+        component['url'] = url_for('dashboard.feature', feature_id=component['id'])
 
-        component = {
-            'id': feature_id,
-
-            # feature's metadata
-            'name': feature_name,
-            'docs': feature_spec.get('url'),
-            'repo': feature_spec.get('repo'),
-
-            # fetch metrics and calculated score
-            'metrics': [
-                metric.get_label_with_value() for metric in metrics if metric.value is not None
-            ],
-            'score': storage.get(feature_id, feature_metric='score'),
-
-            # link to a feature's dashboard
-            'url': url_for('dashboard.feature', feature_id=feature_id),
-        }
-
-        components.append(component)
-
-    # sort components by score (descending)
-    components = sorted(components, key=lambda item: item['score'], reverse=True)
-
-    # print(components)
+        features.append(component)
 
     return render_template(
         'index.html',
@@ -69,7 +46,6 @@ def index_json():
     :rtype: flask.Response
     """
     components = get_components_with_metrics(config=get_config())
-
     features = []
 
     for component in components:
