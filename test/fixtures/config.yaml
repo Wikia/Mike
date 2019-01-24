@@ -60,7 +60,7 @@ metrics:
   # Google Analytics
   - name: analytics/events
     source: wikia/analytics
-    label: "GA events: %d"
+    label: "{ga_label}: %d"
     metric: "ga:totalEvents"
     filters: "{ga_filter}"
 
@@ -97,6 +97,7 @@ features:
     template:
         component: "CK Editor (RTE)"
         ga_filter: "ga:eventCategory==editor-ck;ga:eventAction==submit;ga:eventLabel==publish"
+        ga_label: "Edits published daily"
     metrics:
         - name: analytics/events
 
@@ -106,5 +107,6 @@ features:
     template:
         component: "Visual Editor"
         ga_filter: "ga:eventCategory==editor-ve;ga:eventAction==success;ga:eventLabel==publish"
+        ga_label: "Edits published daily"
     metrics:
         - name: analytics/events
