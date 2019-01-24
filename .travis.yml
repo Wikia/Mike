@@ -17,7 +17,7 @@ after_script:
   - mysql mycroft_holmes -e 'SELECT * FROM features_metrics'
 
 language: python
-python: "3.7"
+python: "3.6"
 
 # command to install dependencies
 install: "make"
