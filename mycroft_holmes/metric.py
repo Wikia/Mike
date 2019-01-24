@@ -6,6 +6,7 @@ import logging
 from .errors import MycroftMetricError, MycroftSourceError
 from .sources.base import SourceBase
 from .storage import MetricsStorage
+from .utils import format_query
 
 
 class Metric:
@@ -81,9 +82,14 @@ class Metric:
     @property
     def _label(self):
         """
-        :rtype: str`
+        :rtype: str
         """
-        return self.get_spec().get('label')
+        spec = self.get_spec()
+        label = spec.get('label')
+
+        # allow label to have {foo} placeholders
+        # that can be filled with template variables from feature's metrics variables
+        return format_query(label, spec.get('template')) if label else None
 
     def set_value(self, value):
         """

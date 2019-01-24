@@ -101,7 +101,8 @@ def test_config_get_features():
         ],
         'template': {
             'component': 'CK Editor (RTE)',
-            'ga_filter': 'ga:eventCategory==editor-ck;ga:eventAction==submit;ga:eventLabel==publish'
+            'ga_filter': 'ga:eventCategory==editor-ck;ga:eventAction==submit;ga:eventLabel==publish',
+            'ga_label': 'Edits published daily',
         }
     }
 
@@ -126,7 +127,7 @@ def test_config_get_metrics():
         'name': 'analytics/events',
         'source': 'wikia/analytics',
         'metric': 'ga:totalEvents',
-        'label': 'GA events: %d',
+        'label': '{ga_label}: %d',
         'filters': '{ga_filter}'
     }
 
