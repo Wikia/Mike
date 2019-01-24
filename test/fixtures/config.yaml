@@ -14,7 +14,8 @@ sources:
     host: "${ELASTIC_HOST}"
   - name: wikia/tags-report
     kind: common/mysql
-    host: db.prod
+    host: "${DATABASE_SPECIALS}"
+    database: "specials"
     user: "${DATABASE_USER}"
     password: "${DATABASE_PASSWORD}"
   - name: wikia/analytics
@@ -49,10 +50,11 @@ metrics:
     index: logstash-apache-access-log
     query: "request: 'GET' AND url: '{url}'"
     label: "%d HTTP requests handled"
-  # MySQL
+  # MySQL, Special:TagsReport
   - name: tags-report/usage
-    source: wikia/mysql
-    query: "SELECT count(*) FROM tags_report WHERE tag = '{tag}'"
+    source: wikia/tags-report
+    query: "SELECT count(*) FROM city_used_tags WHERE ct_kind = %(tag)s"
+    label: "<{tag}> usage: %d"
   - name: wikifactory/feature-enabled-on
     source: wikia/wikifactory  # we will use a generic source from the code if this one is not defined in "sources" section above
     label: "enabled on %d wikis"
