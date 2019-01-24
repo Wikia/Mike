@@ -5,3 +5,4 @@ from .analytics import GoogleAnalyticsSource
 from .const import ConstSource
 from .jira import JiraSource
 from .logstash import LogstashSource
+from .mysql import MysqlSource

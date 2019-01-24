@@ -1,8 +1,8 @@
 {% extends "_main.html" %}
-{% block title %}{{ component.name | safe }}{% endblock %}
+{% block title %}{{ component.name | e }}{% endblock %}
 
 {% block navbar %}
-<a class="navbar-brand" href="/">{{ dashboard_name | safe }}</a>
+<a class="navbar-brand" href="/">{{ dashboard_name | e }}</a>
 {% endblock %}
 
 
@@ -10,15 +10,15 @@
        <div class="container-fluid">
 
             <div class="float-right">
-                <a href="{{ _csv | safe }}" class="badge badge-secondary">CSV</a>
+                <a href="{{ _csv | e }}" class="badge badge-secondary">CSV</a>
                 &nbsp;
-                <a href="{{ _json | safe }}" class="badge badge-secondary">JSON</a>
+                <a href="{{ _json | e }}" class="badge badge-secondary">JSON</a>
             </div>
 
-            <h1>{{ component.name | safe }}</h1>
+            <h1>{{ component.name | e }}</h1>
             <h6>
-                <a href="{{ component.docs | safe }}" target="_blank">Component's documentation</a> |
-                <a href="{{ component.repo | safe }}" target="_blank">View the code on GitHub</a>
+                <a href="{{ component.docs | e }}" target="_blank">Component's documentation</a> |
+                <a href="{{ component.repo | e }}" target="_blank">View the code on GitHub</a>
             </h6>
 
             <div class="spacer"></div>
@@ -50,7 +50,7 @@
                       <div class="card-icon">
                         <i class="material-icons">{{ metric.icon }}</i>
                       </div>
-                      <h5 class="card-title">{{ metric.label | safe }}</h5>
+                      <h5 class="card-title">{{ metric.label | e }}</h5>
                       <h3 class="metric-value" title="{{ metric.raw_value }}">{{ metric.value or '-' }}</h3>
                       <!-- <p class="card-category">No change in the last 7 days</p> -->
                     </div>
@@ -58,10 +58,10 @@
                       <div class="float-right" title="Metric multiplier">{% if metric.weight != 1 %}x{{ metric.weight }}{% endif %}</div>
                       <div class="stats">
                         {% if metric.more_link %}
-                          <a href="{{ metric.more_link[1] | safe }}" target="_blank">{{ metric.more_link[0] | safe }}</a>
+                          <a href="{{ metric.more_link[1] | e }}" target="_blank">{{ metric.more_link[0] | e }}</a>
                         {% endif %}
                         {% if metric.value is none %}
-                          <span>Metric <tt>{{ metric.name | safe }}</tt> failed</span>
+                          <span>Metric <tt>{{ metric.name | e }}</tt> failed</span>
                         {% endif %}
                       </div>
                     </div>

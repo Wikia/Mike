@@ -12,12 +12,13 @@ env:
 before_script:
   - mysql -e 'CREATE DATABASE mycroft_holmes;'
   - cat schema.sql | mysql mycroft_holmes
+  - cat schema_test.sql | mysql mycroft_holmes
 
 after_script:
   - mysql mycroft_holmes -e 'SELECT * FROM features_metrics'
 
 language: python
-python: "3.7"
+python: "3.6"
 
 # command to install dependencies
 install: "make"

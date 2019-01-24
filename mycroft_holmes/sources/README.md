@@ -17,10 +17,9 @@ This directory contains implementation of various sources that provide values fo
 * `common/const`: Returns a constant value (can be used to tweak a score of a feature).
 * `common/jira`: Returns a number of Jira ticket matching given JQL query.
 * `common/logstash`: Returns a number of entries matching a given elasticsearch query.
+* `common/mysql`: Returns a number result for a given SQL query.
 
 ### TODO
-
-* `common/mysql` (performs a specified SQL query that returns a single value)
 
 #### Wikia-specific sources
 
@@ -169,6 +168,48 @@ sources:
           - url: "/foo"  # this will be used in template string
         metrics:
           -  name: logstash/get-requests-access-log
+```
+
+### MysqlSource
+
+Source name: `common/mysql`
+
+> Returns a number result for a given SQL query.
+
+#### `sources` config
+
+```yaml
+sources:
+  - name: foo/mysql
+    kind: common/mysql
+    host: "${DATABASE_HOST}"
+    database: "app_database_name"
+    user: "${DATABASE_USER}"
+    password: "${DATABASE_PASSWORD}"
+```
+
+#### `metrics` config
+
+```yaml
+    metrics:
+      # Get some stats
+      - name: users/count
+        source: foo/mysql
+        query: "SELECT count(*) FROM users WHERE user_group = %(user_group)s"
+        label: "{user_group} group members: %d"
+```
+
+Please note that only the first column from the first row in the results set will be taken.
+
+#### `features` config
+
+```yaml
+    features:
+      - name: FooBar
+        template:
+          - user_group: "Admin"  # this will be used in query defined above
+        metrics:
+          -  name: users/count
 ```
 
 ## Sources setup
