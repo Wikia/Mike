@@ -17,9 +17,7 @@ after_script:
   - mysql mycroft_holmes -e 'SELECT * FROM features_metrics'
 
 language: python
-python:
-    - "3.6"
-    - "3.7"
+python: "3.7"
 
 # command to install dependencies
 install: "make"
@@ -28,3 +26,6 @@ install: "make"
 script:
     - make coverage
     - make lint
+
+# @see https://github.com/nickstenning/travis-pip-cache/issues/1
+cache: pip
