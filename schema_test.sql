@@ -1,4 +1,4 @@
--- This file contains a schema and data definition for Mike's tests
+-- This file contains a schema and sample rows for MysqlSource tests
 DROP TABLE `mike_test`;
 
 CREATE TABLE `mike_test` (
