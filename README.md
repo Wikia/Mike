@@ -17,6 +17,18 @@ pip install -e .
 
 To install development dependencies run `make` inside virtualenv.
 
+## Set up a config file
+
+Please refer to `test/fixtures/config.yaml` and README.md in `mycroft_holmes/source` directory and prepare your own config file.
+
+Save it and store its path in `MIKE_CONFIG` env variable. It is used by the front-end app and metrics collector script.
+
+Otherwise you'll get:
+
+```
+AssertionError: Please specify where your config YAML file is in MIKE_CONFIG env variable.
+```
+
 ## Running UI
 
 `Mycroft Holmes` comes with Flask-powered web-application that provides a dashboard with an overview of components and their metrics.
@@ -27,13 +39,17 @@ Run the following to try it out in development mode:
 make server_dev
 ```
 
-Now visit [`/version.json`]()http://127.0.0.1:5000/version.json). 
+Now visit [`/version.json`](http://127.0.0.1:5000/version.json).
 
 ## Collecting metrics
 
 ### Using Docker
 
-> TODO
+```
+docker pull macbre/mike:latest
+docker run -t macbre/mike -p5000:5000
+``
+
 
 ### Via crontab
 
