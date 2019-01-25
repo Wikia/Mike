@@ -56,7 +56,8 @@ def index_json():
         }
 
         component['links'] = {
-            'self': url_for('dashboard.feature', feature_id=component['id'])
+            'self': url_for('dashboard.feature', feature_id=component['id'], _external=True),
+            'yaml': url_for('dashboard.feature_yaml', feature_id=component['id'], _external=True),
         }
 
         features.append(component)
@@ -152,7 +153,28 @@ def feature(feature_id):
         score=storage.get(feature_id, feature_metric='score'),
         _csv='#',
         _json='#',
+        _yaml=url_for('dashboard.feature_yaml', feature_id=feature_id),
     )
+
+
+@dashboard.route('/component/<string:feature_id>.yaml')
+def feature_yaml(feature_id):
+    """
+    :type feature_id str
+    :rtype: flask.Response
+    """
+    config = get_config()
+
+    # find a feature by ID
+    feature_spec = get_feature_spec_by_id(config, feature_id)
+
+    # render a spec as YAML
+    spec_yaml = yaml.safe_dump(feature_spec, default_flow_style=False)
+
+    # serve as a plain text
+    resp = make_response(spec_yaml)
+    resp.headers['Content-Type'] = 'text/plain'
+    return resp
 
 
 def get_icon_for_source(source_name, default='extension'):
