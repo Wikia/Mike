@@ -3,7 +3,7 @@ App utilities
 """
 import functools
 
-from os import environ, path
+from os import environ
 
 from mycroft_holmes.config import Config
 
@@ -31,15 +31,17 @@ def memoize(func):
 
 
 @memoize
-def get_config():
+def get_config(env=None):
     """
+    :type env dict
     :rtype: mycroft_holmes.config.Config
     """
-    config_file = path.join(path.dirname(__file__), '../../test/fixtures', 'config.yaml')
+    config_file = environ.get('MIKE_CONFIG')
+    assert config_file, 'Please specify where your config YAML file is in MIKE_CONFIG env variable.'
 
     return Config(
         config_file=config_file,
-        env=environ
+        env=env if env else environ
     )
 
 
