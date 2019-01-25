@@ -18,6 +18,13 @@ ADD . .
 # expose the HTTP port
 EXPOSE 5000
 
+# your custom config YAML should be mounted
+# and MIKE_CONFIG env variable should point to it
+ENV MIKE_CONFIG /opt/mike/example.yaml
+
+# entrypoint script
+RUN echo "gunicorn 'mycroft_holmes.app.app:setup_app()' --worker-class sync -b 0.0.0.0:5000 --workers 4 --access-logfile -" > entrypoint
+
 # run the app
 ENV FLASK_APP=mycroft_holmes/app/app.py
-CMD ["flask", "run", "--host=0.0.0.0"]
+CMD ["sh", "entrypoint"]
