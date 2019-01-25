@@ -1,3 +1,14 @@
+.h1, .h2, .h3, .h4, body, h1, h2, h3, h4, h5, h6 {
+    font-family:"IBM PLex Sans Condensed",Helvetica,Arial,sans-serif;
+}
+
+h1,
+h3.card-title,
+.metric-value {
+    font-family: "IBM PLex Mono";
+    letter-spacing: -.075em;
+}
+
 body {
     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#eeeeee+0,aaaaaa+100,7db9e8+100 */
     background: #eeeeee; /* Old browsers */
@@ -28,13 +39,6 @@ body {
 
 .spacer {
     margin-top: 50px;
-}
-
-h1,
-h3.card-title,
-.metric-value {
-    font-family: "Roboto Slab";
-    letter-spacing: -1px;
 }
 
 .metric-value {
