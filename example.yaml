@@ -21,8 +21,6 @@ features:
   - name: Foo Bar
     url: http://docs.company.net/pages/FooBar
     repo: https://github.com/foo/bar
-    template:
-      component: "Foo Bar"
     metrics:
     - name: foo/weighted-bar
       source: common/const

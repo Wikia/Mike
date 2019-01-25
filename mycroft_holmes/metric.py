@@ -28,10 +28,6 @@ class Metric:
 
         self._value = False
 
-        # if we're using a ConstSource, set the value immediatelly
-        if self.get_source_name() == ConstSource.NAME:
-            self._value = self._get_source().get_value()
-
     def __repr__(self):
         """
         :rtype: str
@@ -109,6 +105,10 @@ class Metric:
         """
         :rtype: int
         """
+        # if we're using a ConstSource, set the value immediatelly
+        if self.get_source_name() == ConstSource.NAME:
+            self._value = self.fetch_value()
+
         # lazy-load value from the storage
         if self._value is False:
             storage = MetricsStorage(config=self.config)

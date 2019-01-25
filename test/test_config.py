@@ -5,6 +5,7 @@ Set of unit test for Config class
 import pytest
 
 from mycroft_holmes.config import Config, MycroftHolmesConfigError
+from mycroft_holmes.sources import base
 
 from . import get_fixtures_directory
 
@@ -137,6 +138,7 @@ def test_config_get_metrics_specs_for_feature():
 
     assert config.get_metrics_for_feature(feature_name='foobar') == []
 
+    base.SOURCES_CACHE = dict()
     metrics_specs = config.get_metrics_for_feature(feature_name='DynamicPageList')
     print(metrics_specs)
 
@@ -163,10 +165,13 @@ def test_config_get_metrics_specs_for_feature():
 def test_config_get_metrics_for_feature_const():
     config = Config(config_file=get_fixtures_directory() + '/const.yaml')
 
+    base.SOURCES_CACHE = dict()
     metrics = config.get_metrics_for_feature('Foo Bar')
 
     print(metrics)
     assert len(metrics) == 2
+
+    assert metrics[0].get_spec() == {'name': 'usage/foo', 'source': 'common/const', 'weight': 42}
 
     assert metrics[0].get_source_name() == 'common/const'
     assert metrics[0].get_weight() == 42
@@ -175,14 +180,21 @@ def test_config_get_metrics_for_feature_const():
     assert metrics[1].get_weight() == 66
 
 
-def test_example_config():
+def test_minimal_config():
     config = Config(config_file=get_fixtures_directory() + '/../../example.yaml')
-    metrics = config.get_metrics_for_feature('Foo Bar')
-
     assert len(config.get_features()) == 1
+
+    base.SOURCES_CACHE = dict()
+    metrics = config.get_metrics_for_feature('Foo Bar')
 
     print(metrics)
     assert len(metrics) == 1
+
+    assert metrics[0].get_spec() == {
+        'name': 'foo/weighted-bar',
+        'source': 'common/const',
+        'weight': 700
+    }
 
     assert metrics[0].get_source_name() == 'common/const'
     assert metrics[0].get_weight() == 700

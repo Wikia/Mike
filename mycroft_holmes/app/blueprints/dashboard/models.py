@@ -3,6 +3,7 @@ Models for accessing components and metrics data
 """
 from flask import url_for
 
+from mysql.connector.errors import Error as MycroftMetricsStorageError
 from mycroft_holmes.storage import MetricsStorage
 
 
@@ -20,7 +21,7 @@ def get_components_with_metrics(config):
 
         try:
             score = storage.get(feature_id, feature_metric='score')
-        except Exception:
+        except MycroftMetricsStorageError:
             score = None
 
         component = {
