@@ -8,6 +8,10 @@ sources: []
 # where will metrics be stored
 storage:
   engine: mysql
+  host: ''
+  database: ''
+  user: ''
+  password: ''
 
 # now define metrics that are taken from sources above
 metrics: []

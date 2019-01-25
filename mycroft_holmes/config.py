@@ -151,7 +151,10 @@ class Config:
 
         for metric in feature.get('metrics', []):
             # we can refer to base sources in features section
-            default = {'source': metric.get('source')}
+            default = {
+                'name': metric.get('name'),
+                'source': metric.get('source')
+            }
 
             # create a fresh copy of metric spec
             spec = available_metrics.get(metric['name'], default).copy()

@@ -187,6 +187,10 @@ def test_example_config():
     assert metrics[0].get_source_name() == 'common/const'
     assert metrics[0].get_weight() == 700
 
+    assert metrics[0].value == 1
+    assert metrics[0].get_label_with_value() is None
+    assert metrics[0].get_formatted_value() == '1'
+
     # can we handle empty entries in the config?
     assert len(config.get_metrics()) == 0
     assert len(config.get_sources()) == 0

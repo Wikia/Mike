@@ -19,6 +19,7 @@ def test_fetch_value():
     print(metric)
     assert metric.get_source_name() == ConstSource.NAME
     assert metric.fetch_value() == 1
+    assert metric.value == 1, 'We should not need to connect to database to get this'
 
 
 def test_fetch_value_ignore_weight():
