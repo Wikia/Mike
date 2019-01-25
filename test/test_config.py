@@ -173,3 +173,20 @@ def test_config_get_metrics_for_feature_const():
 
     assert metrics[1].get_source_name() == 'common/const'
     assert metrics[1].get_weight() == 66
+
+
+def test_example_config():
+    config = Config(config_file=get_fixtures_directory() + '/../../example.yaml')
+    metrics = config.get_metrics_for_feature('Foo Bar')
+
+    assert len(config.get_features()) == 1
+
+    print(metrics)
+    assert len(metrics) == 1
+
+    assert metrics[0].get_source_name() == 'common/const'
+    assert metrics[0].get_weight() == 700
+
+    # can we handle empty entries in the config?
+    assert len(config.get_metrics()) == 0
+    assert len(config.get_sources()) == 0

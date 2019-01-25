@@ -150,8 +150,11 @@ class Config:
         metrics = []
 
         for metric in feature.get('metrics', []):
+            # we can refer to base sources in features section
+            default = {'source': metric.get('source')}
+
             # create a fresh copy of metric spec
-            spec = available_metrics.get(metric['name']).copy()
+            spec = available_metrics.get(metric['name'], default).copy()
 
             # extend it with feature-wide template variables
             if feature.get('template'):
