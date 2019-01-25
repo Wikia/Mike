@@ -4,6 +4,8 @@ Provides a blueprint that renders JSON with software version and environment det
 from csv import DictWriter
 from io import StringIO
 
+import yaml
+
 from flask import Blueprint, jsonify, render_template, url_for, abort, make_response
 
 from mycroft_holmes.app.utils import get_config, get_feature_spec_by_id
@@ -139,9 +141,13 @@ def feature(feature_id):
         for metric in config.get_metrics_for_feature(feature_spec['name'])
     ]
 
+    # render a spec as YAML
+    spec_yaml = yaml.safe_dump(feature_spec, default_flow_style=False)
+
     return render_template(
         'feature.html',
         component=feature_spec,
+        spec_yaml=spec_yaml,
         metrics=metrics,
         score=storage.get(feature_id, feature_metric='score'),
         _csv='#',
