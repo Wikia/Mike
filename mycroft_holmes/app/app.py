@@ -2,7 +2,10 @@
 This is an entry point for Mike's UI Flask-powered web-application
 """
 # pylint: disable=no-member
-from flask import Flask
+import time
+from socket import gethostname
+
+from flask import g, Flask
 
 from mycroft_holmes import VERSION
 from .utils import get_config
@@ -35,3 +38,27 @@ def inject():
         dashboard_name=get_config().get_name(),
         version=VERSION
     )
+
+
+# measure response time
+@app.before_request
+def app_before_request():
+    """
+    Measure response time
+    """
+    g.start = time.time()
+
+
+hostname = gethostname()  # cache to avoid uname syscall on each request
+
+
+@app.after_request
+def app_after_request(response):
+    """
+    :type response flask.wrappers.ResponseBase
+    :rtype: flask.wrappers.ResponseBase
+    """
+    response.headers.set('X-Backend-Response-Time', '{:.4f}'.format(time.time() - g.start))
+    response.headers.set('X-Served-By', hostname)
+
+    return response
