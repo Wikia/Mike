@@ -81,10 +81,21 @@ a.card-header {
     font-size: 2.2em;
 }
 
+.card .stats {
+    font-size: 14px !important;
+}
+
 .card h3 a,
 .card .stats a {
     color: #333 !important;
     border-bottom: solid 3px rgba(0, 0, 0, .25);
+    transition-property: border-bottom-color;
+    transition-duration: 0.5s;
+}
+
+.card h3 a:hover,
+.card .stats a:hover {
+    border-bottom-color: #9c27b0;
 }
 
 .card .card-footer .stats span {
