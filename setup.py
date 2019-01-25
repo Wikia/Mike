@@ -25,6 +25,7 @@ setup(
         'google-api-python-client==1.7.7',
         'mysql-connector-python==8.0.13',
         'oauthlib[signedtoken]>=2.1.0, <3.0.0',
+        'requests-oauthlib==1.1.0',
         'jira==2.0.0',
         'pyyaml>=4.2b1',
         # UI

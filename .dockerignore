@@ -1,4 +1,7 @@
 .*
 env/
 test/
+docs/
 htmlcov/
+coverage.xml
+*.md
