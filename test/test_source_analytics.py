@@ -8,11 +8,37 @@ from mycroft_holmes.sources.base import SourceBase
 from mycroft_holmes.sources import GoogleAnalyticsSource
 
 
-class ReportCalledError(Exception):
+class MockedGoogleAnalyticsSource(GoogleAnalyticsSource):
     """
-    This is raised by reports() method of MockedClient
+    This class is used to mock values returned by Google Analytics API
     """
-    pass
+    def __init__(self, mocked_value):
+        """
+        :type mocked_value float
+        """
+        super(MockedGoogleAnalyticsSource, self).__init__('', 0)
+        self.mocked_value = mocked_value
+        self.last_query = None
+
+    def _query(self, **kwargs):
+        """
+        :rtype: float
+        """
+        self.last_query = kwargs
+
+        # [{'metrics': [{'values': ['270634']}], 'dimensions': ['20181213']}]
+        return {
+            'reports': [{
+                'data': {
+                    'rows': [
+                        {
+                            'metrics': [{'values': [str(self.mocked_value)]}],
+                            'dimensions': ['20181213'],
+                        }
+                    ]
+                }
+            }]
+        }
 
 
 class MockedClient:
@@ -20,7 +46,7 @@ class MockedClient:
     Mocked Google API client class returning provided number of tickets
     """
     def reports(self):
-        raise ReportCalledError('reports() method should not be called')  # TODO
+        raise Exception('reports() method should not be called')  # TODO
 
 
 def get_source_with_mocked_client(mocked_client, credentials='{}'):
@@ -55,13 +81,23 @@ def test_source_validation():
         source.get_value()
     assert str(exc_info).endswith('AssertionError: "metric" parameter needs to be provided')
 
-    # these calls should make it into reports() method of GA client
-    with raises(MycroftSourceError):
-        source.get_value(metric='foo')
 
-    # client check
-    with raises(MycroftSourceError):
-        assert source.get_value(metric='foo', filters='bar') == 5  # TODO
+def test_mocked_source():
+    source = MockedGoogleAnalyticsSource(5)
+    assert source.get_value(metric='foo') == 5
+    assert source.last_query == \
+        {'dimension': 'ga:date', 'end_date': '1daysAgo', 'filters': '', 'metric': 'foo', 'start_date': '1daysAgo'}
+
+    source = MockedGoogleAnalyticsSource(42)
+    assert source.get_value(metric='foo', filters='bar') == 42
+    assert source.last_query == \
+        {'dimension': 'ga:date', 'end_date': '1daysAgo', 'filters': 'bar', 'metric': 'foo', 'start_date': '1daysAgo'}
+
+    # float value
+    source = MockedGoogleAnalyticsSource(5.7)
+    assert source.get_value(metric='foo', filters='bar:123') == 5, 'float is casted to int'
+    assert source.last_query == \
+        {'dimension': 'ga:date', 'end_date': '1daysAgo', 'filters': 'bar:123', 'metric': 'foo', 'start_date': '1daysAgo'}
 
 
 def test_client_exception_handling():

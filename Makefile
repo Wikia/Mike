@@ -4,7 +4,7 @@ init:
 	pip install -e .[dev]
 
 test:
-	pytest -v
+	pytest -vv
 
 lint:
 	pylint mycroft_holmes
@@ -12,7 +12,7 @@ lint:
 coverage:
 	rm -f .coverage*
 	rm -rf htmlcov/*
-	coverage run -p -m pytest -v
+	coverage run -p -m pytest -vv
 	coverage combine
 	coverage html -d htmlcov $(coverage_options)
 	coverage xml -i
