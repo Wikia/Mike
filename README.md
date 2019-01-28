@@ -69,7 +69,7 @@ docker run -it mike collect_metrics
 
 ### Passing your custom YAML config file
 
-By default Mike docker container will use a sample config ile located in `/example.yaml`. You should use your own.
+By default Mike docker container will use a sample config file located in `/example.yaml`. You should use your own.
 Please refer to "Set up a config file" section above.
 
 ## Scripts

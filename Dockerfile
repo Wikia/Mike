@@ -26,5 +26,4 @@ ENV MIKE_CONFIG /opt/mike/example.yaml
 RUN echo "gunicorn 'mycroft_holmes.app.app:setup_app()' --worker-class sync -b 0.0.0.0:5000 --workers 4 --access-logfile -" > entrypoint
 
 # run the app
-ENV FLASK_APP=mycroft_holmes/app/app.py
 CMD ["sh", "entrypoint"]
