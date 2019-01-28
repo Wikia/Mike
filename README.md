@@ -41,6 +41,9 @@ make server_dev
 
 Now visit [`/version.json`](http://127.0.0.1:5000/version.json).
 
+> Mike uses [`python-dotenv`](https://pypi.org/project/python-dotenv/). Env variables specified in `.env` in your working
+development directory will be loaded automatically.
+
 ### Collecting metrics
 
 Let's assume that this repository has been cloned into ` /home/macbre/github/Mike` and virtual env has been set up.
@@ -79,7 +82,7 @@ config. Run the following:
 docker run -v /home/mike/config:/opt/config -p5000:5000 --env-file /home/mike/config/.env -e MIKE_CONFIG=/opt/config/mike.yaml -it mike
 ```
 
-`.env` file should look like the following:
+`.env` file should follow this convention:
 
 ```
 DATABASE_USER=mike_db

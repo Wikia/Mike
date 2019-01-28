@@ -28,6 +28,7 @@ setup(
         'requests-oauthlib==1.1.0',
         'jira==2.0.0',
         'pyyaml>=4.2b1',
+        'python-dotenv==0.10.1',
         # UI
         'flask==1.0.2',
         'gunicorn==19.9.0',

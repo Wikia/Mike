@@ -3,7 +3,10 @@ App utilities
 """
 import functools
 
-from os import environ
+from os import environ, getcwd, path
+
+from dotenv import load_dotenv
+
 
 from mycroft_holmes.config import Config
 
@@ -36,6 +39,9 @@ def get_config(env=None):
     :type env dict
     :rtype: mycroft_holmes.config.Config
     """
+    # try to parse .env file to use development
+    load_dotenv(dotenv_path=path.join(getcwd(), '.env'), verbose=True)
+
     config_file = environ.get('MIKE_CONFIG')
     assert config_file, 'Please specify where your config YAML file is in MIKE_CONFIG env variable.'
 
