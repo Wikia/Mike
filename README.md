@@ -57,6 +57,9 @@ SHELL=/bin/bash
 
 ## Using Docker
 
+[![](https://images.microbadger.com/badges/image/macbre/mike.svg)](https://hub.docker.com/r/macbre/mike)
+
+
 You can use our [official Docker image](https://hub.docker.com/r/macbre/mike):
 
 ```
