@@ -112,3 +112,23 @@ features:
         ga_label: "Edits published daily"
     metrics:
         - name: analytics/events
+
+  - name: SourceEditor
+    url: http://docs.company.net/pages/SourceEditor
+    repo: https://github.com/Wikia/app
+    template:
+        component: "Source Editor"
+        ga_filter: "ga:eventCategory==editor-mw;ga:eventAction==submit;ga:eventLabel==publish"
+        ga_label: "Edits published daily"
+    metrics:
+        - name: analytics/events
+
+  - name: MiniEditor
+    url: http://docs.company.net/pages/MiniEditor
+    repo: https://github.com/Wikia/app
+    template:
+        component: "Mini Editor"
+        ga_filter: "ga:eventCategory==editor-mini-mw;ga:eventAction==impression;ga:eventLabel==edit-page-ready"
+        ga_label: "Editor impressions daily"
+    metrics:
+        - name: analytics/events

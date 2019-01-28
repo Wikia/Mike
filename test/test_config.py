@@ -72,7 +72,7 @@ def test_config_get_features():
 
     print(features)
 
-    assert len(features) == 4
+    assert len(features) > 4
 
     assert 'DynamicPageList' in features
     assert features['DynamicPageList'] == {
