@@ -72,6 +72,20 @@ docker run -it mike collect_metrics
 By default Mike docker container will use a sample config file located in `/example.yaml`. You should use your own.
 Please refer to "Set up a config file" section above.
 
+Assuming that you have a local `/home/mike/config/.env` file with all your specific credentials that are referenced in `/home/mike/config/mike.yaml`
+config. Run the following:
+
+```
+docker run -v /home/mike/config:/opt/config -p5000:5000 --env-file /home/mike/config/.env -e MIKE_CONFIG=/opt/config/mike.yaml -it mike
+```
+
+`.env` file should look like the following:
+
+```
+DATABASE_USER=mike_db
+DATABASE_PASSWORD=d97b4e7998a07bd1b2da4c21f29ec183ad3eec20
+```
+
 ## Scripts
 
 The following command line scripts are available in Mike's virtual environment:
