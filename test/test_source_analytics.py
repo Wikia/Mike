@@ -8,12 +8,19 @@ from mycroft_holmes.sources.base import SourceBase
 from mycroft_holmes.sources import GoogleAnalyticsSource
 
 
+class ReportCalledError(Exception):
+    """
+    This is raised by reports() method of MockedClient
+    """
+    pass
+
+
 class MockedClient:
     """
     Mocked Google API client class returning provided number of tickets
     """
     def reports(self):
-        raise Exception('reports() method should not be called')  # TODO
+        raise ReportCalledError('reports() method should not be called')  # TODO
 
 
 def get_source_with_mocked_client(mocked_client, credentials='{}'):
@@ -48,12 +55,13 @@ def test_source_validation():
         source.get_value()
     assert str(exc_info).endswith('AssertionError: "metric" parameter needs to be provided')
 
-    with raises(AssertionError) as exc_info:
+    # these calls should make it into reports() method of GA client
+    with raises(MycroftSourceError):
         source.get_value(metric='foo')
-    assert str(exc_info).endswith('AssertionError: "filters" parameter needs to be provided')
 
     # client check
-    # assert source.get_value(metric='foo', filters='bar') == 5  # TODO
+    with raises(MycroftSourceError):
+        assert source.get_value(metric='foo', filters='bar') == 5  # TODO
 
 
 def test_client_exception_handling():
