@@ -145,11 +145,10 @@ class GoogleAnalyticsSource(SourceBase):
         :rtype: int
         """
         metric = kwargs.get('metric')
-        filters = kwargs.get('filters')
+        filters = kwargs.get('filters', '')  # defaults to an empty string
 
         # validate parameters
         assert isinstance(metric, str), '"metric" parameter needs to be provided'
-        assert isinstance(filters, str), '"filters" parameter needs to be provided'
 
         # apply template variables
         metric = format_query(metric, kwargs.get('template'))
