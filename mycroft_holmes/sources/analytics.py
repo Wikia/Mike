@@ -173,7 +173,7 @@ class GoogleAnalyticsSource(SourceBase):
 
             # [{'metrics': [{'values': ['270634']}], 'dimensions': ['20181213']}]
             rows = report['data']['rows']
-            return int(rows[0]['metrics'][0]['values'][0])
+            return int(float(rows[0]['metrics'][0]['values'][0]))
 
         except Exception as ex:
             self.logger.error('get_value() failed', exc_info=True)
