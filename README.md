@@ -41,23 +41,7 @@ make server_dev
 
 Now visit [`/version.json`](http://127.0.0.1:5000/version.json).
 
-## Collecting metrics
-
-### Using Docker
-
-```
-docker pull macbre/mike:latest
-docker run -p5000:5000 -it mike
-```
-
-Mike UI will be available at port 5000.
-
-#### Passing your custom YAML config file
-
-By default Mike docker cointainer will use a sample config ile located in `/example.yaml`. You should use your own.
-Please refer to "Set up a config file" section above.
-
-### Via crontab
+### Collecting metrics
 
 Let's assume that this repository has been cloned into ` /home/macbre/github/Mike` and virtual env has been set up.
 Now add the following to your `crontab`:
@@ -67,6 +51,26 @@ SHELL=/bin/bash
 # m h  dom mon dow   command
 2 2,14 *   *   *     ( cd /home/macbre/github/Mike && source env/bin/activate && source .env && collect_metrics test/fixtures/config.yaml ) >> /home/macbre/Mike.log 2>&1
 ```
+
+## Using Docker
+
+You can use our [official Docker image](https://hub.docker.com/r/macbre/mike):
+
+```
+docker pull macbre/mike:latest
+docker run -p5000:5000 -it mike
+```
+
+Run the following command periodically to keep metrics up to date:
+
+```
+docker run -it mike collect_metrics
+```
+
+### Passing your custom YAML config file
+
+By default Mike docker container will use a sample config ile located in `/example.yaml`. You should use your own.
+Please refer to "Set up a config file" section above.
 
 ## Scripts
 
