@@ -4,6 +4,7 @@ Handles a single metric of a feature
 import logging
 
 from .errors import MycroftMetricError, MycroftSourceError
+from .sources import ConstSource
 from .sources.base import SourceBase
 from .storage import MetricsStorage
 from .utils import format_query
@@ -104,6 +105,10 @@ class Metric:
         """
         :rtype: int
         """
+        # if we're using a ConstSource, set the value immediatelly
+        if self.get_source_name() == ConstSource.NAME:
+            self._value = self.fetch_value()
+
         # lazy-load value from the storage
         if self._value is False:
             storage = MetricsStorage(config=self.config)
@@ -158,8 +163,13 @@ class Metric:
 
         :rtype: str|None
         """
-        return self._label.replace('%d', self.get_formatted_value()) \
-            if self.value is not None else None
+        if self._label is None:
+            return None
+
+        if self.value is None:
+            return None
+
+        return self._label.replace('%d', self.get_formatted_value())
 
     def get_more_link(self):
         """

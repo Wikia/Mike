@@ -4,9 +4,8 @@ that are used to calculate scores for features.
 """
 import logging
 from collections import OrderedDict
-from os import environ
-from sys import argv
 
+from mycroft_holmes.app.utils import get_config
 from mycroft_holmes.config import Config
 from mycroft_holmes.errors import MycroftHolmesError
 from mycroft_holmes.sources.base import SourceBase
@@ -48,13 +47,12 @@ def main():
     Script entry point
     """
     logger = logging.getLogger('collect_metrics')
-    logger.info('argv: %s', argv)
 
     # list available sources
     logger.info('Available sources: %s', SourceBase.get_sources_names())
 
-    # read provided config file
-    config = Config(config_file=argv[1], env=environ)
+    # read config file provided by MIKE_CONFIG
+    config = get_config()
 
     # list features and metrics
     logger.info('Configured metrics: %s', list(config.get_metrics().keys()))

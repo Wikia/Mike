@@ -17,6 +17,18 @@ pip install -e .
 
 To install development dependencies run `make` inside virtualenv.
 
+## Set up a config file
+
+Please refer to `test/fixtures/config.yaml` and README.md in `mycroft_holmes/source` directory and prepare your own config file.
+
+Save it and store its path in `MIKE_CONFIG` env variable. It is used by the front-end app and metrics collector script.
+
+Otherwise you'll get:
+
+```
+AssertionError: Please specify where your config YAML file is in MIKE_CONFIG env variable.
+```
+
 ## Running UI
 
 `Mycroft Holmes` comes with Flask-powered web-application that provides a dashboard with an overview of components and their metrics.
@@ -27,15 +39,12 @@ Run the following to try it out in development mode:
 make server_dev
 ```
 
-Now visit [`/version.json`]()http://127.0.0.1:5000/version.json). 
+Now visit [`/version.json`](http://127.0.0.1:5000/version.json).
 
-## Collecting metrics
+> Mike uses [`python-dotenv`](https://pypi.org/project/python-dotenv/). Env variables specified in `.env` in your working
+development directory will be loaded automatically.
 
-### Using Docker
-
-> TODO
-
-### Via crontab
+### Collecting metrics
 
 Let's assume that this repository has been cloned into ` /home/macbre/github/Mike` and virtual env has been set up.
 Now add the following to your `crontab`:
@@ -44,6 +53,40 @@ Now add the following to your `crontab`:
 SHELL=/bin/bash
 # m h  dom mon dow   command
 2 2,14 *   *   *     ( cd /home/macbre/github/Mike && source env/bin/activate && source .env && collect_metrics test/fixtures/config.yaml ) >> /home/macbre/Mike.log 2>&1
+```
+
+## Using Docker
+
+You can use our [official Docker image](https://hub.docker.com/r/macbre/mike):
+
+```
+docker pull macbre/mike:latest
+docker run -p5000:5000 -it mike
+```
+
+Run the following command periodically to keep metrics up to date:
+
+```
+docker run -it mike collect_metrics
+```
+
+### Passing your custom YAML config file
+
+By default Mike docker container will use a sample config file located in `/example.yaml`. You should use your own.
+Please refer to "Set up a config file" section above.
+
+Assuming that you have a local `/home/mike/config/.env` file with all your specific credentials that are referenced in `/home/mike/config/mike.yaml`
+config. Run the following:
+
+```
+docker run -v /home/mike/config:/opt/config -p5000:5000 --env-file /home/mike/config/.env -e MIKE_CONFIG=/opt/config/mike.yaml -it mike
+```
+
+`.env` file should follow this convention:
+
+```
+DATABASE_USER=mike_db
+DATABASE_PASSWORD=d97b4e7998a07bd1b2da4c21f29ec183ad3eec20
 ```
 
 ## Scripts

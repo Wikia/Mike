@@ -15,20 +15,30 @@ from .blueprints import \
     dashboard,\
     version_info
 
-# read the config
-get_config()
 
 # set up an app
-app = Flask(__name__)
-app.logger.info('Starting Mycroft Holmes UI v%s', VERSION)
+def setup_app():
+    """
+    :rtype: Flask
+    """
+    # read the config
+    get_config()
 
-# add blueprints
-app.register_blueprint(dashboard)
-app.register_blueprint(version_info)
+    app = Flask(__name__)
+    app.logger.info('Starting Mycroft Holmes UI v%s', VERSION)
+
+    # add blueprints
+    app.register_blueprint(dashboard)
+    app.register_blueprint(version_info)
+
+    # various stuff
+    app.context_processor(inject)
+    app.before_request(app_before_request)
+    app.after_request(app_after_request)
+
+    return app
 
 
-# inject variables into templates
-@app.context_processor
 def inject():
     """
     Inject Mike's version and dashboard name
@@ -40,8 +50,6 @@ def inject():
     )
 
 
-# measure response time
-@app.before_request
 def app_before_request():
     """
     Measure response time
@@ -52,7 +60,6 @@ def app_before_request():
 hostname = gethostname()  # cache to avoid uname syscall on each request
 
 
-@app.after_request
 def app_after_request(response):
     """
     :type response flask.wrappers.ResponseBase

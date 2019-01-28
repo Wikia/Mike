@@ -3,6 +3,7 @@ Models for accessing components and metrics data
 """
 from flask import url_for
 
+from mysql.connector.errors import Error as MycroftMetricsStorageError
 from mycroft_holmes.storage import MetricsStorage
 
 
@@ -18,6 +19,11 @@ def get_components_with_metrics(config):
         feature_id = config.get_feature_id(feature_name)
         metrics = config.get_metrics_for_feature(feature_name)
 
+        try:
+            score = storage.get(feature_id, feature_metric='score')
+        except MycroftMetricsStorageError:
+            score = None
+
         component = {
             'id': feature_id,
 
@@ -28,7 +34,7 @@ def get_components_with_metrics(config):
 
             # fetch metrics and calculated score
             'metrics': metrics,
-            'score': storage.get(feature_id, feature_metric='score'),
+            'score': score,
 
             # link to a feature's dashboard
             'url': url_for('dashboard.feature', feature_id=feature_id, _external=True),

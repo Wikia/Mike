@@ -57,6 +57,12 @@ def test_source_get_value():
         template={'project': 'Foo', 'group': '"test"'}
     ) == 0
 
+    # incorrect query
+    with raises(MycroftSourceError) as ex:
+        source.get_value(query='SELECT foo')
+
+    assert "Unknown column 'foo' in 'field list'" in str(ex)
+
 
 def test_client_exception_handling():
     source = get_source(environ)
@@ -64,9 +70,3 @@ def test_client_exception_handling():
     # AssertionError: "query" parameter needs to be provided
     with raises(AssertionError):
         source.get_value()
-
-    # incorrect query
-    with raises(MycroftSourceError) as ex:
-        source.get_value(query='SELECT foo')
-
-    assert "Unknown column 'foo' in 'field list'" in str(ex)

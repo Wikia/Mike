@@ -1,0 +1,27 @@
+# dashboard name
+name: "The Example dashboard"
+
+# first, we specify settings for generic sources like Jira and MySQL
+# they need credentials and host name
+sources: []
+
+# where will metrics be stored
+storage:
+  engine: mysql
+  host: ''
+  database: ''
+  user: ''
+  password: ''
+
+# now define metrics that are taken from sources above
+metrics: []
+
+# now features "score" will be calculated using the metrics defined above with per-feature parameters set
+features:
+  - name: Foo Bar
+    url: http://docs.company.net/pages/FooBar
+    repo: https://github.com/foo/bar
+    metrics:
+    - name: foo/weighted-bar
+      source: common/const
+      weight: 700

@@ -19,3 +19,9 @@ class MycroftMetricError(MycroftHolmesError):
     """
     Thrown when we fail to get a value for a metric
     """
+
+
+class MycroftMetricsStorageError(MycroftHolmesError):
+    """
+    Thrown by MetricsStorage classes
+    """

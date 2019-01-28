@@ -20,7 +20,10 @@ coverage:
 
 # UI
 server_dev:
-	FLASK_APP=mycroft_holmes/app/app.py FLASK_ENV=development flask run --host=0.0.0.0
+	FLASK_ENV=development gunicorn 'mycroft_holmes.app.app:setup_app()' --log-level DEBUG --worker-class sync --reload -b 0.0.0.0:5000 --workers 1 --access-logfile -
+
+server:
+	gunicorn 'mycroft_holmes.app.app:setup_app()' --worker-class sync -b 0.0.0.0:5000 --workers 4 --access-logfile -
 
 # test database
 mysql_cli:
