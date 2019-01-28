@@ -47,9 +47,15 @@ Now visit [`/version.json`](http://127.0.0.1:5000/version.json).
 
 ```
 docker pull macbre/mike:latest
-docker run -t macbre/mike -p5000:5000
-``
+docker run -p5000:5000 -it mike
+```
 
+Mike UI will be available at port 5000.
+
+#### Passing your custom YAML config file
+
+By default Mike docker cointainer will use a sample config ile located in `/example.yaml`. You should use your own.
+Please refer to "Set up a config file" section above.
 
 ### Via crontab
 
