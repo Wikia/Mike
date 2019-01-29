@@ -173,11 +173,15 @@ class GoogleAnalyticsSource(SourceBase):
 
             self.logger.debug('API response: %s', res)
 
-            report = res['reports'][0]
+            try:
+                report = res['reports'][0]
 
-            # [{'metrics': [{'values': ['270634']}], 'dimensions': ['20181213']}]
-            rows = report['data']['rows']
-            return int(float(rows[0]['metrics'][0]['values'][0]))
+                # [{'metrics': [{'values': ['270634']}], 'dimensions': ['20181213']}]
+                rows = report['data']['rows']
+                return int(float(rows[0]['metrics'][0]['values'][0]))
+            except KeyError as ex:
+                self.logger.error('Failed to get the value from API response: %s', res)
+                raise ex
 
         except Exception as ex:
             self.logger.error('get_value() failed', exc_info=True)
