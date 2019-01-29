@@ -150,15 +150,17 @@ make test
 
 > `TEST_DATABASE` env variable needs to be set to run these tests. `schema.sql` and `schema_test.sql` files need to be applied as well. Please refer to `.travis.yml` when in doubt.
 
-You may want to include storage integration tests. They do require running MySQL server. Connection details are provided via env variables:
+You may want to include storage integration tests. They do require running MySQL server.
+Connection details can be provided via `.env` file:
 
 ```
-export TEST_DATABASE='mycroft_holmes'
-export TEST_DATABASE_USER='foo'
-export TEST_DATABASE_PASSWORD='bar'
+$ cat .env
+TEST_DATABASE=mycroft_holmes
+TEST_DATABASE_USER=foo
+TEST_DATABASE_PASSWORD=bar
 
-make test
+$ make test
 
 # access mysql console with the above credentials
-make mysql_cli
+$ make mysql_cli
 ```

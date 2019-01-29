@@ -25,7 +25,7 @@ class GoogleAnalyticsSource(SourceBase):
       - name: foo/analytics
         kind: common/analytics
         # JSON-encoded string with service account credentials
-        credentials: "${ANALYTICS_SERVICE_ACCOUNT_JSON}"
+        credentials: '${ANALYTICS_SERVICE_ACCOUNT_JSON}'
         view_id: 1234  # your Google Analytics view ID
     ```
 
@@ -37,6 +37,9 @@ class GoogleAnalyticsSource(SourceBase):
 
     > See https://github.com/Wikia/Mike/issues/12 for more details and troubleshooting guides.
 
+    Please note that currently Mike does not support storing float values.
+    Metrics like `ga:bounceRate` will be casted to an integer.
+
     #### `metrics` config
 
     ```yaml
@@ -45,8 +48,9 @@ class GoogleAnalyticsSource(SourceBase):
           - name: analytics/events
             source: foo/analytics
             label: "%d GA events"
+            # https://developers.google.com/analytics/devguides/reporting/core/dimsmets
             metric: "ga:totalEvents"
-            filters: "{ga_filter}"
+            filters: "{ga_filter}"  # this is optional
     ```
 
     #### `features` config
