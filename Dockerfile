@@ -1,5 +1,12 @@
 FROM python:3.6-alpine
 
+# label the image with branch name and commit hash
+LABEL maintainer="maciej.brencz@gmail.com"
+ARG BRANCH="master"
+ARG COMMIT=""
+LABEL branch=${BRANCH}
+LABEL commit=${COMMIT}
+
 WORKDIR /opt/mike
 
 # install dependencies
@@ -21,6 +28,9 @@ EXPOSE 5000
 # your custom config YAML should be mounted
 # and MIKE_CONFIG env variable should point to it
 ENV MIKE_CONFIG /opt/mike/example.yaml
+
+ENV COMMIT_SHA=${COMMIT}
+ENV COMMIT_BRANCH=${BRANCH}
 
 # entrypoint script
 RUN echo "gunicorn 'mycroft_holmes.app.app:setup_app()' --worker-class sync -b 0.0.0.0:5000 --workers 4 --access-logfile -" > entrypoint
