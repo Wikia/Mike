@@ -1,4 +1,7 @@
-# Mike [![Build Status](https://travis-ci.org/Wikia/Mike.svg?branch=master)](https://travis-ci.org/Wikia/Mike)
+# Mike
+
+[![Build Status](https://travis-ci.org/Wikia/Mike.svg?branch=master)](https://travis-ci.org/Wikia/Mike)
+[![](https://images.microbadger.com/badges/image/macbre/mike.svg)](https://hub.docker.com/r/macbre/mike)
 
 ![](https://github.com/Wikia/Mike/raw/master/docs/Mike_dashboard.png)
 
@@ -56,9 +59,6 @@ SHELL=/bin/bash
 ```
 
 ## Using Docker
-
-[![](https://images.microbadger.com/badges/image/macbre/mike.svg)](https://hub.docker.com/r/macbre/mike)
-
 
 You can use our [official Docker image](https://hub.docker.com/r/macbre/mike):
 
