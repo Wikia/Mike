@@ -75,7 +75,7 @@ metrics:
   - name: athena/contributions_in_ns
     source: wikia/athena
     # https://prestodb.github.io/docs/0.172/functions/datetime.html
-    query: "SELECT count(*) FROM statsdb.fact_event_events WHERE event_ts > current_date - interval '1' day AND event_type IN ('create', 'edit') AND namespace_id BETWEEN %(contributions_ns_from)d AND %(contributions_ns_to)d LIMIT 10;"
+    query: "SELECT count(*) FROM statsdb.fact_event_events WHERE year = cast(year(now()) as VARCHAR) AND event_ts > current_date - interval '1' day AND event_type IN ('create', 'edit') AND namespace_id BETWEEN %(contributions_ns_from)d AND %(contributions_ns_to)d"
     label: "Contributions in the last 24h: %d"
 
 common:
