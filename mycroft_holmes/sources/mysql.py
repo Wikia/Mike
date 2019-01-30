@@ -3,11 +3,10 @@ Mysql class
 """
 from mysql import connector
 
-from mycroft_holmes.errors import MycroftSourceError
-from .base import SourceBase
+from .base import DatabaseSourceBase
 
 
-class MysqlSource(SourceBase):
+class MysqlSource(DatabaseSourceBase):
     """
     Returns a number result for a given SQL query.
 
@@ -70,40 +69,14 @@ class MysqlSource(SourceBase):
 
         self._client = client or None
 
-    @property
-    def client(self):
+    def _get_client(self):
         """
         Connect to MySQL lazilly
 
         :rtype: mysql.connector.connection.MySQLConnection
         """
-        if not self._client:
-            self.logger.info('Connecting to MySQL running at "%s"...',
-                             self._connection_params['host'])
+        self.logger.info('Connecting to MySQL running at "%s"...',
+                         self._connection_params['host'])
 
-            # https://dev.mysql.com/doc/connector-python
-            self._client = connector.connect(**self._connection_params)
-
-        return self._client
-
-    def get_value(self, **kwargs):
-        """
-        :raise: MycroftSourceError
-        :rtype: int
-        """
-        query = kwargs.get('query')
-        assert isinstance(query, str), '"query" parameter needs to be provided'
-
-        template = kwargs.get('template')
-
-        try:
-            cursor = self.client.cursor()
-            cursor.execute(query, template)
-
-            value = cursor.fetchone()[0]
-
-            self.logger.info('SQL: %s', cursor.statement)
-
-            return value
-        except Exception as ex:
-            raise MycroftSourceError('Failed to get metric value: %s' % repr(ex))
+        # https://dev.mysql.com/doc/connector-python
+        return connector.connect(**self._connection_params)

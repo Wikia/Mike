@@ -32,7 +32,7 @@ class SourceBase:
 
         :rtype: list[cls]
         """
-        return SourceBase.__subclasses__()
+        return SourceBase.__subclasses__() + DatabaseSourceBase.__subclasses__()
 
     @staticmethod
     def get_sources_names():
@@ -41,7 +41,7 @@ class SourceBase:
 
         :rtype: list[str]
         """
-        return [source.NAME for source in SourceBase._sources()]
+        return [source.NAME for source in SourceBase._sources() if source.NAME]
 
     @staticmethod
     def new_from_name(source_name, args=None):
