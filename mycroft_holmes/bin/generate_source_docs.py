@@ -11,7 +11,7 @@ def main():
     """
     logger = logging.getLogger('generate_source_docs')
 
-    sources = SourceBase.__subclasses__()
+    sources = SourceBase.sources()
     logger.info('Registered sources: %s', sources)
 
     sources_list = ''
@@ -20,6 +20,9 @@ def main():
     for source in sources:
         class_name = source.__name__  # e.g. ConstSource
         source_name = source.NAME  # e.g. common/const
+
+        if source_name is None:
+            continue
 
         sources_list += "* `%s`: %s\n" % (source_name, source.get_short_description())
 

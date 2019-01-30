@@ -23,6 +23,12 @@ sources:
     # https://developers.google.com/analytics/devguides/reporting/core/v4/quickstart/service-py
     credentials: '${ANALYTICS_SERVICE_ACCOUNT_JSON}'
     view_id: 89268958  # All Wikis Sampled @ 100%
+  - name: wikia/athena
+    kind: aws/athena
+    access_key_id: "${ATHENA_ACCESS_KEY_ID}"
+    secret_access_key: "${ATHENA_SECRET}"
+    s3_staging_dir: "${ATHENA_S3_STAGING_DIR}"
+    region: "us-east-1"
 
 # where will metrics be stored
 storage:
@@ -65,6 +71,12 @@ metrics:
     label: "{ga_label}: %d"
     metric: "ga:totalEvents"
     filters: "{ga_filter}"
+  # Athena
+  - name: athena/contributions_in_ns
+    source: wikia/athena
+    # https://prestodb.github.io/docs/0.172/functions/datetime.html
+    query: "SELECT count(*) FROM statsdb.fact_event_events WHERE year = cast(year(now()) as VARCHAR) AND event_ts > current_date - interval '1' day AND event_type IN ('create', 'edit') AND namespace_id BETWEEN %(contributions_ns_from)d AND %(contributions_ns_to)d"
+    label: "Contributions in the last 24h: %d"
 
 common:
   # these keys will be copied to each feature defined below
@@ -91,6 +103,10 @@ features:
     repo: https://github.com/Wikia/app/tree/dev/extensions/wikia/Wall
     template:
       component: "Message Wall"  # this will be used in template string
+      contributions_ns_from: 1200  # NS_WALL
+      contributions_ns_to: 1202 # NS_USER_WALL_MESSAGE_GREETING
+    metrics:
+      - name: athena/contributions_in_ns
 
   # Editors
   - name: CKEditor

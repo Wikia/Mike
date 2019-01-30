@@ -26,13 +26,18 @@ class SourceBase:
         return '<{} name:{}>'.format(self.__class__.__name__, self.NAME)
 
     @staticmethod
-    def _sources():
+    def sources():
         """
-        Returns all subclasses of SourceBase class imported in __init__.py file
+        Returns all subclasses of SourceBase class imported in __init__.py file.
+
+        They are ordered by source name.
 
         :rtype: list[cls]
         """
-        return SourceBase.__subclasses__()
+        classes = SourceBase.__subclasses__() + DatabaseSourceBase.__subclasses__()
+        classes = [cls for cls in classes if cls.NAME]
+
+        return sorted(classes, key=lambda x: x.NAME)
 
     @staticmethod
     def get_sources_names():
@@ -41,7 +46,7 @@ class SourceBase:
 
         :rtype: list[str]
         """
-        return [source.NAME for source in SourceBase._sources()]
+        return [source.NAME for source in SourceBase.sources()]
 
     @staticmethod
     def new_from_name(source_name, args=None):
@@ -50,7 +55,7 @@ class SourceBase:
         :type args dict
         :rtype: SourceBase
         """
-        for source in SourceBase._sources():
+        for source in SourceBase.sources():
             if source.NAME == source_name:
                 args = args if args else {}
                 return source(**args)
@@ -147,3 +152,52 @@ class SourceBase:
         doc = re.sub(r'^ {4}', '', doc, flags=re.MULTILINE)
 
         return doc
+
+
+class DatabaseSourceBase(SourceBase):
+    """
+    An abstract class for database-related sources
+
+    Used by "aws/athena" and "common/mysql" sources.
+    """
+    def __init__(self):
+        super(DatabaseSourceBase, self).__init__()
+        self._client = None
+
+    def _get_client(self):
+        """
+        Get database client when needed
+        """
+        raise NotImplementedError('_get_client needs to be implemented')
+
+    @property
+    def client(self):
+        """
+        Connect to Database lazily
+
+        :rtype: mysql.connector.connection.MySQLConnection
+        """
+        if not self._client:
+            self._client = self._get_client()
+
+        return self._client
+
+    def get_value(self, **kwargs):
+        """
+        :raise: MycroftSourceError
+        :rtype: int
+        """
+        query = kwargs.get('query')
+        assert isinstance(query, str), '"query" parameter needs to be provided'
+
+        template = kwargs.get('template')
+
+        try:
+            cursor = self.client.cursor()
+
+            self.logger.info('SQL: %s [%s]', query, template)
+            cursor.execute(query, template)
+
+            return cursor.fetchone()[0]
+        except Exception as ex:
+            raise MycroftSourceError('Failed to get metric value: %s' % repr(ex))

@@ -13,3 +13,7 @@ def test_format():
     assert format_query('project = "{project}"', {'project': 'Foo'}) == 'project = "Foo"'
     assert format_query('project = "{project}" AND priority = "{priority}"',
                         {'project': 'Foo', 'priority': 'P3'}) == 'project = "Foo" AND priority = "P3"'
+
+    # numbers and other types
+    assert format_query('{foo}', {'foo': 123}) == '123', 'Numeric parameters are handled too'
+    assert format_query('{foo}', {'foo': False}) == 'False', 'Boolean parameters are handled too'
