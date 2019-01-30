@@ -57,6 +57,19 @@ def test_source_get_value():
         template={'project': 'Foo', 'group': '"test"'}
     ) == 0
 
+    # query with numerical arguments
+    query = 'SELECT count(*) FROM mike_test WHERE user_id = %(user_id)s'
+
+    assert source.get_value(
+        query=query,
+        template={'user_id': 1}
+    ) == 1
+
+    assert source.get_value(
+        query=query,
+        template={'user_id': 500}
+    ) == 0
+
     # incorrect query
     with raises(MycroftSourceError) as ex:
         source.get_value(query='SELECT foo')
