@@ -16,7 +16,7 @@ def format_query(query, params=None):
         return query
 
     for key, value in params.items():
-        query = query.replace('{%s}' % key, value)
+        query = query.replace('{%s}' % key, str(value))
 
     return query
 
