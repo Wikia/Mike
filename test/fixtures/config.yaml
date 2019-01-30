@@ -23,6 +23,12 @@ sources:
     # https://developers.google.com/analytics/devguides/reporting/core/v4/quickstart/service-py
     credentials: '${ANALYTICS_SERVICE_ACCOUNT_JSON}'
     view_id: 89268958  # All Wikis Sampled @ 100%
+  - name: wikia/athena
+    kind: aws/athena
+    access_key_id: "${ATHENA_ACCESS_KEY_ID}"
+    secret_access_key: "${ATHENA_SECRET}"
+    s3_staging_dir: "${ATHENA_S3_STAGING_DIR}"
+    region: "us-east-1"
 
 # where will metrics be stored
 storage:
