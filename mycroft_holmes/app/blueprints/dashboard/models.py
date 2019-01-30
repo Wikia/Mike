@@ -34,7 +34,7 @@ def get_components_with_metrics(config):
 
             # fetch metrics and calculated score
             'metrics': metrics,
-            'score': score,
+            'score': score or 0,  # always an int, as we sort latter on
 
             # link to a feature's dashboard
             'url': url_for('dashboard.feature', feature_id=feature_id, _external=True),
