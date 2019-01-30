@@ -76,7 +76,7 @@ metrics:
     source: wikia/athena
     # https://prestodb.github.io/docs/0.172/functions/datetime.html
     query: "SELECT count(*) FROM statsdb.fact_event_events WHERE year = cast(year(now()) as VARCHAR) AND event_ts > current_date - interval '1' day AND event_type IN ('create', 'edit') AND namespace_id BETWEEN %(contributions_ns_from)d AND %(contributions_ns_to)d"
-    label: "Contributions in the last 24h: %d"
+    label: "Edits in the last 24h: %d"
 
 common:
   # these keys will be copied to each feature defined below
@@ -105,6 +105,16 @@ features:
       component: "Message Wall"  # this will be used in template string
       contributions_ns_from: 1200  # NS_WALL
       contributions_ns_to: 1202 # NS_USER_WALL_MESSAGE_GREETING
+    metrics:
+      - name: athena/contributions_in_ns
+
+  - name: Blogs
+    url: http://docs.company.net/pages/Blogs
+    repo: https://github.com/Wikia/app/tree/dev/extensions/wikia/Blogs
+    template:
+      component: "Blogs"  # this will be used in template string
+      contributions_ns_from: 500  # NS_BLOG_ARTICLE
+      contributions_ns_to: 503 # NS_BLOG_LISTING_TALK
     metrics:
       - name: athena/contributions_in_ns
 
