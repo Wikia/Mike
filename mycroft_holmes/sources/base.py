@@ -198,7 +198,11 @@ class DatabaseSourceBase(SourceBase):
 
             value = cursor.fetchone()[0]
 
-            self.logger.info('SQL: %s', cursor.statement)
+            try:
+                # pyathena.cursor.Cursor object has no attribute 'statement'
+                self.logger.info('SQL: %s', cursor.statement)
+            except AttributeError:
+                pass
 
             return value
         except Exception as ex:

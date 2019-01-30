@@ -84,4 +84,4 @@ class AthenaSource(DatabaseSourceBase):
                          self._connection_params['region_name'])
 
         # https://pypi.org/project/PyAthena/
-        return  connect(**self._connection_params)
+        return connect(**self._connection_params)
