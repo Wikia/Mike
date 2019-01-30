@@ -7,7 +7,14 @@
 
 ### [Mycroft Holmes](https://en.wikipedia.org/wiki/The_Moon_Is_a_Harsh_Mistress#Characters) (High-Optional, Logical, Multi-Evaluating Supervisor) aka Mike.
 
-[The tool that collects metrics for software components](https://medium.com/legacy-systems-diary/our-story-about-sustaining-engineering-team-7e83652b8873) based on: bug reports / tickets, features usage and the code quality.
+[The tool that collects metrics for software components](https://medium.com/legacy-systems-diary/our-story-about-sustaining-engineering-team-7e83652b8873) based on:
+
+* bug reports / tickets from [JIRA](https://www.atlassian.com/software/jira)
+* features usage statistics taken from [Google Analytics](https://analytics.google.com/analytics/web/) or [AWS Athena](https://aws.amazon.com/athena/)
+* access and application logs from [Elasticsearch](https://www.elastic.co/)
+* any data that can be queried from [MySQL database](https://www.mysql.com/)
+
+> See the list of [all available sources](https://github.com/Wikia/Mike/tree/master/mycroft_holmes/sources#available-sources).
 
 ## Install
 
