@@ -71,6 +71,12 @@ metrics:
     label: "{ga_label}: %d"
     metric: "ga:totalEvents"
     filters: "{ga_filter}"
+  # Athena
+  - name: athena/contributions_in_ns
+    source: wikia/athena
+    # https://prestodb.github.io/docs/0.172/functions/datetime.html
+    query: "SELECT count(*) FROM statsdb.fact_event_events WHERE event_ts > current_date - interval '1' day AND event_type IN ('create', 'edit') AND namespace_id BETWEEN %(contributions_ns_from)d AND %(contributions_ns_to)d LIMIT 10;"
+    label: "Contributions in the last 24h: %d"
 
 common:
   # these keys will be copied to each feature defined below
@@ -97,6 +103,10 @@ features:
     repo: https://github.com/Wikia/app/tree/dev/extensions/wikia/Wall
     template:
       component: "Message Wall"  # this will be used in template string
+      contributions_ns_from: 1200  # NS_WALL
+      contributions_ns_to: 1202 # NS_USER_WALL_MESSAGE_GREETING
+    metrics:
+      - name: athena/contributions_in_ns
 
   # Editors
   - name: CKEditor
