@@ -194,16 +194,10 @@ class DatabaseSourceBase(SourceBase):
 
         try:
             cursor = self.client.cursor()
+
+            self.logger.info('SQL: %s [%s]', query, template)
             cursor.execute(query, template)
 
-            value = cursor.fetchone()[0]
-
-            try:
-                # pyathena.cursor.Cursor object has no attribute 'statement'
-                self.logger.info('SQL: %s', cursor.statement)
-            except AttributeError:
-                pass
-
-            return value
+            return cursor.fetchone()[0]
         except Exception as ex:
             raise MycroftSourceError('Failed to get metric value: %s' % repr(ex))
