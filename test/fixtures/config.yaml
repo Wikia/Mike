@@ -22,7 +22,7 @@ sources:
     password: "${DATABASE_PASSWORD}"
   - name: wikia/shared-db
     kind: common/mysql
-    host: "${DATABASE_SPECIALS}"
+    host: "${DATABASE_SHAREDB}"
     database: "wikicities"
     user: "${DATABASE_USER}"
     password: "${DATABASE_PASSWORD}"
@@ -72,8 +72,8 @@ metrics:
     query: "SELECT count(*) FROM city_used_tags WHERE ct_kind = %(tag)s"
     label: "<{tag}> tag usage: %d"
   - name: cnw/new-wikis
-    source: wikia/wikifactory
-    query: "select city_id, city_dbname, city_created from city_list where city_created > NOW() - INTERVAL 1 DAY AND city_dbname NOT LIKE '%qatestwiki%';"
+    source: wikia/shared-db
+    query: "SELECT count(*) FROM city_list WHERE city_created > NOW() - INTERVAL 1 DAY AND city_dbname NOT LIKE '%qatestwiki%';"
     label: "New wikis in the last 24h: %d"
   # WikiFactory
   - name: wikifactory/feature-enabled-on
@@ -144,7 +144,7 @@ features:
     url: http://docs.company.net/pages/CreateNewWiki
     repo: https://github.com/Wikia/app/tree/dev/extensions/wikia/CreateNewWiki
     template:
-      component: "Create New Wiki"  # this will be used in template string
+      component: "CreateNewWiki"  # this will be used in template string
     metrics:
       - name: cnw/new-wikis
 
