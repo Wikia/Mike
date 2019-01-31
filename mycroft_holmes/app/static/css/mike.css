@@ -126,3 +126,8 @@ pre {
     font-family: "IBM PLex Mono", monospace;
     padding: 1em 2em;
 }
+
+.footer tt {
+    opacity: 0.5;
+    text-transform: none;
+}

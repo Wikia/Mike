@@ -20,7 +20,8 @@ coverage:
 
 # UI
 server_dev:
-	FLASK_ENV=development gunicorn 'mycroft_holmes.app.app:setup_app()' --log-level DEBUG --worker-class sync --reload -b 0.0.0.0:5000 --workers 1 --access-logfile -
+	FLASK_ENV=development COMMIT_SHA=`git rev-parse --short HEAD` \
+		  gunicorn 'mycroft_holmes.app.app:setup_app()' --log-level DEBUG --worker-class sync --reload -b 0.0.0.0:5000 --workers 1 --access-logfile -
 
 server:
 	gunicorn 'mycroft_holmes.app.app:setup_app()' --worker-class sync -b 0.0.0.0:5000 --workers 4 --access-logfile -
