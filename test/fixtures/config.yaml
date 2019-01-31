@@ -1,5 +1,5 @@
 # dashboard name
-name: "The A-Team components"
+name: "The COrE Team components"
 
 # first, we specify settings for generic sources like Jira and MySQL
 # they need credentials and host name
@@ -12,12 +12,22 @@ sources:
   - name: wikia/elastic
     kind: common/elastic
     host: "${ELASTIC_HOST}"
+
+  # MySQL
   - name: wikia/tags-report
     kind: common/mysql
     host: "${DATABASE_SPECIALS}"
     database: "specials"
     user: "${DATABASE_USER}"
     password: "${DATABASE_PASSWORD}"
+  - name: wikia/shared-db
+    kind: common/mysql
+    host: "${DATABASE_SPECIALS}"
+    database: "wikicities"
+    user: "${DATABASE_USER}"
+    password: "${DATABASE_PASSWORD}"
+
+  # GA / internal data warehouse
   - name: wikia/analytics
     kind: common/analytics
     # https://developers.google.com/analytics/devguides/reporting/core/v4/quickstart/service-py
@@ -61,6 +71,11 @@ metrics:
     source: wikia/tags-report
     query: "SELECT count(*) FROM city_used_tags WHERE ct_kind = %(tag)s"
     label: "<{tag}> tag usage: %d"
+  - name: cnw/new-wikis
+    source: wikia/wikifactory
+    query: "select city_id, city_dbname, city_created from city_list where city_created > NOW() - INTERVAL 1 DAY AND city_dbname NOT LIKE '%qatestwiki%';"
+    label: "New wikis in the last 24h: %d"
+  # WikiFactory
   - name: wikifactory/feature-enabled-on
     source: wikia/wikifactory  # we will use a generic source from the code if this one is not defined in "sources" section above
     label: "enabled on %d wikis"
@@ -124,6 +139,14 @@ features:
     metrics:
       - name: athena/contributions_in_ns
       - name: athena/pageviews_in_ns
+
+  - name: CreateNewWiki
+    url: http://docs.company.net/pages/CreateNewWiki
+    repo: https://github.com/Wikia/app/tree/dev/extensions/wikia/CreateNewWiki
+    template:
+      component: "Create New Wiki"  # this will be used in template string
+    metrics:
+      - name: cnw/new-wikis
 
   # Editors
   - name: CKEditor
