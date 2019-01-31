@@ -127,12 +127,28 @@ def test_empty_metric():
 
     metric = Metric(spec={
         'name': 'foo/var',
+        'label': 'Usage in the last 24h: %d'
     }, feature_name='foo', config=config)
 
     # the value is empty, storage read seems to fail for it
     metric.set_value(None)
 
-    print(metric)
+    assert metric.get_label() == 'Usage in the last 24h'
+    assert metric.value is None
+    assert metric.get_formatted_value() is None
+    assert metric.get_label_with_value() == 'Usage in the last 24h: -'
+    assert metric.get_more_link() is None
+
+
+def test_empty_metric_and_label():
+    config = Config(config_file=get_fixtures_directory() + '/config.yaml')
+
+    metric = Metric(spec={
+        'name': 'foo/var',
+    }, feature_name='foo', config=config)
+
+    # the value is empty, storage read seems to fail for it
+    metric.set_value(None)
 
     assert metric.get_label() is None
     assert metric.value is None

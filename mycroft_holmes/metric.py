@@ -166,10 +166,8 @@ class Metric:
         if self._label is None:
             return None
 
-        if self.value is None:
-            return None
-
-        return self._label.replace('%d', self.get_formatted_value())
+        formatted_value = self.get_formatted_value() if self.value is not None else '-'
+        return self._label.replace('%d', formatted_value)
 
     def get_more_link(self):
         """
