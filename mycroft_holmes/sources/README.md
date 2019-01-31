@@ -90,8 +90,8 @@ sources:
     view_id: 1234  # your Google Analytics view ID
 ```
 
-Service account credentials JSON file can obtained from
-https://developers.google.com/analytics/devguides/reporting/core/v4/authorization.
+**JSON key file** (you will use it as `credentials` config key) generation guide:
+https://flaviocopes.com/google-api-authentication/#service-to-service-api
 
 * "Google Analytics Reporting API" needs to be enabled for service account.
 * You need to add an email (specified in service account JSON file) to your GA users.
