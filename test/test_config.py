@@ -13,8 +13,8 @@ from . import get_fixtures_directory
 def test_config_loads_correctly():
     config = Config(config_file=get_fixtures_directory() + '/config.yaml')
 
-    assert config.get_raw()['name'] == 'The A-Team components'
-    assert config.get_name() == 'The A-Team components'
+    assert config.get_raw()['name'] == 'The COrE Team components'
+    assert config.get_name() == 'The COrE Team components'
 
 
 def test_config_missing_file():
