@@ -75,12 +75,12 @@ metrics:
   - name: athena/contributions_in_ns
     source: wikia/athena
     # https://prestodb.github.io/docs/0.172/functions/datetime.html
-    query: "SELECT count(*) FROM statsdb.fact_event_events WHERE year = cast(year(now()) as VARCHAR) AND event_ts > current_date - interval '1' day AND event_type IN ('create', 'edit') AND namespace_id BETWEEN %(athena_ns_from)d AND %(athena_ns_to)d"
+    query: "SELECT count(*) FROM statsdb.fact_event_events WHERE year = cast(year(now()) as VARCHAR) AND event_ts > now() - interval '1' day AND event_type IN ('create', 'edit') AND namespace_id BETWEEN %(athena_ns_from)d AND %(athena_ns_to)d"
     label: "Edits in the last 24h: %d"
   - name: athena/pageviews_in_ns
     source: wikia/athena
     # https://prestodb.github.io/docs/0.172/functions/datetime.html
-    query: "SELECT count(*) FROM statsdb.fact_pageview_events WHERE year = cast(year(now()) as VARCHAR) AND event_ts > current_date - interval '1' day AND namespace_id BETWEEN %(athena_ns_from)d AND %(athena_ns_to)d"
+    query: "SELECT count(*) FROM statsdb.fact_pageview_events WHERE year = cast(year(now()) as VARCHAR) AND event_ts > now() - interval '1' day AND namespace_id BETWEEN %(athena_ns_from)d AND %(athena_ns_to)d"
     label: "Page views in the last 24h: %d"
 
 common:
