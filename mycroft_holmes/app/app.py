@@ -3,6 +3,7 @@ This is an entry point for Mike's UI Flask-powered web-application
 """
 # pylint: disable=no-member
 import time
+import os
 from socket import gethostname
 
 from flask import g, Flask
@@ -41,12 +42,13 @@ def setup_app():
 
 def inject():
     """
-    Inject Mike's version and dashboard name
+    Inject Mike's version, git commit hash and dashboard name
     :rtype: dict
     """
     return dict(
         dashboard_name=get_config().get_name(),
-        version=VERSION
+        version=VERSION,
+        commit_hash=os.environ.get('COMMIT_SHA'),
     )
 
 
