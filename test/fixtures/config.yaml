@@ -140,6 +140,17 @@ features:
       - name: athena/contributions_in_ns
       - name: athena/pageviews_in_ns
 
+  - name: Forum
+    url: http://docs.company.net/pages/Forum
+    repo: https://github.com/Wikia/app/tree/dev/extensions/wikia/Forum
+    template:
+      component: "Forum"  # this will be used in template string
+      athena_ns_from: 2000  # NS_WIKIA_FORUM_BOARD
+      athena_ns_to: 2002 # NS_WIKIA_FORUM_TOPIC_BOARD
+    metrics:
+      - name: athena/contributions_in_ns
+      - name: athena/pageviews_in_ns
+
   - name: CreateNewWiki
     url: http://docs.company.net/pages/CreateNewWiki
     repo: https://github.com/Wikia/app/tree/dev/extensions/wikia/CreateNewWiki
