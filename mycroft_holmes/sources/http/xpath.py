@@ -68,7 +68,7 @@ class HttpXPathSource(SourceBase):
     def get_value(self, **kwargs):
         """
         :raise: MycroftSourceError
-        :rtype: int
+        :rtype: float
         """
         url = self.get_url(**kwargs)
         xpath = kwargs.get('xpath')
@@ -99,7 +99,7 @@ class HttpXPathSource(SourceBase):
             text = str(matches[0].text).strip()
             text = text.replace(",", ".")
 
-            return int(float(text))
+            return float(text)
 
         except Exception as ex:
             raise MycroftSourceError('Failed to get metric value: %s' % repr(ex))

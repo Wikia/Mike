@@ -78,7 +78,7 @@ def test_source_get_value():
     assert isinstance(source, HttpXPathSource)
     assert isinstance(source._client, HttpClient), 'client should be mocked'
 
-    assert source.get_value(**args) == 123
+    assert source.get_value(**args) == 123.5
 
     # URL should be properly filled with template values
     assert source._client.requested_url == 'http://foo.bar/get/foo'
