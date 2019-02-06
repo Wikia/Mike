@@ -1,4 +1,4 @@
-FROM python:3.6-alpine
+FROM python:3.6-slim
 
 # label the image with branch name and commit hash
 LABEL maintainer="maciej.brencz@gmail.com"
@@ -14,10 +14,10 @@ ADD setup.py .
 ADD mycroft_holmes/__init__.py mycroft_holmes/
 ADD mycroft_holmes/bin mycroft_holmes/bin
 
-RUN apk add --update --no-cache mariadb-connector-c \
-    && apk add --no-cache --virtual .build-deps build-base mariadb-dev libffi-dev yaml-dev \
+RUN apt-get update && apt-get install -y libmariadbclient-dev gcc \
     && pip install -e . \
-    && apk del .build-deps
+    && rm -rf ~/.cache/pip \
+    && apt-get remove -y gcc && apt-get autoremove -y
 
 # copy the rest of the files
 ADD . .

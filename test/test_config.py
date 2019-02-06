@@ -182,27 +182,14 @@ def test_config_get_metrics_for_feature_const():
 
 def test_minimal_config():
     config = Config(config_file=get_fixtures_directory() + '/../../example.yaml')
-    assert len(config.get_features()) == 1
+    assert len(config.get_features()) == 2
+    assert len(config.get_metrics()) == 2
 
     base.SOURCES_CACHE = dict()
-    metrics = config.get_metrics_for_feature('Foo Bar')
-
+    metrics = config.get_metrics_for_feature('PanTadeusz')
     print(metrics)
-    assert len(metrics) == 1
 
-    assert metrics[0].get_spec() == {
-        'name': 'foo/weighted-bar',
-        'source': 'common/const',
-        'weight': 700
-    }
-
-    assert metrics[0].get_source_name() == 'common/const'
-    assert metrics[0].get_weight() == 700
-
-    assert metrics[0].value == 1
-    assert metrics[0].get_label_with_value() is None
-    assert metrics[0].get_formatted_value() == '1'
+    assert metrics[0].get_source_name() == 'http/xpath'
 
     # can we handle empty entries in the config?
-    assert len(config.get_metrics()) == 0
     assert len(config.get_sources()) == 0
