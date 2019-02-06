@@ -296,7 +296,7 @@ Source name: `http/xpath`
       # http://lubimyczytac.pl/ksiazka/4871036/pan-tadeusz
       - name: PanTadeusz
         template:
-          - book_id: 4871036
+          book_id: 4871036
         metrics:
           - name: lubimy_czytac/rating
 ```

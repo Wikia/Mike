@@ -39,17 +39,18 @@ class HttpXPathSource(SourceBase):
           # http://lubimyczytac.pl/ksiazka/4871036/pan-tadeusz
           - name: PanTadeusz
             template:
-              - book_id: 4871036
+              book_id: 4871036
             metrics:
-              - name: lubimy_czytac/rating
+              name: lubimy_czytac/rating
     ```
     """
 
     NAME = 'http/xpath'
 
-    def __init__(self, client=None):
+    def __init__(self, client=None, **kwargs):
         """
         :type client obj
+        :type kwargs obj
         """
         super(HttpXPathSource, self).__init__()
 
