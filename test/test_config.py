@@ -183,7 +183,7 @@ def test_config_get_metrics_for_feature_const():
 def test_minimal_config():
     config = Config(config_file=get_fixtures_directory() + '/../../example.yaml')
     assert len(config.get_features()) == 2
-    assert len(config.get_metrics()) == 1
+    assert len(config.get_metrics()) == 2
 
     base.SOURCES_CACHE = dict()
     metrics = config.get_metrics_for_feature('PanTadeusz')

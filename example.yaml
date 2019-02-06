@@ -24,6 +24,11 @@ metrics:
     url: "http://lubimyczytac.pl/ksiazka/{book_id}"
     xpath: '//*[@itemprop="aggregateRating"]//*[@itemprop="ratingValue"]'
     label: "Book rating: %d"
+  - name: lubimy_czytac/wants_to_read
+    source: http/xpath  # use the base source directly here
+    url: "http://lubimyczytac.pl/ksiazka/{book_id}"
+    xpath: '//*[@id="ajaxShelfsBox"]//*[@data-shelf-id-counter="3"]'
+    label: "Wants to read: %d"
 
 # these keys will be copied to each feature defined below
 common:
@@ -36,6 +41,9 @@ features:
       url: "http://lubimyczytac.pl/ksiazka/4871036/pan-tadeusz"
       template:
         book_id: 4871036
+      metrics:
+        # additional metric just for this book
+        - name: lubimy_czytac/wants_to_read
 
     - name: "Wojna i Pókój"
       url: "http://lubimyczytac.pl/ksiazka/4869384/wojna-i-pokoj-tom-1"
