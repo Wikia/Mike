@@ -19,6 +19,7 @@ This directory contains implementation of various sources that provide values fo
 * `common/jira`: Returns a number of Jira ticket matching given JQL query.
 * `common/logstash`: Returns a number of entries matching a given elasticsearch query.
 * `common/mysql`: Returns a number result for a given SQL query.
+* `http/xpath`: Makes a HTTP request to fetch HTML and takes a node using xpath query.
 
 ### TODO
 
@@ -262,6 +263,42 @@ Please note that only the first column from the first row in the results set wil
           - user_group: "Admin"  # this will be used in query defined above
         metrics:
           -  name: users/count
+```
+
+### HttpXPathSource
+
+Source name: `http/xpath`
+
+> Makes a HTTP request to fetch HTML and takes a node using xpath query.
+
+#### `sources` config
+
+> Not applicable. This source does not have any specific settings.
+
+#### `metrics` config
+
+```yaml
+    metrics:
+      - name: lubimy_czytac/rating
+        source: http/xpath  # use the base source directly here
+        url: "http://lubimyczytac.pl/ksiazka/{book_id}"
+        xpath: '//*[@itemprop="aggregateRating"]//*[@itemprop="ratingValue"]'
+        label: "Book rating: %d"
+```
+
+> Please refer to [XPath documentation](https://developer.mozilla.org/en-US/docs/Web/XPath)
+> for how to specify the `xpath` parameter.
+
+#### `features` config
+
+```yaml
+    features:
+      # http://lubimyczytac.pl/ksiazka/4871036/pan-tadeusz
+      - name: PanTadeusz
+        template:
+          - book_id: 4871036
+        metrics:
+          - name: lubimy_czytac/rating
 ```
 
 ## Sources setup
