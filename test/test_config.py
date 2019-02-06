@@ -98,12 +98,12 @@ def test_config_get_features():
         'metrics': [
             {'name': 'jira/p2-tickets', 'weight': 2},
             {'name': 'jira/p3-tickets'},
-            {'name': 'analytics/events'},
+            {'name': 'editor/impressions'},
+            {'name': 'editor/publishes'},
         ],
         'template': {
             'component': 'CK Editor (RTE)',
-            'ga_filter': 'ga:eventCategory==editor-ck;ga:eventAction==submit;ga:eventLabel==publish',
-            'ga_label': 'Edits published daily',
+            'ga_category': 'editor-ck',
         }
     }
 

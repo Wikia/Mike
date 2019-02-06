@@ -80,12 +80,24 @@ metrics:
     source: wikia/wikifactory  # we will use a generic source from the code if this one is not defined in "sources" section above
     label: "enabled on %d wikis"
     query: FeatureEnabledOn
+
   # Google Analytics
   - name: analytics/events
     source: wikia/analytics
     label: "{ga_label}: %d"
     metric: "ga:totalEvents"
     filters: "{ga_filter}"
+  - name: editor/impressions
+    source: wikia/analytics
+    label: "Editor impressions daily: %d"
+    metric: "ga:totalEvents"
+    filters: "ga:eventCategory=={ga_category};ga:eventLabel==edit-page-ready"
+  - name: editor/publishes
+    source: wikia/analytics
+    label: "Edits published daily: %d"
+    metric: "ga:totalEvents"
+    filters: "ga:eventCategory=={ga_category};ga:eventLabel==publish"
+
   # Athena
   - name: athena/contributions_in_ns
     source: wikia/athena
@@ -165,30 +177,30 @@ features:
     repo: https://github.com/Wikia/app/tree/dev/extensions/wikia/RTE
     template:
         component: "CK Editor (RTE)"
-        ga_filter: "ga:eventCategory==editor-ck;ga:eventAction==submit;ga:eventLabel==publish"
-        ga_label: "Edits published daily"
+        ga_category: "editor-ck"
     metrics:
-        - name: analytics/events
+        - name: editor/impressions
+        - name: editor/publishes
 
   - name: VisualEditor
     url: http://docs.company.net/pages/VisualEditor
     repo: https://github.com/Wikia/app/tree/dev/extensions/VisualEditor
     template:
         component: "Visual Editor"
-        ga_filter: "ga:eventCategory==editor-ve;ga:eventAction==success;ga:eventLabel==publish"
-        ga_label: "Edits published daily"
+        ga_category: "editor-ve"
     metrics:
-        - name: analytics/events
+        - name: editor/impressions
+        - name: editor/publishes
 
   - name: SourceEditor
     url: http://docs.company.net/pages/SourceEditor
     repo: https://github.com/Wikia/app
     template:
         component: "Source Editor"
-        ga_filter: "ga:eventCategory==editor-mw;ga:eventAction==submit;ga:eventLabel==publish"
-        ga_label: "Edits published daily"
+        ga_category: "editor-mw"
     metrics:
-        - name: analytics/events
+        - name: editor/impressions
+        - name: editor/publishes
 
   - name: MiniEditor
     url: http://docs.company.net/pages/MiniEditor

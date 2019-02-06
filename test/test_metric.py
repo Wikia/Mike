@@ -107,8 +107,8 @@ def test_metric_get_label():
 
     # analytics
     metrics[2].set_value(34511)
-    assert metrics[2].get_label() == 'Edits published daily'
-    assert metrics[2].get_label_with_value() == 'Edits published daily: 34.5k'
+    assert metrics[2].get_label() == 'Editor impressions daily'
+    assert metrics[2].get_label_with_value() == 'Editor impressions daily: 34.5k'
     assert metrics[2].get_more_link() is None
 
 
