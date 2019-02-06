@@ -52,7 +52,7 @@ def get_source_with_mocked_client(mocked_client=None):
 
 
 URL = 'http://foo.bar/{path}'
-TEXT = '<p>foo bar<b>123</b></p>'
+TEXT = '<p>foo bar<b>\n123,5\n</b></p>'
 
 
 def test_is_source_present():

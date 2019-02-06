@@ -95,7 +95,11 @@ class HttpXPathSource(SourceBase):
             if not matches:
                 raise MycroftSourceError('xpath query returned no matches')
 
-            return int(matches[0].text)
+            # "123,5" - do our best to parse such value
+            text = str(matches[0].text).strip()
+            text = text.replace(",", ".")
+
+            return int(float(text))
 
         except Exception as ex:
             raise MycroftSourceError('Failed to get metric value: %s' % repr(ex))
