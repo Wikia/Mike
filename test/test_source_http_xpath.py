@@ -93,14 +93,14 @@ def test_invalid_xpath_and_no_matches():
         source.get_value(url=URL, xpath='hello!')
 
     print(ex)
-    assert "XPathEvalError('Invalid expression')" in str(ex)
+    assert "XPathEvalError('Invalid expression'" in str(ex)
 
     # xpath is valid, but there are no matches
     with raises(MycroftSourceError) as ex:
         source.get_value(url=URL, xpath='//h1')
 
     print(ex)
-    assert "MycroftSourceError('xpath query returned no matches')" in str(ex)
+    assert "MycroftSourceError('xpath query returned no matches'" in str(ex)
 
 
 def test_client_exception_handling():
