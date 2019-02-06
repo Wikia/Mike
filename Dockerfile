@@ -1,4 +1,4 @@
-FROM python:3.6-alpine
+FROM python:3.6-alpine3.9
 
 # label the image with branch name and commit hash
 LABEL maintainer="maciej.brencz@gmail.com"
@@ -15,7 +15,7 @@ ADD mycroft_holmes/__init__.py mycroft_holmes/
 ADD mycroft_holmes/bin mycroft_holmes/bin
 
 RUN apk add --update --no-cache mariadb-connector-c \
-    && apk add --no-cache --virtual .build-deps build-base mariadb-dev libffi-dev yaml-dev \
+    && apk add --no-cache --virtual .build-deps build-base mariadb-dev libffi-dev yaml-dev libxml2-dev libxslt-dev \
     && pip install -e . \
     && apk del .build-deps
 
