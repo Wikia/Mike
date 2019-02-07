@@ -32,6 +32,14 @@ class HttpXPathSource(SourceBase):
     > Please refer to [XPath documentation](https://developer.mozilla.org/en-US/docs/Web/XPath)
     > for how to specify the `xpath` parameter.
 
+    You can use the following JS snippet to test your xpath in a browser:
+
+    ```js
+    document.evaluate(
+        '//*[@itemprop="aggregateRating"]//*[@itemprop="ratingValue"]', document
+    ).iterateNext()
+    ```
+
     #### `features` config
 
     ```yaml
