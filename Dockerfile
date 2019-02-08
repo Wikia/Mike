@@ -10,17 +10,23 @@ LABEL commit=${COMMIT}
 WORKDIR /opt/mike
 
 # install dependencies
-ADD setup.py .
-ADD mycroft_holmes/__init__.py mycroft_holmes/
-ADD mycroft_holmes/bin mycroft_holmes/bin
+COPY setup.py .
+COPY mycroft_holmes/__init__.py mycroft_holmes/
+COPY mycroft_holmes/bin mycroft_holmes/bin
 
-RUN apk add --update --no-cache mariadb-connector-c \
-    && apk add --no-cache --virtual .build-deps build-base mariadb-dev libffi-dev yaml-dev libxml2-dev libxslt-dev \
+# @see https://leemendelowitz.github.io/blog/how-does-python-find-packages.html
+# Python by default reads site packages from /usr/local/lib/python3.6/site-packages
+# while apk install py3-lxml to /usr/lib/python3.6/site-packages
+ENV PYTHONPATH /usr/local/lib/python3.6/site-packages:/usr/lib/python3.6/site-packages
+
+RUN apk add --update --no-cache mariadb-connector-c py3-lxml \
+    && apk add --no-cache --virtual .build-deps build-base mariadb-dev libffi-dev yaml-dev \
     && pip install -e . \
-    && apk del .build-deps
+    && apk del .build-deps \
+    && pip list
 
 # copy the rest of the files
-ADD . .
+COPY . .
 
 # expose the HTTP port
 EXPOSE 5000
