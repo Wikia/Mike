@@ -96,7 +96,7 @@ class Metric:
         """
         This one is used in unit tests
 
-        :type value int|None
+        :type value int|float|None
         """
         self._value = value
 
@@ -122,7 +122,7 @@ class Metric:
     @staticmethod
     def format_value(value):
         """
-        :type value int
+        :type value int|float
         :rtype: str
         """
         if value >= 100000:
@@ -136,6 +136,9 @@ class Metric:
         if value >= 1000:
             # 1.23k
             return '{:.2f}k'.format(value / 1000)
+
+        if isinstance(value, float):
+            return '{:.2f}'.format(value)
 
         return str(value)
 
