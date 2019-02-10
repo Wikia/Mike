@@ -91,8 +91,8 @@ class MetricsStorage:
             row = cursor.fetchone()
 
             if row:
-                value = row[0]
-                return float(value) if int(value) != float(value) else int(value)
+                value = float(row[0])
+                return int(value) if value.is_integer() else value
 
             return None
 
