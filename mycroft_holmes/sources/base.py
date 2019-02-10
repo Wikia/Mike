@@ -185,7 +185,7 @@ class DatabaseSourceBase(SourceBase):
     def get_value(self, **kwargs):
         """
         :raise: MycroftSourceError
-        :rtype: int
+        :rtype: float
         """
         query = kwargs.get('query')
         assert isinstance(query, str), '"query" parameter needs to be provided'
@@ -198,6 +198,8 @@ class DatabaseSourceBase(SourceBase):
             self.logger.info('SQL: %s [%s]', query, template)
             cursor.execute(query, template)
 
-            return cursor.fetchone()[0]
+            value = float(cursor.fetchone()[0])
+            return value
+
         except Exception as ex:
             raise MycroftSourceError('Failed to get metric value: %s' % repr(ex))
