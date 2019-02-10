@@ -81,6 +81,14 @@ def test_source_get_value():
     assert value == 3.46
     assert isinstance(value, float)
 
+    # we can't fetch strings
+    with raises(MycroftSourceError) as ex:
+        source.get_value(
+            query='SELECT name FROM mike_test WHERE name = "Monty"'
+        )
+
+    assert "could not convert string to float" in str(ex)
+
     # incorrect query
     with raises(MycroftSourceError) as ex:
         source.get_value(query='SELECT foo')
