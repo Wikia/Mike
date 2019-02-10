@@ -137,6 +137,7 @@ class Metric:
             # 1.23k
             return '{:.2f}k'.format(value / 1000)
 
+        # two digits precision (#63)
         if isinstance(value, float):
             return '{:.2f}'.format(value)
 
