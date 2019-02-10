@@ -112,7 +112,7 @@ class SourceBase:
 
     def get_value(self, **kwargs):
         """
-        :rtype: int
+        :rtype: int|float
         """
         raise NotImplementedError('get_value needs to be implemented')
 
