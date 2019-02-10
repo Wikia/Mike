@@ -146,7 +146,7 @@ class GoogleAnalyticsSource(SourceBase):
     def get_value(self, **kwargs):
         """
         :raise: MycroftSourceError
-        :rtype: int
+        :rtype: float
         """
         metric = kwargs.get('metric')
         filters = kwargs.get('filters', '')  # defaults to an empty string
@@ -178,7 +178,7 @@ class GoogleAnalyticsSource(SourceBase):
 
                 # [{'metrics': [{'values': ['270634']}], 'dimensions': ['20181213']}]
                 rows = report['data']['rows']
-                return int(float(rows[0]['metrics'][0]['values'][0]))
+                return float(rows[0]['metrics'][0]['values'][0])
             except KeyError as ex:
                 self.logger.error('Failed to get the value from API response: %s', res)
                 raise ex

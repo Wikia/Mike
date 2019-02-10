@@ -89,13 +89,16 @@ def test_mocked_source():
         {'dimension': 'ga:date', 'end_date': '1daysAgo', 'filters': '', 'metric': 'foo', 'start_date': '1daysAgo'}
 
     source = MockedGoogleAnalyticsSource(42)
-    assert source.get_value(metric='foo', filters='bar') == 42
+    value = source.get_value(metric='foo', filters='bar')
+
+    assert value == 42
+    assert isinstance(value, float), 'Returned value is always a float'
     assert source.last_query == \
         {'dimension': 'ga:date', 'end_date': '1daysAgo', 'filters': 'bar', 'metric': 'foo', 'start_date': '1daysAgo'}
 
     # float value
     source = MockedGoogleAnalyticsSource(5.7)
-    assert source.get_value(metric='foo', filters='bar:123') == 5, 'float is casted to int'
+    assert source.get_value(metric='foo', filters='bar:123') == 5.7, 'float value is kept'
     assert source.last_query == \
         {'dimension': 'ga:date', 'end_date': '1daysAgo', 'filters': 'bar:123', 'metric': 'foo', 'start_date': '1daysAgo'}
 
