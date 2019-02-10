@@ -52,10 +52,13 @@ def test_source_get_value():
         template={'project': 'Foo', 'group': 'user'}
     ) == 1
 
-    assert source.get_value(
+    value = source.get_value(
         query=query,
         template={'project': 'Foo', 'group': '"test"'}
-    ) == 0
+    )
+
+    assert value == 0
+    assert isinstance(value, float), 'Values are always returned as float'
 
     # query with numerical arguments
     query = 'SELECT count(*) FROM mike_test WHERE user_id = %(user_id)s'
@@ -69,6 +72,22 @@ def test_source_get_value():
         query=query,
         template={'user_id': 500}
     ) == 0
+
+    # query for floating values (#63)
+    value = source.get_value(
+        query='SELECT value FROM mike_test WHERE name = "Monty"'
+    )
+
+    assert value == 3.46
+    assert isinstance(value, float)
+
+    # we can't fetch strings
+    with raises(MycroftSourceError) as ex:
+        source.get_value(
+            query='SELECT name FROM mike_test WHERE name = "Monty"'
+        )
+
+    assert "could not convert string to float" in str(ex)
 
     # incorrect query
     with raises(MycroftSourceError) as ex:

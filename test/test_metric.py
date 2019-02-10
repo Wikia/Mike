@@ -12,8 +12,16 @@ from mycroft_holmes.sources.base import SourceBase
 from . import get_fixtures_directory
 
 
+def get_config(env=None):
+    """
+    :type env dict|None
+    :rtype: Config
+    """
+    return Config(config_file=get_fixtures_directory() + '/config.yaml', env=env)
+
+
 def test_metric():
-    config = Config(config_file=get_fixtures_directory() + '/config.yaml', env={
+    config = get_config(env={
         'JIRA_URL': 'https://foo.atlasian.net',
         'JIRA_USER': 'MrFoo',
         'JIRA_PASSWORD': '9bec73487c01653ad7830c25e4b1dc926d17e518',
@@ -47,7 +55,7 @@ def test_metric():
 
 
 def test_metric_missing_source_handling():
-    config = Config(config_file=get_fixtures_directory() + '/config.yaml')
+    config = get_config()
 
     metric = Metric(spec={
         'name': 'foo/var',
@@ -59,7 +67,7 @@ def test_metric_missing_source_handling():
 
 
 def test_metric_empty_source_handling():
-    config = Config(config_file=get_fixtures_directory() + '/config.yaml')
+    config = get_config()
 
     metric = Metric(spec={
         'name': 'foo/var',
@@ -70,7 +78,7 @@ def test_metric_empty_source_handling():
 
 
 def test_metric_get_weight():
-    config = Config(config_file=get_fixtures_directory() + '/config.yaml')
+    config = get_config()
 
     metric = Metric(spec={
         'name': 'foo/var',
@@ -89,7 +97,7 @@ def test_metric_get_weight():
 
 
 def test_metric_get_label():
-    config = Config(config_file=get_fixtures_directory() + '/config.yaml')
+    config = get_config()
     metrics = config.get_metrics_for_feature(feature_name='VisualEditor')
 
     print(metrics)
@@ -121,9 +129,30 @@ def test_format_value():
     assert Metric.format_value(222130) == '222k'
     assert Metric.format_value(222930) == '223k'
 
+    # floats (#63)
+    assert Metric.format_value(20.56) == '20.56'
+    assert Metric.format_value(120.5675) == '120.57'  # we always assume two digits precision + rounding
+    assert Metric.format_value(1120.56) == '1.12k'
+    assert Metric.format_value(222930.56) == '223k'
+
+
+def test_float_value():
+    config = get_config()
+    spec = dict(label='This is a metric: %d')
+
+    metric = Metric('feature_foo', config, spec)
+
+    metric.set_value(345.11)
+    assert metric.get_label() == 'This is a metric'
+    assert metric.get_label_with_value() == 'This is a metric: 345.11'
+
+    metric.set_value(312)
+    assert metric.get_label() == 'This is a metric'
+    assert metric.get_label_with_value() == 'This is a metric: 312'
+
 
 def test_empty_metric():
-    config = Config(config_file=get_fixtures_directory() + '/config.yaml')
+    config = get_config()
 
     metric = Metric(spec={
         'name': 'foo/var',
@@ -141,7 +170,7 @@ def test_empty_metric():
 
 
 def test_empty_metric_and_label():
-    config = Config(config_file=get_fixtures_directory() + '/config.yaml')
+    config = get_config()
 
     metric = Metric(spec={
         'name': 'foo/var',
