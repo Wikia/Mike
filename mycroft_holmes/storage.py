@@ -69,7 +69,7 @@ class MetricsStorage:
         """
         :type feature_id str
         :type feature_metric str
-        :rtype: int|None
+        :rtype: int|float|None
         """
         # SELECT value FROM features_metrics
         # WHERE feature = 'ckeditor' and metric = 'score'
@@ -89,7 +89,12 @@ class MetricsStorage:
             # self.logger.debug('SQL: %s', cursor.statement)
 
             row = cursor.fetchone()
-            return row[0] if row else None
+
+            if row:
+                value = row[0]
+                return float(value) if int(value) != float(value) else int(value)
+
+            return None
 
         except MySqlError as ex:
             self.logger.error('Storage error occured: %s', ex)
