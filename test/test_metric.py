@@ -12,8 +12,16 @@ from mycroft_holmes.sources.base import SourceBase
 from . import get_fixtures_directory
 
 
+def get_config(env=None):
+    """
+    :type env dict|None
+    :rtype: Config
+    """
+    return Config(config_file=get_fixtures_directory() + '/config.yaml', env=env)
+
+
 def test_metric():
-    config = Config(config_file=get_fixtures_directory() + '/config.yaml', env={
+    config = get_config(env={
         'JIRA_URL': 'https://foo.atlasian.net',
         'JIRA_USER': 'MrFoo',
         'JIRA_PASSWORD': '9bec73487c01653ad7830c25e4b1dc926d17e518',
@@ -47,7 +55,7 @@ def test_metric():
 
 
 def test_metric_missing_source_handling():
-    config = Config(config_file=get_fixtures_directory() + '/config.yaml')
+    config = get_config()
 
     metric = Metric(spec={
         'name': 'foo/var',
@@ -59,7 +67,7 @@ def test_metric_missing_source_handling():
 
 
 def test_metric_empty_source_handling():
-    config = Config(config_file=get_fixtures_directory() + '/config.yaml')
+    config = get_config()
 
     metric = Metric(spec={
         'name': 'foo/var',
@@ -70,7 +78,7 @@ def test_metric_empty_source_handling():
 
 
 def test_metric_get_weight():
-    config = Config(config_file=get_fixtures_directory() + '/config.yaml')
+    config = get_config()
 
     metric = Metric(spec={
         'name': 'foo/var',
@@ -89,7 +97,7 @@ def test_metric_get_weight():
 
 
 def test_metric_get_label():
-    config = Config(config_file=get_fixtures_directory() + '/config.yaml')
+    config = get_config()
     metrics = config.get_metrics_for_feature(feature_name='VisualEditor')
 
     print(metrics)
@@ -129,7 +137,7 @@ def test_format_value():
 
 
 def test_float_value():
-    config = Config(config_file=get_fixtures_directory() + '/config.yaml')
+    config = get_config()
     spec = dict(label='This is a metric: %d')
 
     metric = Metric('feature_foo', config, spec)
@@ -144,7 +152,7 @@ def test_float_value():
 
 
 def test_empty_metric():
-    config = Config(config_file=get_fixtures_directory() + '/config.yaml')
+    config = get_config()
 
     metric = Metric(spec={
         'name': 'foo/var',
@@ -162,7 +170,7 @@ def test_empty_metric():
 
 
 def test_empty_metric_and_label():
-    config = Config(config_file=get_fixtures_directory() + '/config.yaml')
+    config = get_config()
 
     metric = Metric(spec={
         'name': 'foo/var',
