@@ -119,6 +119,8 @@ class MetricsStorage:
 
             for feature_id, feature_metrics in self.data.items():
                 for (metric, value) in feature_metrics.items():
+                    self.logger.info("Storing %s ...", (feature_id, metric, value))
+
                     cursor.execute(
                         'INSERT INTO /* mycroft_holmes */ features_metrics '
                         '(feature, metric, value) '
