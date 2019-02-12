@@ -125,6 +125,10 @@ class Metric:
         :type value int|float
         :rtype: str
         """
+        if value >= 10000000:
+            # 10M
+            return '{:.2f}M'.format(value / 1000 / 1000)
+
         if value >= 100000:
             # 100k
             return '{:.0f}k'.format(value / 1000)

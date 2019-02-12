@@ -129,6 +129,9 @@ def test_format_value():
     assert Metric.format_value(222130) == '222k'
     assert Metric.format_value(222930) == '223k'
 
+    assert Metric.format_value(10556844.0) == '10.56M'
+    assert Metric.format_value(22832412) == '22.83M'
+
     # floats (#63)
     assert Metric.format_value(20.56) == '20.56'
     assert Metric.format_value(120.5675) == '120.57'  # we always assume two digits precision + rounding

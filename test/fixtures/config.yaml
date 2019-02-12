@@ -98,6 +98,19 @@ metrics:
     metric: "ga:totalEvents"
     filters: "ga:eventCategory=={ga_category};ga:eventLabel==publish"
 
+  # portability metrics via GA (CORE-81)
+  - name: portability/pageviews-pi
+    source: wikia/analytics
+    label: "Page views in NS_MAIN (with PI): %d"
+    metric: "ga:pageviews"
+    filters: "ga:dimension4==oasis;ga:dimension28==Yes;ga:dimension25==0"  # NS_MAIN, desktop, with portable infobox
+
+  - name: portability/pageviews-nsmain
+    source: wikia/analytics
+    label: "Page views in NS_MAIN: %d"
+    metric: "ga:pageviews"
+    filters: "ga:dimension4==oasis;ga:dimension25==0"  # NS_MAIN, desktop
+
   # Athena
   - name: athena/contributions_in_ns
     source: wikia/athena
@@ -128,6 +141,16 @@ common:
 
 # now features "score" will be calculated using the metrics defined above with per-feature parameters set
 features:
+
+  - name: PortableInfoboxes
+    url: http://docs.company.net/pages/DynamicPageList
+    repo: https://github.com/Wikia/app/tree/dev/extensions/DynamicPageList
+    template:
+      component: "Portability Metric"
+    metrics:
+      -  name: portability/pageviews-nsmain
+      -  name: portability/pageviews-pi
+
   - name: DynamicPageList
     url: http://docs.company.net/pages/DynamicPageList
     repo: https://github.com/Wikia/app/tree/dev/extensions/DynamicPageList
