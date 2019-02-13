@@ -101,15 +101,28 @@ metrics:
   # portability metrics via GA (CORE-81)
   - name: portability/pageviews-pi
     source: wikia/analytics
-    label: "Page views in NS_MAIN (with PI): %d"
+    label: "Desktop PV in NS_MAIN (with PI): %d"
     metric: "ga:pageviews"
-    filters: "ga:dimension4==oasis;ga:dimension28==Yes;ga:dimension25==0"  # NS_MAIN, desktop, with portable infobox
+    filters: "ga:deviceCategory==desktop;ga:dimension28==Yes;ga:dimension25==0"  # NS_MAIN, desktop, with portable infobox
 
   - name: portability/pageviews-nsmain
     source: wikia/analytics
-    label: "Page views in NS_MAIN: %d"
+    label: "Desktop PV in NS_MAIN: %d"
     metric: "ga:pageviews"
-    filters: "ga:dimension4==oasis;ga:dimension25==0"  # NS_MAIN, desktop
+    filters: "ga:deviceCategory==desktop;ga:dimension25==0"  # NS_MAIN, desktop
+
+  # https://developers.google.com/analytics/devguides/reporting/core/dimsmets#view=detail&group=platform_or_device&jump=ga_devicecategory
+  - name: pi-mobile/pageviews-pi
+    source: wikia/analytics
+    label: "Mobile PV in NS_MAIN (with PI): %d"
+    metric: "ga:pageviews"
+    filters: "ga:deviceCategory==mobile;ga:dimension28==Yes;ga:dimension25==0"  # NS_MAIN, mobile, with portable infobox
+
+  - name: pi-mobile/pageviews-nsmain
+    source: wikia/analytics
+    label: "Mobile PV in NS_MAIN: %d"
+    metric: "ga:pageviews"
+    filters: "ga:deviceCategory==mobile;ga:dimension25==0"  # NS_MAIN, mobile
 
   # Athena
   - name: athena/contributions_in_ns
@@ -148,8 +161,16 @@ features:
     template:
       component: "Portability Metric"
     metrics:
+      # desktop
       -  name: portability/pageviews-nsmain
+         weight: 0.01
       -  name: portability/pageviews-pi
+         weight: 0.01
+      # mobile
+      -  name: pi-mobile/pageviews-nsmain
+         weight: 0.01
+      -  name: pi-mobile/pageviews-pi
+         weight: 0.01
 
   - name: DynamicPageList
     url: http://docs.company.net/pages/DynamicPageList
