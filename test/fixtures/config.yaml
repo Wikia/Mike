@@ -145,6 +145,12 @@ metrics:
     query: "SELECT count(*) FROM statsdb.fact_trackingevent_events WHERE ga_category = 'chat' and ga_label = 'join' AND year = cast(year(now()) as VARCHAR) AND event_ts > now() - interval '1' day"
     label: "Chat messages in the last 24h: %d"
 
+  - name: shared_help/pv
+    source: wikia/athena
+    # page views in NS_HELP namespace excluding community.wikia.com
+    query: "SELECT count(*) FROM statsdb.fact_pageview_events WHERE year = cast(year(now()) as VARCHAR) AND event_ts > now() - interval '1' day AND namespace_id = %(athena_ns)d  AND wiki_id <> 177 /* community */;"
+    label: "Help pages views in the last 24h: %d"
+
   # HTTP sources
   - name: github/stars
     source: http/xpath  # use the base source directly here
@@ -163,6 +169,15 @@ common:
 
 # now features "score" will be calculated using the metrics defined above with per-feature parameters set
 features:
+
+  - name: SharedHelp
+    url: http://docs.company.net/pages/SharedHelp
+    repo: https://github.com/Wikia/app/tree/dev/extensions/wikia/SharedHelp
+    template:
+      component: "Shared help"
+      athena_ns: 12 # NS_HELP
+    metrics:
+      - name: shared_help/pv
 
   - name: Chat
     url: http://docs.company.net/pages/Chat
