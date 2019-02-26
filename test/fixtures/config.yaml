@@ -87,16 +87,16 @@ metrics:
     label: "{ga_label}: %d"
     metric: "ga:totalEvents"
     filters: "{ga_filter}"
+
+  # Editors
   - name: editor/impressions
-    source: wikia/analytics
+    source: wikia/athena
+    query: 'SELECT count(*) FROM "statsdb"."fact_trackingevent_events" WHERE ga_label = ''edit-page-ready'' AND  ga_category = %(ga_category)s AND year = cast(year(now()) as VARCHAR) AND event_ts > now() - interval ''1'' day'
     label: "Editor impressions daily: %d"
-    metric: "ga:totalEvents"
-    filters: "ga:eventCategory=={ga_category};ga:eventLabel==edit-page-ready"
   - name: editor/publishes
-    source: wikia/analytics
+    source: wikia/athena
+    query: 'SELECT count(*) FROM "statsdb"."fact_trackingevent_events" WHERE ga_label = ''publish'' AND  ga_category = %(ga_category)s AND year = cast(year(now()) as VARCHAR) AND event_ts > now() - interval ''1'' day'
     label: "Edits published daily: %d"
-    metric: "ga:totalEvents"
-    filters: "ga:eventCategory=={ga_category};ga:eventLabel==publish"
 
   # portability metrics via GA (CORE-81)
   - name: portability/pageviews-pi
