@@ -136,6 +136,15 @@ metrics:
     query: "SELECT count(*) FROM statsdb.fact_pageview_events WHERE year = cast(year(now()) as VARCHAR) AND event_ts > now() - interval '1' day AND namespace_id BETWEEN %(athena_ns_from)d AND %(athena_ns_to)d"
     label: "Page views in the last 24h: %d"
 
+  - name: chat/joins
+    source: wikia/athena
+    query: "SELECT count(*) FROM statsdb.fact_trackingevent_events WHERE ga_category = 'chat' and ga_label = 'message' AND year = cast(year(now()) as VARCHAR) AND event_ts > now() - interval '1' day"
+    label: "Chat joins in the last 24h: %d"
+  - name: chat/messages
+    source: wikia/athena
+    query: "SELECT count(*) FROM statsdb.fact_trackingevent_events WHERE ga_category = 'chat' and ga_label = 'join' AND year = cast(year(now()) as VARCHAR) AND event_ts > now() - interval '1' day"
+    label: "Chat messages in the last 24h: %d"
+
   # HTTP sources
   - name: github/stars
     source: http/xpath  # use the base source directly here
@@ -154,6 +163,15 @@ common:
 
 # now features "score" will be calculated using the metrics defined above with per-feature parameters set
 features:
+
+  - name: Chat
+    url: http://docs.company.net/pages/Chat
+    repo: https://github.com/Wikia/app/tree/dev/extensions/Chat2
+    template:
+        component: "Chat"
+    metrics:
+        - name: chat/joins
+        - name: chat/messages
 
   - name: PortableInfoboxes
     url: http://docs.company.net/pages/DynamicPageList
