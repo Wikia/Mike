@@ -156,7 +156,7 @@ def feature(feature_id):
         metrics=metrics,
         score=storage.get(feature_id, feature_metric='score'),
         the_latest_timestamp=storage.get_the_latest_timestamp(),
-        _csv='#',
+        _csv=url_for('dashboard.feature_csv', feature_id=feature_id),
         _json='#',
         _yaml=url_for('dashboard.feature_yaml', feature_id=feature_id),
     )
