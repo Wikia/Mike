@@ -1,6 +1,7 @@
 """
 Provides a blueprint that renders JSON with software version and environment details
 """
+from collections import defaultdict
 from csv import DictWriter
 from io import StringIO
 
@@ -159,6 +160,59 @@ def feature(feature_id):
         _json='#',
         _yaml=url_for('dashboard.feature_yaml', feature_id=feature_id),
     )
+
+
+@dashboard.route('/component/<string:feature_id>.csv')
+def feature_csv(feature_id):
+    """
+    :type feature_id str
+    :rtype: flask.Response
+    """
+    config = get_config()
+    feature_spec = get_feature_spec_by_id(config, feature_id)
+
+    # not found? return 404
+    if feature_spec is None:
+        abort(404, 'Feature "%s" not found' % (feature_id,))
+
+    # get all names of all metrics
+    metrics = ['score'] + sorted([
+        metric.get_name()
+        for metric in config.get_metrics_for_feature(feature_spec['name'])
+    ])
+
+    storage = MetricsStorage(config=config)
+    values = defaultdict(dict)
+
+    # "merge" different metrics from the same day into CSV per-day rows
+    for row in storage.get_feature_metrics_history(feature_id):
+        date = str(row['date'])
+        metric_name = row['metric']
+        metric_value = row['value']
+
+        # avoid: ValueError: dict contains fields not in fieldnames: 'analytics/events'
+        if metric_name in metrics:
+            values[date][metric_name] = metric_value
+
+    # https://docs.python.org/3.6/library/csv.html#writer-objects
+    output = StringIO()
+
+    csv = DictWriter(
+        f=output,
+        fieldnames=['date'] + metrics
+    )
+
+    csv.writeheader()
+
+    # write CSV rows
+    for date, row in values.items():
+        row.update({"date": date})
+        csv.writerow(row)
+
+    resp = make_response(output.getvalue())
+    resp.headers['Content-Type'] = 'text/plain'
+
+    return resp
 
 
 @dashboard.route('/component/<string:feature_id>.yaml')
