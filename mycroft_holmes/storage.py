@@ -164,3 +164,26 @@ class MetricsStorage:
         except MySqlError as ex:
             self.logger.error('Storage error occured: %s', ex)
             return None
+
+    def get_feature_metrics_history(self, feature__id):
+        """
+        Yields the historical values of all metrics for a given feature
+
+        :type feature__id str
+        :rtype: list[dict]
+        """
+        cursor = self.storage.cursor()
+
+        cursor.execute(
+            "SELECT /* mycroft_holmes */ DATE(timestamp) AS date, metric, value "
+            "FROM features_metrics WHERE feature = %(feature)s GROUP BY date, metric",
+            {
+                'feature': feature__id
+            }
+        )
+
+        for row in iter(cursor):
+            yield dict(zip(
+                ('date', 'metric', 'value'),
+                row
+            ))
