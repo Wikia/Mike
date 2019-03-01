@@ -117,18 +117,25 @@ class MetricsStorage:
             cursor = self.storage.cursor()
             self.storage.start_transaction()
 
+            # take the current timestamp and use it to make this value consistent
+            cursor.execute('SELECT /* mycroft_holmes */ NOW()')
+            timestamp = cursor.fetchone()[0]
+
+            self.logger.info("Using timestamp %s", timestamp)
+
             for feature_id, feature_metrics in self.data.items():
                 for (metric, value) in feature_metrics.items():
                     self.logger.info("Storing %s ...", (feature_id, metric, value))
 
                     cursor.execute(
                         'INSERT INTO /* mycroft_holmes */ features_metrics '
-                        '(feature, metric, value) '
-                        'VALUES (%(feature)s, %(metric)s, %(value)s)',
+                        '(feature, metric, value, timestamp) '
+                        'VALUES (%(feature)s, %(metric)s, %(value)s, %(timestamp)s)',
                         {
                             'feature': feature_id,
                             'metric': metric,
-                            'value': value
+                            'value': value,
+                            'timestamp': timestamp,
                         }
                     )
 
@@ -142,3 +149,18 @@ class MetricsStorage:
         except MySqlError as ex:
             self.logger.error('Storage error occured: %s', ex)
             raise ex
+
+    def get_the_latest_timestamp(self):
+        """
+        Get the timestamp of the latest entry in metrics storage
+
+        :rtype: str|None
+        """
+        try:
+            cursor = self.storage.cursor()
+            cursor.execute("SELECT /* mycroft_holmes */ MAX(timestamp) FROM features_metrics")
+
+            return cursor.fetchone()[0]
+        except MySqlError as ex:
+            self.logger.error('Storage error occured: %s', ex)
+            return None
