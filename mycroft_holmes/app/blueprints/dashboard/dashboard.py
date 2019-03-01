@@ -22,7 +22,9 @@ def index():
     """
     :rtype: flask.Response
     """
-    components = get_components_with_metrics(config=get_config())
+    config = get_config()
+    components = get_components_with_metrics(config=config)
+    storage = MetricsStorage(config=config)
     features = []
 
     for component in components:
@@ -37,6 +39,7 @@ def index():
     return render_template(
         'index.html',
         components=components,
+        the_latest_timestamp=storage.get_the_latest_timestamp(),
         _json=url_for('dashboard.index_json'),
         _csv=url_for('dashboard.index_csv'),
     )
@@ -151,6 +154,7 @@ def feature(feature_id):
         spec_yaml=spec_yaml,
         metrics=metrics,
         score=storage.get(feature_id, feature_metric='score'),
+        the_latest_timestamp=storage.get_the_latest_timestamp(),
         _csv='#',
         _json='#',
         _yaml=url_for('dashboard.feature_yaml', feature_id=feature_id),

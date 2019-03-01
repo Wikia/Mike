@@ -59,6 +59,13 @@
                   Powered by Mycroft Holmes v{{ version }}<tt> @ {{ commit_hash }}</tt>
                 </a>
               </li>
+              {% if the_latest_timestamp %}
+              <li>
+                <a href="#">
+                  Metrics updated: <tt>{{ the_latest_timestamp }}</tt>
+                </a>
+              </li>
+              {% endif %}
               <li>
                 <a href="https://github.com/creativetimofficial/material-dashboard">
                   Build with Material Dashboard from creative-tim.com
