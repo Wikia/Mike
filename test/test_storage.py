@@ -25,6 +25,7 @@ class ConfigForMetricsStorage(Config):
 
 
 TIMESTAMP = '2019-03-02 20:22:24'
+TIMESTAMP_LATER = '2019-03-04 10:22:24'
 
 
 def test_storage():
@@ -37,16 +38,17 @@ def test_storage():
     cursor = storage.storage.cursor()
     cursor.execute('TRUNCATE TABLE features_metrics')
 
-    # no data so far
-    # assert storage.get_the_latest_timestamp() is None
-
     # push some metrics and later on try to get them
     storage.push('foo', {'score': 123, 'bar/metric': 42.458})
     storage.push('bar', {'score': 1, 'bar/metric': -3})
     storage.commit(timestamp=TIMESTAMP)
 
-    storage.push('bar', {'score': 5, 'bar/metric': -4})
+    # multiple values in the same day - test values aggregation
+    storage.push('bar', {'score': 1, 'bar/metric': 6})
     storage.commit(timestamp=TIMESTAMP)
+
+    storage.push('bar', {'score': 5, 'bar/metric': -4})
+    storage.commit(timestamp=TIMESTAMP_LATER)
 
     assert storage.get(feature_id='foo', feature_metric='score') == 123
     assert storage.get(feature_id='foo', feature_metric='bar/metric') == 42.46, 'Storage keeps floats with scale of 2'
@@ -66,4 +68,19 @@ def test_storage():
     assert isinstance(metric.value, float), 'The value is returned as a float'
 
     # check the latest timestamp
-    assert storage.get_the_latest_timestamp() == TIMESTAMP
+    assert storage.get_the_latest_timestamp() == TIMESTAMP_LATER
+
+    # get metrics history
+    assert list(storage.get_feature_metrics_history(feature__id='not_existing')) == [], 'Not existing feature'
+
+    assert list(storage.get_feature_metrics_history(feature__id='foo')) == [
+        {'date': '2019-03-02', 'metric': 'bar/metric', 'value': 42.46},
+        {'date': '2019-03-02', 'metric': 'score', 'value': 123},
+    ]
+
+    assert list(storage.get_feature_metrics_history(feature__id='bar')) == [
+        {'date': '2019-03-02', 'metric': 'bar/metric', 'value': 6.0},  # get max value for the day
+        {'date': '2019-03-02', 'metric': 'score', 'value': 1.0},
+        {'date': '2019-03-04', 'metric': 'bar/metric', 'value': -4.0},
+        {'date': '2019-03-04', 'metric': 'score', 'value': 5.0}
+    ]

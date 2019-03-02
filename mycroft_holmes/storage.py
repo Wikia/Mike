@@ -182,7 +182,7 @@ class MetricsStorage:
         cursor = self.storage.cursor()
 
         cursor.execute(
-            "SELECT /* mycroft_holmes */ DATE(timestamp) AS date, metric, value "
+            "SELECT /* mycroft_holmes */ DATE(timestamp) AS date, metric, MAX(value) as value "
             "FROM features_metrics WHERE feature = %(feature)s GROUP BY date, metric",
             {
                 'feature': feature__id
@@ -190,7 +190,8 @@ class MetricsStorage:
         )
 
         for row in iter(cursor):
-            yield dict(zip(
-                ('date', 'metric', 'value'),
-                row
-            ))
+            yield {
+                'date': str(row[0]),
+                'metric': row[1],
+                'value': float(row[2]),
+            }
