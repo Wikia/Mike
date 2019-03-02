@@ -5,7 +5,7 @@ CREATE TABLE `features_metrics` (
   `feature` varchar(32) NOT NULL,
   `metric` varchar(32) NOT NULL,
   `value` int(9) NOT NULL,
-  `timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `timestamp` datetime NOT NULL,
   PRIMARY KEY (`entry_id`),
   KEY `feature_metric_timestamp_idx` (`feature`,`metric`,`timestamp`)
 ) CHARSET=utf8;

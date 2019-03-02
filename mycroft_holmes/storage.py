@@ -109,17 +109,20 @@ class MetricsStorage:
 
         self.data[feature_id] = feature_metrics
 
-    def commit(self):
+    def commit(self, timestamp=None):
         """
         Store metrics collected via push()
+
+        :type timestamp str
         """
         try:
             cursor = self.storage.cursor()
             self.storage.start_transaction()
 
             # take the current timestamp and use it to make this value consistent
-            cursor.execute('SELECT /* mycroft_holmes */ NOW()')
-            timestamp = cursor.fetchone()[0]
+            if timestamp is None:
+                cursor.execute('SELECT /* mycroft_holmes */ NOW()')
+                timestamp = cursor.fetchone()[0]
 
             self.logger.info("Using timestamp %s", timestamp)
 
@@ -160,7 +163,11 @@ class MetricsStorage:
             cursor = self.storage.cursor()
             cursor.execute("SELECT /* mycroft_holmes */ MAX(timestamp) FROM features_metrics")
 
-            return cursor.fetchone()[0]
+            value = cursor.fetchone()[0]
+
+            # cast datetime.datetime to string
+            return str(value) if value else None
+
         except MySqlError as ex:
             self.logger.error('Storage error occured: %s', ex)
             return None

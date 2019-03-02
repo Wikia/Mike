@@ -171,3 +171,6 @@ $ make test
 # access mysql console with the above credentials
 $ make mysql_cli
 ```
+ 
+ > Please note that **tests truncate the tables**.
+ 
