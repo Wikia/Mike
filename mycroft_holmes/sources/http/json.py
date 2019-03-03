@@ -4,6 +4,7 @@ http/json source
 import pyjq
 
 from mycroft_holmes.errors import MycroftSourceError
+from mycroft_holmes.utils import format_query
 from . import HttpSourceBase
 
 
@@ -37,8 +38,9 @@ class HttpJsonSource(HttpSourceBase):
           - name: PolishWikipedia
             template:
               wikipedia_domain: pl
+              stats_field: "articles"
             metrics:
-              name: wikipedia/stats
+              - name: wikipedia/stats
     ```
     """
 
@@ -66,6 +68,9 @@ class HttpJsonSource(HttpSourceBase):
 
         try:
             resp = self.make_request(url)
+
+            # allow jq pattern to be customized with template variables
+            jq = format_query(jq, kwargs.get('template'))
 
             # parse with jq
             # https://stedolan.github.io/jq/manual/#Basicfilters
