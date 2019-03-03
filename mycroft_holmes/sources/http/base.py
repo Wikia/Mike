@@ -11,9 +11,11 @@ class HttpSourceBase(SourceBase):
     """
     A generic trait for all HTTP-based sources
     """
-    def __init__(self, client):
+    # pylint: disable=unused-argument
+    def __init__(self, client, **kwargs):
         """
         :type client object
+        :type kwargs object
         """
         super().__init__()
         self._client = client or session()
