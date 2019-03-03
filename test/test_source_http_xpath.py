@@ -67,7 +67,7 @@ def test_source_get_value():
     # exceptions handling
     source = get_source_with_mocked_client(HttpClient(None))
 
-    # AssertionError: "url" parameter needs to be provided
+    # Failed to get metric value: Exception('Mocked HTTP exception')
     with raises(MycroftSourceError):
         source.get_value(url=URL, xpath='//p/b', template={'path': 'get/foo'})
 
