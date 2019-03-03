@@ -2,15 +2,13 @@
 http/xpath source
 """
 from lxml.html import document_fromstring
-from requests import session
 
 from mycroft_holmes.errors import MycroftSourceError
-from mycroft_holmes.utils import format_query
 
-from ..base import SourceBase
+from . import HttpSourceBase
 
 
-class HttpXPathSource(SourceBase):
+class HttpXPathSource(HttpSourceBase):
     """
     Makes a HTTP request to fetch HTML and takes a node using xpath query.
 
@@ -57,21 +55,10 @@ class HttpXPathSource(SourceBase):
 
     def __init__(self, client=None, **kwargs):
         """
-        :type client obj
-        :type kwargs obj
+        :type client object
+        :type kwargs object
         """
-        super(HttpXPathSource, self).__init__()
-
-        self._client = client or session()
-
-    @staticmethod
-    def get_url(**kwargs):
-        """
-        :type: dict
-        :rtype: str|None
-        """
-        url = kwargs.get('url')
-        return format_query(url, kwargs.get('template')) if url else None
+        super().__init__(client=client, **kwargs)
 
     def get_value(self, **kwargs):
         """
@@ -87,11 +74,7 @@ class HttpXPathSource(SourceBase):
         self.logger.info('Fetching <%s>', url)
 
         try:
-            resp = self._client.get(url)
-            resp.raise_for_status()
-
-            self.logger.info('GET <%s> - HTTP %d (%.2f kB)',
-                             url, resp.status_code, 1. * len(resp.text) / 1024)
+            resp = self.make_request(url)
 
             # parse with lxml
             # https://lxml.de/lxmlhtml.html#parsing-html

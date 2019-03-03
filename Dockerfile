@@ -20,7 +20,7 @@ COPY mycroft_holmes/bin mycroft_holmes/bin
 ENV PYTHONPATH /usr/local/lib/python3.6/site-packages:/usr/lib/python3.6/site-packages
 
 RUN apk add --update --no-cache mariadb-connector-c py3-lxml \
-    && apk add --no-cache --virtual .build-deps build-base mariadb-dev libffi-dev yaml-dev \
+    && apk add --no-cache --virtual .build-deps build-base automake autoconf libtool mariadb-dev libffi-dev yaml-dev \
     && pip install -e . \
     && apk del .build-deps \
     && pip list

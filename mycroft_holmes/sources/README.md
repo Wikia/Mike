@@ -19,6 +19,7 @@ This directory contains implementation of various sources that provide values fo
 * `common/jira`: Returns a number of Jira ticket matching given JQL query.
 * `common/logstash`: Returns a number of entries matching a given elasticsearch query.
 * `common/mysql`: Returns a number result for a given SQL query.
+* `http/json`: Makes a HTTP request to fetch JSON and extract a single value using jq pattern.
 * `http/xpath`: Makes a HTTP request to fetch HTML and takes a node using xpath query.
 
 ### TODO
@@ -263,6 +264,42 @@ Please note that only the first column from the first row in the results set wil
           - user_group: "Admin"  # this will be used in query defined above
         metrics:
           -  name: users/count
+```
+
+### HttpJsonSource
+
+Source name: `http/json`
+
+> Makes a HTTP request to fetch JSON and extract a single value using jq pattern.
+
+#### `sources` config
+
+> Not applicable. This source does not have any specific settings.
+
+#### `metrics` config
+
+```yaml
+    metrics:
+      - name: wikipedia/stats
+        source: http/json  # let's use the base source directly here
+        url: "https://{wikipedia_domain}.wikipedia.org/w/api.php?action=query&meta=siteinfo&siprop=statistics&format=json"
+        jq: ".query.statistics.{stats_field}"
+        label: "{wikipedia_domain} Wikipedia {stats_field}: %d"
+```
+
+> Please refer to [jq pattern documentation](hhttps://stedolan.github.io/jq/manual/#Basicfilters)
+> for how to specify the `jq` parameter.
+
+#### `features` config
+
+```yaml
+    features:
+      - name: PolishWikipedia
+        template:
+          wikipedia_domain: pl
+          stats_field: "articles"
+        metrics:
+          - name: wikipedia/stats
 ```
 
 ### HttpXPathSource
