@@ -64,7 +64,8 @@ def get_source_with_mocked_client(mocked_client=None):
 URL = 'http://foo.bar/{path}'
 DATA = {
     'foo': "123.45",
-    'test': [1, 2.4, 3.1415]
+    'test': [1, 2.4, 3.1415],
+    'spaces': "12 345.3"
 }
 
 ARGS = dict(
@@ -87,6 +88,7 @@ def test_source_get_value():
     assert source.get_value(jq='.foo', **ARGS) == 123.45, 'String value is casted to float'
     assert source.get_value(jq='.test[0]', **ARGS) == 1, 'Integer remains an integer'
     assert source.get_value(jq='.test[2]', **ARGS) == 3.1415
+    assert source.get_value(jq='.spaces', **ARGS) == 12345.3, 'Spaces are removed from the value'
 
     # jq customized with a template argument
     assert source.get_value(jq='.test[{field_no}]', template={'field_no': 0}, url=URL) == 1

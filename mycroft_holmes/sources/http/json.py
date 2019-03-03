@@ -91,6 +91,9 @@ class HttpJsonSource(HttpSourceBase):
             assert not isinstance(match, list), \
                 'Multiple values where found, narrow your jq pattern'
 
+            # remove spaces: '12 345' -> 12345
+            match = str(match).replace(' ', '')
+
             return float(match)
 
         except Exception as ex:
