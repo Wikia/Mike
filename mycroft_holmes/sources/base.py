@@ -34,10 +34,18 @@ class SourceBase:
 
         :rtype: list[cls]
         """
-        classes = SourceBase.__subclasses__() + DatabaseSourceBase.__subclasses__()
-        classes = [cls for cls in classes if cls.NAME]
+        sources = []
 
-        return sorted(classes, key=lambda x: x.NAME)
+        for _class in SourceBase.__subclasses__():
+            if _class.NAME:
+                sources.append(_class)
+            else:
+                # we've found the base source class, e.g. DatabaseSourceBase or HttpSourceBase
+                for _subclass in _class.__subclasses__():
+                    if _subclass.NAME:
+                        sources.append(_subclass)
+
+        return sorted(sources, key=lambda x: x.NAME)
 
     @staticmethod
     def get_sources_names():
