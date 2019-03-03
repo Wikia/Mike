@@ -88,6 +88,10 @@ def test_source_get_value():
     assert source.get_value(jq='.test[0]', **ARGS) == 1, 'Integer remains an integer'
     assert source.get_value(jq='.test[2]', **ARGS) == 3.1415
 
+    # jq customized with a template argument
+    assert source.get_value(jq='.test[{field_no}]', template={'field_no': 0}, url=URL) == 1
+    assert source.get_value(jq='.test[{field_no}]', template={'field_no': 2}, url=URL) == 3.1415
+
     with raises(MycroftSourceError) as ex:
         source.get_value(jq='.test', **ARGS)
     assert 'Multiple values where found, narrow your jq pattern' in str(ex)

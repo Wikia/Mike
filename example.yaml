@@ -30,6 +30,12 @@ metrics:
     xpath: '//*[@id="ajaxShelfsBox"]//*[@data-shelf-id-counter="3"]'
     label: "Wants to read: %d"
 
+  - name: wikipedia/stats
+    source: http/json  # let's use the base source directly here
+    url: "https://{wikipedia_domain}.wikipedia.org/w/api.php?action=query&meta=siteinfo&siprop=statistics&format=json"
+    jq: ".query.statistics.{stats_field}"
+    label: "{wikipedia_domain} Wikipedia {stats_field}: %d"
+
 # these keys will be copied to each feature defined below
 common:
   metrics:
@@ -49,3 +55,10 @@ features:
       url: "http://lubimyczytac.pl/ksiazka/4869384/wojna-i-pokoj-tom-1"
       template:
         book_id: 4869384
+
+    - name: PolishWikipedia
+      template:
+        wikipedia_domain: pl
+        stats_field: "articles"
+      metrics:
+        - name: wikipedia/stats
