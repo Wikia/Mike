@@ -53,7 +53,7 @@ class HttpXPathSource(HttpSourceBase):
 
     NAME = 'http/xpath'
 
-    def __init__(self, client=None, **kwargs):
+    def __init__(self, client=None):
         """
         :type client obj
         :type kwargs obj

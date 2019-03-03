@@ -3,8 +3,8 @@ A base HTTP-bases source
 """
 from requests import session
 
-from ..base import SourceBase
 from mycroft_holmes.utils import format_query
+from ..base import SourceBase
 
 
 class HttpSourceBase(SourceBase):
