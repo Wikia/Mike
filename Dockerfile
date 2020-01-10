@@ -42,7 +42,7 @@ ENV COMMIT_BRANCH=${BRANCH}
 RUN echo "gunicorn 'mycroft_holmes.app.app:setup_app()' --worker-class sync -b 0.0.0.0:5000 --workers 4 --access-logfile -" > entrypoint
 
 # do not run as root
-USER nobody
+USER 65534
 
 # run the app
 CMD ["sh", "entrypoint"]
